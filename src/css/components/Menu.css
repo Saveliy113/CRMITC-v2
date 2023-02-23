@@ -1,0 +1,225 @@
+aside {
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  width: 200px;
+  height: 100%;
+  background: rgb(29, 29, 29);
+  box-shadow: 5px 5px 10px black;
+  padding-left: 25px;
+  border-top-right-radius: 60px;
+  border-bottom-right-radius: 60px;
+  z-index: 1;
+}
+
+#logo {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  width: fit-content;
+}
+
+aside .menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu a {
+  display: flex;
+  align-items: baseline;
+  padding-left: 5px;
+  text-decoration: none;
+  color: #fff;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  gap: 10px;
+  transition: all 0.2s ease-in;
+}
+
+.menu a h3,
+.menu a i {
+  line-height: 10px;
+  font-weight: 300;
+  transition: all 0.2s ease-in-out;
+}
+
+.menu a svg {
+  font-size: 20px;
+}
+
+.menu a:hover,
+.menu .a.active {
+  font-size: larger;
+  color: rgb(52, 121, 248);
+  background: rgb(19, 19, 19);
+  border-left: 3px solid rgb(52, 121, 248);
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  padding-left: 15px;
+}
+
+/*--------------------------------- MEDIA QEURIES ------------------------*/
+
+@media (max-width: 835px) {
+  aside {
+    width: 180px;
+    padding-left: 5px;
+  }
+
+  .menu a {
+    gap: 5px;
+  }
+
+  .a.active {
+    padding-left: 5px;
+    font-size: medium;
+  }
+}
+
+@media (max-width: 768px) {
+  aside {
+    padding-left: 0;
+    width: 100%;
+    height: 45px;
+    bottom: 0;
+    border-radius: 10px 10px 0 0;
+  }
+
+  #logo {
+    display: none;
+  }
+
+  aside .menu {
+    height: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+    flex-direction: row;
+    justify-content: center;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .menu a {
+    width: 60px;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 0;
+    margin-left: 0;
+    margin-bottom: 0;
+    gap: 0;
+  }
+
+  .menu a h3,
+  .menu a i {
+    font-size: 12px;
+    line-height: 0;
+  }
+
+  .menu a svg {
+    font-size: 15px;
+  }
+
+  .indicator {
+    position: absolute;
+    top: -22px;
+    left: calc(100vw / 2 - 33px);
+    width: 60px;
+    height: 60px;
+    background: rgb(29, 29, 29);
+    border-radius: 50%;
+    z-index: -1;
+    transition: all 0.5s ease-in-out;
+  }
+
+  .indicator::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: -14px;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: 12px 10px rgb(29 29 29);
+  }
+  .indicator::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    right: -14px;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: -12px 10px rgb(29 29 29);
+  }
+
+  .menu a {
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .menu a:hover,
+  .menu .a.active {
+    color: rgb(52, 121, 248);
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    transform: translateY(-20px);
+  }
+
+  .menu a:hover {
+    transform: none;
+  }
+
+  .menu a:nth-child(1).active ~ .indicator {
+    transform: translateX(-183px);
+  }
+  .menu a:nth-child(2).active ~ .indicator {
+    transform: translateX(-90px);
+  }
+  .menu a:nth-child(3).active ~ .indicator {
+    transform: translateX(0);
+  }
+  .menu a:nth-child(4).active ~ .indicator {
+    transform: translateX(90px);
+  }
+  .menu a:nth-child(5).active ~ .indicator {
+    transform: translateX(185px);
+  }
+}
+
+/* @media (max-width: 530px) {
+  .menu a:nth-child(1).active ~ .indicator {
+    transform: translateX(-183px);
+  }
+  .menu a:nth-child(5).active ~ .indicator {
+    transform: translateX(185px);
+  }
+} */
+
+@media (max-width: 440px) {
+  aside .menu {
+    gap: 10px;
+  }
+
+  .indicator {
+    left: calc(100vw / 2 - 30px);
+  }
+
+  .menu a:nth-child(1).active ~ .indicator {
+    transform: translateX(-140px);
+  }
+  .menu a:nth-child(2).active ~ .indicator {
+    transform: translateX(-70px);
+  }
+  .menu a:nth-child(3).active ~ .indicator {
+    transform: translateX(0);
+  }
+  .menu a:nth-child(4).active ~ .indicator {
+    transform: translateX(70px);
+  }
+  .menu a:nth-child(5).active ~ .indicator {
+    transform: translateX(140px);
+  }
+}

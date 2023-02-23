@@ -1,0 +1,13 @@
+.studentInfo {
+  width: 90%;
+  margin: 0 auto;
+}
+.studentInfo__item {
+    height: 40px;
+  display: flex;
+  align-items: center;
+}
+.studentInfo__item p {
+  margin-left: 20px;
+  font-size: large;
+}

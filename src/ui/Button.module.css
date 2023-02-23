@@ -1,0 +1,25 @@
+.btn {
+  width: fit-content;
+  margin: 0;
+  border: none;
+  text-decoration: none;
+  font-family: 'Comfortaa', cursive;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: large;
+  cursor: pointer;
+  background-color: whitesmoke;
+  box-shadow: 2px 2px 5px black;
+  transition: all 0.1s ease-in;
+}
+
+.btn:enabled:hover {
+  outline: 2px solid rgb(52, 121, 248);
+  color: rgb(52, 121, 248);
+  box-shadow: none;
+}
+
+.btn:disabled {
+  cursor: auto;
+}

@@ -1,0 +1,29 @@
+.search__container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+}
+.search__container label {
+  margin-bottom: 5px;
+  font-size: large;
+  position: absolute;
+  top: -25px;
+  left: 0;
+  color: whitesmoke;
+}
+.search__container input {
+  max-width: 250px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  padding-left: 10px;
+  font-family: inherit;
+  font-size: large;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+.search__container input:focus {
+  border: 2px solid rgb(52, 121, 248);
+}

@@ -1,0 +1,234 @@
+.modal__container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadein 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.modal__window {
+  width: 500px;
+  min-height: 320px;
+  max-height: 70%;
+  margin: auto;
+  padding: 30px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 1);
+  box-shadow: 0 0 7px rgb(52, 121, 248);
+  transition: all 0.5s ease-in-out;
+}
+
+.modal__window::-webkit-scrollbar {
+  display: none;
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: center;
+}
+
+/*------------------------IFHIDDEN------------------------*/
+.modal__container.ifHidden {
+  animation: fadeout 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.modal__window.ifHidden {
+  height: 0px;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding: 0;
+  transition: all 0.5s ease-in-out;
+}
+
+/*---------------------MODAL WINDOW CONTENT----------------*/
+
+.modal__window h1 {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.modal__inputs {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.modal__input-container {
+  width: 100%;
+  gap: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.modal__input-container label {
+  font-size: large;
+  font-weight: bold;
+  width: 30%;
+  text-align: left;
+}
+
+.modal__input-container input,
+.modal__input-container textarea {
+  display: block;
+  width: 70%;
+  /* margin: 1.2rem auto; */
+  padding: 5px 10px;
+  font-family: 'Comfortaa', cursive;
+  font-size: 20px;
+  text-align: left;
+  color: white;
+  background: none;
+  border: 1px solid rgb(52, 121, 248);
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.2s ease-in;
+}
+
+.modal__input-container input:focus,
+.modal__input-container textarea:focus {
+  border-color: #ffc400ec;
+}
+
+.modal__input-container textarea {
+  height: 100px;
+}
+
+.modal__input-container textarea::-webkit-scrollbar,
+.modal__input-container input[type='number']::-webkit-outer-spin-button,
+.modal__input-container input[type='number']::-webkit-inner-spin-button {
+  display: none;
+  /* -webkit-appearance: none; */
+}
+
+/*----------------ADDITIONAL ELEMENTS--------------*/
+
+#modal__close {
+  position: absolute;
+  top: 5px;
+  width: 95%;
+  height: 30px;
+  box-sizing: border-box;
+  text-align: end;
+}
+
+#modal__close svg {
+  font-size: 30px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+#modal__close svg:hover {
+  font-size: 35px;
+  color: red;
+}
+
+/*--------------------------------ANIMATIONS, TRANSITIONS---------------------------- */
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes fadein-n-out {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  30% {
+    opacity: 1;
+    visibility: visible;
+  }
+  80% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.modal-enter {
+  opacity: 0;
+}
+.modal-enter-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+.modal-exit {
+  opacity: 1;
+}
+.modal-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+/*----------------------------- MEDIA QUERIES --------------------------*/
+
+@media (max-width: 768px) {
+  .modal__window {
+    width: 80%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 495px) {
+  .modal__window h1 {
+    font-size: 25px;
+  }
+
+  .modal__input-container label {
+    font-size: small;
+  }
+
+  .modal__input-container select,
+  .modal__input-container input,
+  .modal__input-container textarea {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 450px) {
+  .modal__window {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    padding-top: 30px;
+  }
+
+  #modal__close svg {
+    margin-top: 5px;
+  }
+}
