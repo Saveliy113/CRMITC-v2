@@ -1,45 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+//REACT
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RiCheckFill, RiCloseFill, RiArrowDownSFill } from 'react-icons/ri';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from 'react-redux';
 
+//REDUX
 import {
   useAddStudentMutation,
   useGetCoursesQuery,
+  useGetDirectionsQuery,
   useGetStudentsQuery,
   useGetUsersQuery,
 } from '../services/dataApi';
 import { setFetchData } from '../redux/slices/dataSlice';
+
+//COMPONENTS
+import { ToastContainer, toast } from 'react-toastify';
+import { CSSTransition } from 'react-transition-group';
 import Pagination from '../ui/Pagination';
 import RowsSlicer from '../ui/RowsSlicer';
 import Search from '../ui/Search';
-import { CSSTransition } from 'react-transition-group';
 import Loader from '../ui/Loader';
 import Button from '../ui/Button';
 import ModalWindow from '../components/ModalWindow';
 import ModalLoader from '../ui/ModalLoader';
 
+//ICONS
+import { RiCheckFill, RiCloseFill, RiArrowDownSFill } from 'react-icons/ri';
+
+//CSS
 import '../css/pages/Students.css';
 import styles from '../ui/Table.module.css';
 import '../css/components/ModalWindow.css';
 import '../ui/Select.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Students = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentPage = useSelector((store) => store.data.page);
-  const columns = [
-    'ID',
-    'Имя',
-    'Оплата',
-    'Общая сумма',
-    'Остаток за текущий месяц',
-    'Рекрутер',
-    'Договор',
-    'Учится',
-  ];
+
+  //-----------------------DATA-------------------------//
 
   const {
     data,
@@ -49,57 +49,32 @@ const Students = () => {
   const { data: recruiters, isSuccess: recruiterIsSuccess } =
     useGetUsersQuery();
   const { data: courses, isSuccess: coursesIsSuccess } = useGetCoursesQuery();
-  console.log('Student loading' + isLoading);
+  const { data: directions, isSuccess: directionsIsSuccess } =
+    useGetDirectionsQuery();
+
   useEffect(() => {
-    studentsIsSuccess && dispatch(setFetchData({ page: 'students', data }));
+    studentsIsSuccess &&
+      dispatch(
+        setFetchData({
+          page: 'students',
+          data: data.filter((student) => student.studies),
+        })
+      );
   }, [studentsIsSuccess]);
 
   const students = useSelector((store) => store.data.currentData);
-  const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
-  const tableTr =
-    currentPage === 'students' &&
-    students &&
-    students.map((student, index) => (
-      <tr key={index} onClick={() => navigate(`student?id=${student.id}`)}>
-        <td data-label="ID">{student.id}</td>
-        <td data-label="Имя">{student.full_name}</td>
-        <td data-label="Оплата">{student.payment}</td>
-        <td data-label="Общая сумма">{student.full_payment}</td>
-        <td data-label="Остаток за текущий месяц">
-          {student.remainder_for_current_mount}
-        </td>
-        <td data-label="Рекрутер">
-          {recruiterIsSuccess &&
-            recruiters.map((recruiter) =>
-              recruiter.id === student.recruiter ? recruiter.username : ''
-            )}
-        </td>
-        <td data-label="Договор">
-          {student.contract ? <RiCheckFill /> : <RiCloseFill />}
-        </td>
-        <td data-label="Учится">
-          {student.studies ? <RiCheckFill /> : <RiCloseFill />}
-        </td>
-      </tr>
-    ));
+
+  //----------------------------------------------------//
 
   //---------------- MODAL WINDOW ------------------//
 
-  const [
-    addStudent,
-    { isSuccess, isLoading: addStudentLoading, isError, error },
-  ] = useAddStudentMutation();
   const [isOpened, setIsOpened] = useState(false);
-
-  const onClickClose = () => {
-    setIsOpened(!isOpened);
-  };
-
   const [reqBody, setReqBody] = useState({
     full_name: '',
     start_mount: '',
     email: '',
     discount: '',
+    discount_of_cash: '',
     phone: '',
     course: 0,
     studies: false,
@@ -107,13 +82,32 @@ const Students = () => {
     contract: false,
     comment: '',
   });
-  console.log(reqBody);
-  const submitHandler = async (event) => {
+  const discountType = useRef();
+
+  const [
+    addStudent,
+    {
+      isSuccess: addStudentIsSuccess,
+      isLoading: addStudentLoading,
+      isError: addStudentIsError,
+      error: addStudentError,
+    },
+  ] = useAddStudentMutation();
+
+  const onClickClose = () => {
+    setIsOpened(!isOpened);
+  };
+
+  const submitHandler = async () => {
     await addStudent(reqBody).unwrap();
   };
 
-  const notifySuccess = () =>
-    toast.success('Студент успешно добавлен!', {
+  //----------------------------------------------------//
+
+  //----------------ACTIONS AFTER QUERY RESPONSE------------------//
+
+  const notifySuccess = (text) =>
+    toast.success(text, {
       position: 'top-center',
       autoClose: 3000,
       hideProgressBar: true,
@@ -124,8 +118,8 @@ const Students = () => {
       theme: 'light',
     });
 
-  const notifyError = () =>
-    toast.error(`Ошибка ${error.status}. Повторите попытку.`, {
+  const notifyError = (error) =>
+    toast.error(`Ошибка. ${error.data.detail}`, {
       position: 'top-center',
       autoClose: 3000,
       hideProgressBar: true,
@@ -137,12 +131,13 @@ const Students = () => {
     });
 
   useEffect(() => {
-    if (isSuccess) {
+    if (addStudentIsSuccess) {
       setReqBody({
         full_name: '',
         start_mount: '',
         email: '',
         discount: '',
+        discount_of_cash: '',
         phone: '',
         course: 0,
         studies: false,
@@ -150,18 +145,80 @@ const Students = () => {
         contract: false,
         comment: '',
       });
-      notifySuccess();
-    } else if (isError) {
-      notifyError();
+      notifySuccess('Студент успешно добавлен!');
+    } else if (addStudentIsError) {
+      notifyError(addStudentError);
     }
-  }, [isSuccess, isError]);
+  }, [addStudentIsSuccess, addStudentIsError]);
 
   //-----------------------------------------------//
+
+  //-----------------------TABLE-------------------------//
+
+  const [directionFilter, setDirectionFilter] = useState('');
+  useEffect(() => {
+    if (directionFilter) {
+      dispatch(
+        setFetchData({
+          page: 'students',
+          data: data.filter(
+            (student) =>
+              student.studies && student.direction === directionFilter
+          ),
+        })
+      );
+    }
+  }, [directionFilter]);
+
+  console.log('DIRECTIONFILTERVALUE: ', directionFilter);
+
+  const columns = [
+    'ID',
+    'Имя',
+    'Оплата',
+    'Общая сумма',
+    'Остаток за текущий месяц',
+    'Рекрутер',
+    'Договор',
+  ];
+  const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
+  const tableTr =
+    currentPage === 'students' && students && students.length !== 0 ? (
+      students.map((student, index) => (
+        <tr key={index} onClick={() => navigate(`/student?id=${student.id}`)}>
+          <td data-label="ID">{student.id}</td>
+          <td data-label="Имя">{student.full_name}</td>
+          <td data-label="Оплата">{student.payment.toLocaleString('ru')}</td>
+          <td data-label="Общая сумма">
+            {student.full_payment.toLocaleString('ru')}
+          </td>
+          <td data-label="Остаток за текущий месяц">
+            {student.remainder_for_current_mount.toLocaleString('ru')}
+          </td>
+          <td data-label="Рекрутер">
+            {recruiterIsSuccess
+              ? recruiters.map((recruiter) =>
+                  recruiter.id === student.recruiter ? recruiter.username : ''
+                )
+              : ''}
+          </td>
+          <td data-label="Договор">
+            {student.contract ? <RiCheckFill /> : <RiCloseFill />}
+          </td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan={7}>No available data</td>
+      </tr>
+    );
+
+  //----------------------------------------------------//
 
   return (
     <>
       {coursesIsSuccess && recruiterIsSuccess ? (
-        <CSSTransition
+        <CSSTransition //MODAL WINDOW
           in={isOpened}
           timeout={500}
           classNames={'modal'}
@@ -215,17 +272,49 @@ const Students = () => {
               </div>
               <div className="modal__input-container">
                 <label htmlFor="discount">Скидка</label>
-                <input
-                  onChange={(event) =>
-                    setReqBody({ ...reqBody, discount: event.target.value })
-                  }
-                  type="number"
-                  id="discount"
-                  maxLength="3"
-                  min={0}
-                  max={100}
-                  value={reqBody.discount}
-                />
+                <div className="discount__wrapper">
+                  <input
+                    onChange={(event) =>
+                      discountType.current.value === '%'
+                        ? setReqBody({
+                            ...reqBody,
+                            discount: event.target.value,
+                          })
+                        : setReqBody({
+                            ...reqBody,
+                            discount_of_cash: event.target.value,
+                          })
+                    }
+                    type="number"
+                    id="discount"
+                    value={reqBody.discount || reqBody.discount_of_cash}
+                  />
+                  <div className="select__container">
+                    <select
+                      ref={discountType}
+                      onChange={(event) =>
+                        event.target.value === '%'
+                          ? setReqBody({
+                              ...reqBody,
+                              discount: reqBody.discount_of_cash,
+                              discount_of_cash: 0,
+                            })
+                          : setReqBody({
+                              ...reqBody,
+                              discount_of_cash: reqBody.discount,
+                              discount: 0,
+                            })
+                      }
+                      className="select__box"
+                    >
+                      <option value="%">%</option>
+                      <option value="сумма">сумма</option>
+                    </select>
+                    <div className="icon__container">
+                      <RiArrowDownSFill />
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="modal__input-container">
                 <label htmlFor="phone">Телефон</label>
@@ -348,12 +437,31 @@ const Students = () => {
         ''
       )}
 
-      {tableTr ? (
+      {studentsIsSuccess && directionsIsSuccess ? ( //TABLE
         <>
           <div className="table__actions-box">
             <RowsSlicer />
             <Button text="+Добавить студента" action={onClickClose} />
-            <Search />
+            <div className="select__container">
+              <select
+                onChange={(event) => setDirectionFilter(event.target.value)}
+                className="select__box"
+                value={directionFilter}
+              >
+                <option hidden selected>
+                  Направление
+                </option>
+                {directions.map((direction, i) => (
+                  <option key={i} value={direction.id}>
+                    {direction.title}
+                  </option>
+                ))}
+              </select>
+              <div className="icon__container">
+                <RiArrowDownSFill />
+              </div>
+            </div>
+            <Search placeholder="Имя студента" />
           </div>
           <div className="table__box">
             <table className={styles.table}>

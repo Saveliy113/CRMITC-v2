@@ -1,0 +1,21 @@
+#description {
+  color: black;
+}
+
+.link {
+  color: white;
+  font-weight: 700;
+  font-size: larger;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.clients__table-tr:hover {
+  cursor: auto;
+  background: none !important;
+  color: white !important;
+}
+
+#phone__td {
+  color: lightgreen;
+}

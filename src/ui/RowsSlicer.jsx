@@ -6,12 +6,12 @@ import { changeItemsPerPage } from '../redux/slices/dataSlice';
 
 import styles from './RowsSlicer.module.css';
 
-const RowsSlicer = () => {
+const RowsSlicer = ({ initialState }) => {
   const dispatch = useDispatch();
-  const [rowsNumber, setRowsNumber] = useState(5);
-  console.log('ROWS NUMBER IS: ' + rowsNumber);
+  const [rowsNumber, setRowsNumber] = useState(10);
+  // console.log('ROWS NUMBER IS: ' + rowsNumber);
   useEffect(() => {
-    console.log('DISPATCH ROWSSLICER');
+    // console.log('DISPATCH ROWSSLICER');
     dispatch(changeItemsPerPage(Number(rowsNumber)));
   }, [rowsNumber]);
   const changeRowsNumber = (event) => {
@@ -20,7 +20,11 @@ const RowsSlicer = () => {
   };
   return (
     <div className={styles.select__container}>
-      <select onChange={changeRowsNumber} className={styles.select__box}>
+      <select
+        onChange={changeRowsNumber}
+        className={styles.select__box}
+        value={rowsNumber}
+      >
         <option value="5">5</option>
         <option value="10">10</option>
         <option value="20">20</option>

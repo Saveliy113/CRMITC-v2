@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { CSSTransition } from 'react-transition-group';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { RiArrowDownSFill } from 'react-icons/ri';
+//REACT
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
+//REDUX
 import {
   useAddPaymentMutation,
   useGetStudentsPaymentsQuery,
@@ -14,6 +11,13 @@ import {
   useGetUsersQuery,
 } from '../services/dataApi';
 import { setFetchData } from '../redux/slices/dataSlice';
+
+//ICONS
+import { RiArrowDownSFill } from 'react-icons/ri';
+
+//COMPONENTS
+import { CSSTransition } from 'react-transition-group';
+import { ToastContainer, toast } from 'react-toastify';
 import Pagination from '../ui/Pagination';
 import RowsSlicer from '../ui/RowsSlicer';
 import Search from '../ui/Search';
@@ -22,15 +26,18 @@ import ModalWindow from '../components/ModalWindow';
 import Loader from '../ui/Loader';
 import ModalLoader from '../ui/ModalLoader';
 
+//CSS
 import '../css/pages/Students.css';
 import styles from '../ui/Table.module.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Payments = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const currentPage = useSelector((store) => store.data.page);
-  const columns = ['ID', 'Имя', 'Сумма', 'Рекрутер', 'Дата', 'Комментарий'];
 
-  /*-----------------------DATA--------------------------*/
+  //-----------------------DATA-------------------------//
+
   const { data, isSuccess: paymentsIsSuccess } = useGetStudentsPaymentsQuery();
   const { data: recruiters, isSuccess: recruiterIsSuccess } =
     useGetUsersQuery();
@@ -40,53 +47,43 @@ const Payments = () => {
   useEffect(() => {
     paymentsIsSuccess && dispatch(setFetchData({ page: 'payments', data }));
   }, [paymentsIsSuccess]);
+
   const payments = useSelector((store) => store.data.currentData);
 
-  const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
-  const tableTr =
-    currentPage === 'payments' &&
-    payments &&
-    payments.map((payment, index) => {
-      return (
-        <tr key={index}>
-          <td data-label="ID">{payment.id}</td>
-          <td data-label="Имя">
-            {studentsIsSuccess &&
-              students.map((student) =>
-                student.id === payment.student ? student.full_name : ''
-              )}
-          </td>
-          <td data-label="Сумма">{payment.sum}</td>
-          <td data-label="Рекрутер">
-            {recruiterIsSuccess &&
-              recruiters.map((recruiter) =>
-                recruiter.id === payment.recruiter ? recruiter.username : ''
-              )}
-          </td>
-          <td data-label="Дата">{payment.date.slice(0, 10)}</td>
-          <td data-label="Комментарий">
-            {payment.comment ? payment.comment : '-'}
-          </td>
-        </tr>
-      );
-    });
-  /*------------------------------------------------------*/
+  //----------------------------------------------------//
 
   /*---------------------MODAL WINDOW---------------------*/
-  const [reqBody, setReqBody] = useState({ student: 0, sum: '', recruiter: 0 });
+
   const [isOpened, setIsopened] = useState(false);
-  const [addPayment, { isSuccess, isLoading, isError, error }] =
-    useAddPaymentMutation();
+  const [reqBody, setReqBody] = useState({ student: 0, sum: '', recruiter: 0 });
+
+  const [
+    addPayment,
+    {
+      isSuccess: addPaymentSuccess,
+      isLoading: addPaymentLoading,
+      isError: addPaymentIsError,
+      error: addPaymentError,
+    },
+  ] = useAddPaymentMutation();
+
+  const isPaymentAddAllowed =
+    reqBody.student && reqBody.sum && reqBody.recruiter ? false : true; //THIS INPUT FIELDS MUST BE FILLED
 
   const onClickClose = () => {
     setIsopened(!isOpened);
   };
+
   const submitHandler = () => {
     addPayment(reqBody).unwrap();
   };
 
-  const notifySuccess = () =>
-    toast.success('Платеж успешно добавлен!', {
+  /*------------------------------------------------------*/
+
+  //----------------ACTIONS AFTER QUERY RESPONSE------------------//
+
+  const notifySuccess = (text) =>
+    toast.success(text, {
       position: 'top-center',
       autoClose: 3000,
       hideProgressBar: true,
@@ -97,8 +94,8 @@ const Payments = () => {
       theme: 'light',
     });
 
-  const notifyError = () =>
-    toast.error(`Ошибка ${error.status}. Повторите попытку.`, {
+  const notifyError = (error) =>
+    toast.error(`Ошибка. ${error.data.detail}`, {
       position: 'top-center',
       autoClose: 3000,
       hideProgressBar: true,
@@ -110,13 +107,52 @@ const Payments = () => {
     });
 
   useEffect(() => {
-    if (isSuccess) {
+    if (addPaymentSuccess) {
       setReqBody({ student: 0, sum: '', recruiter: 0 });
-      notifySuccess();
-    } else if (isError) {
-      notifyError();
+      notifySuccess('Платеж успешно добавлен!');
+    } else if (addPaymentIsError) {
+      notifyError(addPaymentError);
     }
-  }, [isSuccess, isError]);
+  }, [addPaymentSuccess, addPaymentIsError]);
+
+  /*------------------------------------------------------*/
+
+  //-----------------------TABLE-------------------------//
+
+  const columns = ['ID', 'Имя', 'Сумма', 'Рекрутер', 'Дата', 'Комментарий'];
+
+  const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
+  const tableTr =
+    currentPage === 'payments' && payments && payments.length !== 0 ? (
+      payments.map((payment, index) => (
+        <tr key={index} onClick={() => navigate(`/payment?id=${payment.id}`)}>
+          <td data-label="ID">{payment.id}</td>
+          <td data-label="Имя">
+            {studentsIsSuccess
+              ? students.map((student) =>
+                  student.id === payment.student ? student.full_name : ''
+                )
+              : ''}
+          </td>
+          <td data-label="Сумма">{payment.sum.toLocaleString('ru')}</td>
+          <td data-label="Рекрутер">
+            {recruiterIsSuccess
+              ? recruiters.map((recruiter) =>
+                  recruiter.id === payment.recruiter ? recruiter.username : ''
+                )
+              : ''}
+          </td>
+          <td data-label="Дата">{payment.date.slice(0, 10)}</td>
+          <td data-label="Комментарий">
+            {payment.comment ? payment.comment : '-'}
+          </td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan={6}>No available data</td>
+      </tr>
+    );
 
   /*------------------------------------------------------*/
 
@@ -212,18 +248,14 @@ const Payments = () => {
             </div>
             <ToastContainer />
             <div className="modal__actions">
-              {isLoading ? (
-                <ModalLoader isLoading={isLoading} />
+              {addPaymentLoading ? (
+                <ModalLoader />
               ) : (
                 <Button
                   id="login__btn"
                   text="Добавить"
                   action={submitHandler}
-                  disabled={
-                    reqBody.student && reqBody.sum && reqBody.recruiter
-                      ? false
-                      : true
-                  }
+                  disabled={isPaymentAddAllowed}
                 />
               )}
             </div>
@@ -233,12 +265,12 @@ const Payments = () => {
         ''
       )}
 
-      {tableTr ? (
+      {paymentsIsSuccess ? ( //TABLE
         <>
           <div className="table__actions-box">
             <RowsSlicer />
             <Button text="+Добавить платеж" action={onClickClose} />
-            <Search searchData={students} />
+            <Search placeholder="Имя студента" searchData={students} />
           </div>
           <div className="table__box">
             <table className={styles.table}>

@@ -1,25 +1,32 @@
+//REACt
 import { Routes, Route } from 'react-router-dom';
 
+//COMPONENTS
+import Header from './components/Header';
 import Menu from './components/Menu';
+import LoginForm from './components/LoginForm';
+
+//PAGES
 import Main from './pages/Main';
+import CountryDetail from './pages/CountryDetails';
 import Branches from './pages/Branches';
+import BrancheDetails from './pages/BrancheDetails';
+import Direction from './pages/Direction';
+import TrailLessons from './pages/TrailLessons';
+import ClientDetails from './pages/ClientDetails';
+import RecruiterDetails from './pages/RecruiterDetails';
+import MentorDetails from './pages/MentorDetails';
 import Courses from './pages/Courses';
 import CourseInfo from './pages/CourseInfo';
 import Students from './pages/Students';
-import Payments from './pages/Payments';
-import Button from './ui/Button';
-import Loader from './ui/Loader';
-import LoginForm from './components/LoginForm';
-import RowsSlicer from './ui/RowsSlicer';
-import Search from './ui/Search';
-import { CSSTransition } from 'react-transition-group';
-
-import './App.css';
-import Header from './components/Header';
-import { useState } from 'react';
-import NotFound from './pages/NotFound';
 import StudentInfo from './pages/StudentInfo';
-import ModalLoader from './ui/ModalLoader';
+import Payments from './pages/Payments';
+import PaymentDetails from './pages/PaymentDetails';
+import NotFound from './pages/NotFound';
+
+//CSS
+import './App.css';
+import TrailLesson from './pages/TrailLesson';
 
 function App() {
   return (
@@ -28,21 +35,26 @@ function App() {
       <LoginForm />
       <div className="content">
         <Header />
-        {/* <div className="table__actions-box">
-          <RowsSlicer />
-          <Search />
-        </div> */}
         <Routes>
           <Route path="/" element={<Main />} />
+          <Route path="/country_details" element={<CountryDetail />} />
+          <Route path="/recruiter" element={<RecruiterDetails />} />
+          <Route path="/mentor" element={<MentorDetails />} />
           <Route path="/branches" element={<Branches />} />
+          <Route path="branche_details/*" element={<BrancheDetails />} />
+          <Route path="/trail_lessons" element={<TrailLessons />} />
+          <Route path="/trail_lesson" element={<TrailLesson />} />
+          <Route path="/client_details" element={<ClientDetails />} />
+          <Route path="/direction" element={<Direction />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/course" element={<CourseInfo />} />
           <Route path="/students" element={<Students />} />
-          <Route path="/students/student" element={<StudentInfo />} />
-          <Route path="/Payments" element={<Payments />} />
+          <Route path="/student" element={<StudentInfo />} />
+          <Route path="/courses/course" element={<CourseInfo />} />
+          <Route path="/payments" element={<Payments />} />
+          <Route path="/payment" element={<PaymentDetails />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        {/* <ModalLoader /> */}
       </div>
     </div>
   );

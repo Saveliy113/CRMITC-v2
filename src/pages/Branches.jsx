@@ -1,55 +1,73 @@
+//REACT
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { setFetchData } from '../redux/slices/dataSlice';
-import { useGetBranchesQuery, useGetCountriesQuery } from '../services/dataApi';
+//COMPONENTS
 import Pagination from '../ui/Pagination';
 import RowsSlicer from '../ui/RowsSlicer';
 import Search from '../ui/Search';
+import Loader from '../ui/Loader';
+
+//REDUX
+import { setFetchData } from '../redux/slices/dataSlice';
+import { useGetCountriesQuery } from '../services/dataApi';
+
+//CSS
 import '../css/pages/Students.css';
 import styles from '../ui/Table.module.css';
-import Loader from '../ui/Loader';
 
 const Branches = () => {
   const dispatch = useDispatch();
-  const columns = ['Страна', 'Город', 'Адрес'];
+  const navigate = useNavigate();
+  const columns = ['ID', 'Страна'];
   const currentPage = useSelector((store) => store.data.page);
 
-  const { data, isSuccess: branchesIsSuccess } = useGetBranchesQuery();
-  const { data: countries, isSuccess: countriesIsSuccess } =
+  //-----------------------DATA-------------------------//
+
+  const { data: countriesData, isSuccess: countriesIsSuccess } =
     useGetCountriesQuery();
 
   useEffect(() => {
-    branchesIsSuccess && dispatch(setFetchData({ page: 'branches', data }));
-  }, [branchesIsSuccess]);
+    countriesIsSuccess &&
+      dispatch(setFetchData({ page: 'branches', data: countriesData }));
+  }, [countriesIsSuccess]);
 
-  const branches = useSelector((store) => store.data.currentData);
+  const countries = useSelector((store) => store.data.currentData);
+
+  //----------------------------------------------------//
+
+  //-----------------------TABLE-------------------------//
+
   const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
   const tableTr =
-    currentPage === 'branches' &&
-    branches &&
-    branches.map((branche, index) => {
-      return (
-        <tr key={index}>
+    currentPage === 'branches' && countries && countries.length !== 0 ? (
+      countries.map((country, index) => (
+        <tr
+          key={index}
+          onClick={() =>
+            navigate(`/country_details?id=1&country=${country.name}`)
+          }
+        >
+          <td data-label="id">{countries.map((country) => country.id)}</td>
           <td data-label="Страна">
-            {countriesIsSuccess &&
-              countries.map((country) =>
-                country.id === branche.country ? country.name : ''
-              )}
+            {countries.map((country) => country.name)}
           </td>
-          <td data-label="Город">{branche.city}</td>
-          <td data-label="Адресс">{branche.address}</td>
         </tr>
-      );
-    });
+      ))
+    ) : (
+      <tr>
+        <td colSpan={2}>No available data</td>
+      </tr>
+    );
 
   return (
     <>
-      {tableTr && branchesIsSuccess && countriesIsSuccess ? (
+      {countriesIsSuccess ? (
         <>
           <div className="table__actions-box">
             <RowsSlicer />
-            <Search />
+            <Search placeholder="Страна" />
           </div>
           <div className="table__box">
             <table className={styles.table}>

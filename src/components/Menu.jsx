@@ -1,17 +1,23 @@
+//REACT
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+//COMPONENTS
+import ItcLogo from '../assets/img/ITClogoW.png';
+
+//ICONS
 import {
   RiHome4Fill,
   RiMapPin2Fill,
   RiBook2Fill,
   RiUser3Fill,
   RiMoneyDollarCircleFill,
+  RiComputerLine,
 } from 'react-icons/ri';
 
-import ItcLogo from '../assets/img/ITClogoW.png';
-
+//CSS
 import '../css/components/Menu.css';
-import { useSelector } from 'react-redux';
 
 const Menu = () => {
   const isLoged = useSelector((store) => store.login.token);
@@ -19,6 +25,7 @@ const Menu = () => {
     pointerEvents: 'none',
     color: 'rgba(114, 114, 114, 0.5)',
   };
+
   return (
     <aside>
       <NavLink id="logo" to="/">
@@ -30,6 +37,7 @@ const Menu = () => {
           <RiHome4Fill />
           <h3>Главная</h3>
         </NavLink>
+
         <NavLink
           className="a"
           to="/branches"
@@ -38,6 +46,16 @@ const Menu = () => {
           <RiMapPin2Fill />
           <h3>Филиалы</h3>
         </NavLink>
+
+        <NavLink
+          className="a"
+          to="/trail_lessons"
+          style={isLoged ? {} : blockedStyles}
+        >
+          <RiComputerLine />
+          <h3>Пробные уроки</h3>
+        </NavLink>
+
         <NavLink
           className="a"
           to="/courses"
@@ -46,6 +64,7 @@ const Menu = () => {
           <RiBook2Fill />
           <h3>Курсы</h3>
         </NavLink>
+
         <NavLink
           className="a"
           to="/students"
@@ -54,6 +73,7 @@ const Menu = () => {
           <RiUser3Fill />
           <h3>Студенты</h3>
         </NavLink>
+
         <NavLink
           className="a"
           to="/payments"
@@ -62,6 +82,7 @@ const Menu = () => {
           <RiMoneyDollarCircleFill />
           <h3>Оплаты</h3>
         </NavLink>
+
         <div className="indicator"></div>
       </div>
     </aside>

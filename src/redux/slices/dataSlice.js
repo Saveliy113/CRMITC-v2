@@ -57,21 +57,25 @@ const dataSlice = createSlice({
         );
       }
     },
-    onStudentSearch(state, action) {
-      if (!action.payload) {
+    onSearch(state, action) {
+      if (!action.payload.searchText) {
         state.searchQuery = '';
+        state.pageCount = Math.ceil(
+          state.fetchData.length / state.itemsPerPage
+        );
         state.currentData = state.fetchData.slice(
           state.itemOffset,
           state.endOffset
         );
       } else {
         state.searchQuery = action.payload.searchText;
+        state.pageCount = 0;
         state.currentData = state.fetchData
-          .slice(state.itemOffset, state.endOffset)
+          // .slice(state.itemOffset, state.endOffset)
           .filter((data) => {
             switch (state.page) {
               case 'branches':
-                return data.city
+                return data.name
                   .toLowerCase()
                   .includes(action.payload.searchText.toLowerCase());
               case 'courses':
@@ -116,7 +120,7 @@ export const {
   changePage,
   clearData,
   changeItemsPerPage,
-  onStudentSearch,
+  onSearch,
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

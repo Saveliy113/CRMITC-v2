@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Button from '../ui/Button';
 import { RiCloseCircleLine } from 'react-icons/ri';
 
-const ModalWindow = ({ opened, action, submit, children, title }) => {
+const ModalWindow = ({ opened, action,  children, title }) => {
   //   console.log(children.props.children);
   console.log(React.Children.map(children, (child) => child));
   //   console.log(opened);

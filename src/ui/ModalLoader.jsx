@@ -1,5 +1,7 @@
+//REACT
 import React from 'react';
 
+//CSS
 import styles from './ModalLoader.module.css';
 
 const ModalLoader = () => {

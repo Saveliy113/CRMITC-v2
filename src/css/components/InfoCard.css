@@ -51,20 +51,20 @@
 
 /*---------------CARD CONTENT--------------*/
 
-.student__username {
+.header__title {
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 50%;
 }
-.student__username svg {
+.header__title svg {
   width: 130px;
   height: 130px;
   margin-bottom: 10px;
   color: rgb(52, 121, 248);
 }
 
-.student__username h1 {
+.header__title h1 {
   color: black;
   font-weight: 700;
   margin: 0;
@@ -113,6 +113,7 @@
 }
 
 .p__link {
+  color: black;
   font-weight: 700;
   font-size: large;
   text-decoration: underline;
@@ -149,7 +150,7 @@
 }
 
 .card__edit-container input {
-  color: black;
+  color: black !important;
 }
 
 .card__edit-container .select__box {
@@ -194,13 +195,13 @@
   transform: scale(1.1);
 }
 
-#edit__container-saveBtn{
+#edit__container-saveBtn {
   padding: 0;
   background: none;
   border: none;
 }
 
-#edit__container-saveBtn:disabled svg{
+#edit__container-saveBtn:disabled svg {
   pointer-events: none;
   color: rgba(128, 128, 128, 0.575);
 }
@@ -252,7 +253,7 @@
     top: -8%;
   }
 
-  .student__username svg {
+  .header__title svg {
     width: 70px;
     height: 70px;
     margin-bottom: 5px;

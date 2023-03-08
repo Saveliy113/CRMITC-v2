@@ -1,20 +1,52 @@
-import React from 'react';
+//REACT
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { useSearchParams } from 'react-router-dom';
 
-import ReactPaginate from 'react-paginate';
+//REDUX
 import { changePage } from '../redux/slices/dataSlice';
 
+//ICONS
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+
+//COMPONENTS
+import ReactPaginate from 'react-paginate';
+
+//CSS
 import styles from './Pagination.module.css';
 
 const Pagination = () => {
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  // useEffect(() => {
+  //   setSearchParams({ page: currentPageIndex });
+  // }, []);
   const pageCount = useSelector((store) => store.data.pageCount);
   const currentPageIndex = useSelector((store) => store.data.currentPageIndex);
+  const urlPageIndex = Number(searchParams.get('page'));
+  // useEffect(() => {
+  //   if (!urlPageIndex) {
+  //     searchParams.set('page', 1);
+  //     setSearchParams(searchParams);
+  //   }
+  // });
+
+  // useEffect(() => {
+  //   searchParams.set('page', 1);
+  //   setSearchParams(searchParams);
+  // }, [pageCount]);
+
+  useEffect(() => {
+    if (urlPageIndex > 0) {
+      dispatch(changePage(urlPageIndex - 1));
+    } else dispatch(changePage(0));
+  }, [urlPageIndex]);
 
   const handlePageClick = (event) => {
-    console.log('PAGE:', event);
-    dispatch(changePage(event.selected));
+    // dispatch(changePage(event.selected));
+    searchParams.set('page', event.selected + 1);
+    // setSearchParams({ page: event.selected + 1 });
+    setSearchParams(searchParams);
   };
 
   return (

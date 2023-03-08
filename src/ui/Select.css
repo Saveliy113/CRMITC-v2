@@ -7,10 +7,10 @@
   height: 40px;
 }
 
-[type$="checkbox"] {
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
+[type$='checkbox'] {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
 }
 
 .select__box {
@@ -42,8 +42,8 @@
 }
 
 .icon__container svg {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   cursor: pointer;
   color: black;
   transition: all 0.2s ease-in;

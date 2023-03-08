@@ -1,0 +1,49 @@
+.multi-select__control {
+  width: fit-content !important;
+  min-height: 40px !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease-in !important;
+  color: black !important;
+}
+
+#react-select-2-input {
+  position: absolute;
+}
+
+.multi-select__clear-indicator svg {
+  color: black;
+  transition: all 0.2s ease-in;
+}
+
+.multi-select__clear-indicator svg:hover {
+  color: #e74c3c !important;
+}
+
+.multi-select__dropdown-indicator {
+  padding: 6px !important;
+}
+
+.multi-select__menu {
+  color: black;
+}
+.multi-select__dropdown-indicator svg {
+  width: 25px !important;
+  height: 25px !important;
+  color: black;
+  transition: all 0.2s ease-in;
+}
+
+.multi-select__dropdown-indicator:hover svg {
+  color: rgb(52, 121, 248);
+}
+
+.multi-select__indicator-separator {
+  display: none;
+}
+
+.multi-select__indicators {
+  background-color: lightgray !important;
+  border-top-right-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+}
