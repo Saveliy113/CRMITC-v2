@@ -78,6 +78,7 @@ const Direction = () => {
   return (
     <>
       <h1>{directionTitle}</h1>
+      <h3>Курсы в этом направлении</h3>
       {directionSuccess ? (
         <>
           <div className="table__actions-box">

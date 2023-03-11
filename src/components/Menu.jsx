@@ -18,6 +18,7 @@ import {
 
 //CSS
 import '../css/components/Menu.css';
+import CustomLink from './CustomLink';
 
 const Menu = () => {
   const isLoged = useSelector((store) => store.login.token);
@@ -33,55 +34,55 @@ const Menu = () => {
       </NavLink>
 
       <div className="menu">
-        <NavLink className="a" to="/">
+        <CustomLink to="/">
           <RiHome4Fill />
           <h3>Главная</h3>
-        </NavLink>
+        </CustomLink>
 
-        <NavLink
-          className="a"
+        <CustomLink
+          // className="a"
           to="/branches"
           style={isLoged ? {} : blockedStyles}
         >
           <RiMapPin2Fill />
           <h3>Филиалы</h3>
-        </NavLink>
+        </CustomLink>
 
-        <NavLink
-          className="a"
+        <CustomLink
+          // className="a"
           to="/trail_lessons"
           style={isLoged ? {} : blockedStyles}
         >
           <RiComputerLine />
           <h3>Пробные уроки</h3>
-        </NavLink>
+        </CustomLink>
 
-        <NavLink
-          className="a"
+        <CustomLink
+          // className="a"
           to="/courses"
           style={isLoged ? {} : blockedStyles}
         >
           <RiBook2Fill />
           <h3>Курсы</h3>
-        </NavLink>
+        </CustomLink>
 
-        <NavLink
-          className="a"
+        <CustomLink
+          // className="a"
           to="/students"
           style={isLoged ? {} : blockedStyles}
         >
           <RiUser3Fill />
           <h3>Студенты</h3>
-        </NavLink>
+        </CustomLink>
 
-        <NavLink
-          className="a"
+        <CustomLink
+          // className="a"
           to="/payments"
           style={isLoged ? {} : blockedStyles}
         >
           <RiMoneyDollarCircleFill />
           <h3>Оплаты</h3>
-        </NavLink>
+        </CustomLink>
 
         <div className="indicator"></div>
       </div>

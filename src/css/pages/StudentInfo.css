@@ -3,11 +3,15 @@
   margin: 0 auto;
 }
 .studentInfo__item {
-    height: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
 }
 .studentInfo__item p {
   margin-left: 20px;
   font-size: large;
+}
+
+#student__comment {
+  color: black;
 }

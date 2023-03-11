@@ -1,5 +1,6 @@
 .branch.card {
   min-height: 130px;
+  padding-bottom: 10px;
   box-sizing: border-box;
 }
 
@@ -29,6 +30,7 @@
 
 .branch.card .card__content {
   margin: 0;
+  flex-direction: row;
 }
 
 .branch__card-button {

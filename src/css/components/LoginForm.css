@@ -1,36 +1,16 @@
+/* CONTAINERS */
 .loginform__container {
   position: absolute;
   width: 100vw;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  animation: fadein 0.5s;
-  animation-fill-mode: forwards;
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
-@keyframes fadein {
-  0% {
-    opacity: 0;
-    visibility: hidden;
-  }
-  50% {
-    opacity: 1;
-    visibility: visible;
-  }
-}
-.loginform__container.ifHidden {
-  animation: fadeout 0.5s;
-  animation-fill-mode: forwards;
-}
-@keyframes fadeout {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
+
 .login__form {
+  width: 300px;
+  height: 320px;
+  padding: 30px;
   position: absolute;
   top: 0;
   left: 0;
@@ -38,61 +18,28 @@
   bottom: 0;
   margin: auto;
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
   flex-direction: column;
-  border-radius: 20px;
-  background-color: rgba(0, 0, 0, 1);
-  box-shadow: 1px 1px 2px rgb(52, 121, 248);
-  width: 300px;
-  min-height: 320px;
-  max-height: fit-content;
-  padding: 30px;
+  justify-content: space-evenly;
+  align-items: center;
   overflow: hidden;
+  border-radius: 20px;
+  background-color: rgb(30, 30, 30);
+  box-shadow: 1px 1px 2px rgb(52, 121, 248);
   transition: all 0.5s ease-in-out;
 }
-.login__form.ifHidden {
-  height: 0px;
-  overflow-y: hidden;
-  white-space: nowrap;
-  padding: 0;
-  transition: all 0.5s ease-in-out;
+
+.loginform__actions {
+  height: 40px;
+  margin-bottom: 10px;
 }
+
+/*----------------------CONTENT----------------------*/
+
 .login__username,
 .login__password {
   position: relative;
 }
 
-#loginform__close {
-  position: absolute;
-  top: 5px;
-  width: 100%;
-  height: 30px;
-  position: absolute;
-  box-sizing: border-box;
-  text-align: end;
-}
-
-#loginform__close svg {
-  font-size: 30px;
-  margin-right: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-#loginform__close svg:hover {
-  font-size: 35px;
-  color: red;
-}
-
-.login__form h1 {
-  text-transform: uppercase;
-  font-weight: 700;
-  align-self: center;
-}
-
-.loginform__inputs {
-  margin-bottom: 30px;
-}
 .login__form input {
   font-family: 'Comfortaa';
   font-size: 1.2rem;
@@ -109,35 +56,118 @@
   border-radius: 24px;
   transition: all 0.2s ease-in;
 }
+
 .login__form input:focus {
   width: 250px;
   border-color: #ffc400ec;
 }
+
+.login__form h1 {
+  font-weight: 700;
+  text-transform: uppercase;
+  align-self: center;
+}
+
 .login__form i {
   position: absolute;
   left: 20px;
   top: 35px;
 }
 
+#loginform__close {
+  width: 100%;
+  height: 30px;
+  position: absolute;
+  top: 5px;
+  box-sizing: border-box;
+  text-align: end;
+}
+
+#loginform__close svg {
+  font-size: 30px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+#loginform__close svg:hover {
+  font-size: 35px;
+  color: #e74c3c;
+}
+
 .isLoginComplete__error,
 .isLoginComplete__success {
-  position: absolute;
-  top: 260px;
   margin: 0;
   margin-bottom: 10px;
-  pointer-events: none;
   display: flex;
   justify-content: center;
-  text-align: center;
-  white-space: nowrap;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
-  color: green;
-  animation: fadeMessage 3s;
+  text-align: center;
+  word-wrap: break-word;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.isLoginComplete__success {
+  color: #07bc0c;
+  animation: fadeSuccessMessage 3s;
   animation-fill-mode: both;
 }
 
-@keyframes fadeMessage {
+.isLoginComplete__error {
+  color: #e74c3c;
+  font-size: 15px;
+  animation: fadeErrorMessage 5s;
+  animation-fill-mode: both;
+}
+
+.isLoginComplete__error svg,
+.isLoginComplete__success svg {
+  width: 30px;
+  height: 30px;
+}
+
+.modal-enter {
+  opacity: 0;
+}
+.modal-enter-active {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+.modal-exit {
+  opacity: 1;
+}
+.modal-exit-active {
+  opacity: 0;
+  transition: opacity 500ms;
+}
+
+/*----------------------------- ANIMATIONS --------------------------*/
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  50% {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes fadeSuccessMessage {
   0% {
     opacity: 0;
     visibility: hidden;
@@ -152,46 +182,26 @@
   }
 }
 
-.isLoginComplete__success.hidden,
-.isLoginComplete__error.hidden {
-  animation: fadeout 0.3s;
-  animation-fill-mode: forwards;
+@keyframes fadeErrorMessage {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  25% {
+    opacity: 1;
+    visibility: visible;
+  }
+  75% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
-.isLoginComplete__error {
-  color: red;
-  font-size: 15px;
-  animation: fadein 0.5s;
-  animation-fill-mode: forwards;
-}
-
-.login__form.ifHidden .isLoginComplete__error {
-  opacity: 0;
-  transition: all 0.3s ease-in-out;
-  /* display: none;   */
-  /* transform: scale(0); */
-}
-
-.isLoginComplete__error svg,
-.isLoginComplete__success svg {
-  width: 30px;
-  height: 30px;
-}
-
-.my-node-enter {
-  opacity: 0;
-}
-.my-node-enter-active {
-  opacity: 1;
-  transition: opacity 200ms;
-}
-.my-node-exit {
-  opacity: 1;
-}
-.my-node-exit-active {
-  opacity: 0;
-  transition: opacity 200ms;
-}
+/*------------------------------------------------------------------*/
 
 /*----------------------------- MEDIA QUERIES --------------------------*/
 

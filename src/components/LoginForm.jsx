@@ -1,60 +1,53 @@
+//REACT
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  RiCloseCircleLine,
-  RiCheckboxCircleLine,
-  RiErrorWarningLine,
-} from 'react-icons/ri';
-import { CSSTransition } from 'react-transition-group';
+//REDUX
+import { useLogInMutation } from '../services/authApi';
 import {
   toggleLoginForm,
   setToken,
   setUsername,
 } from '../redux/slices/loginFormSlice';
-import { useLogInMutation } from '../services/authApi';
-import Button from '../ui/Button';
 
+//ICONS
+import {
+  RiCloseCircleLine,
+  RiCheckboxCircleLine,
+  RiErrorWarningLine,
+} from 'react-icons/ri';
+
+//COMPONENTS
+import { CSSTransition } from 'react-transition-group';
+import Button from '../ui/Button';
+import ModalLoader from '../ui/ModalLoader';
+
+//CSS
 import '../css/components/LoginForm.css';
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
+  const isOpened = useSelector((state) => state.login.isOpened);
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
-
-  const isOpened = useSelector((state) => state.login.isOpened);
-  const dispatch = useDispatch();
 
   const onClickClose = () => {
     dispatch(toggleLoginForm());
   };
 
-  //   -------------- LOGIN FORM CLOSING WHEN CLICKED OUTSIDE-----------------  //
-  const loginFormContainerRef = useRef();
-  const loginFormRef = useRef();
-
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     const isLoginForm = event.composedPath().includes(loginFormRef.current);
-  //     if (!isLoginForm) {
-  //       dispatch(toggleLoginForm());
-  //     }
-  //   };
-  //   if (loginFormContainerRef) {
-  //     loginFormContainerRef.current.addEventListener(
-  //       'click',
-  //       handleClickOutside
-  //     );
-  //   }
-  //   return () =>
-  //     loginFormContainerRef.current.removeEventListener(
-  //       'click',
-  //       handleClickOutside
-  //     );
-  // }, [loginFormContainerRef]);
-
   //   -------------------- LOGIN FORM AUTHORIZATION ------------------------ //
-  const [logIn, { data, error, isError, status, isSuccess }] =
-    useLogInMutation();
+
+  const [
+    logIn,
+    {
+      data,
+      error: loginError,
+      isError: loginIsError,
+      isLoading: logInLoading,
+      isSuccess: loginIsSuccess,
+    },
+  ] = useLogInMutation();
+
   const authorization = async () => {
     await logIn({
       password,
@@ -62,41 +55,44 @@ const LoginForm = () => {
     }).unwrap();
   };
 
-  //--- TOKEN SAVING ---//
+  //-----------------------SAVING TOKEN TO REDUX-------------------------//
 
   const setUserData = () => {
     dispatch(setToken(data.auth_token));
     dispatch(setUsername(username));
   };
+
+  //-------------------------------------------------------------------//
+
+  //-----------------------ACTIONS AFTER RESPONSE-------------------------//
+
+  const [notifyVisibility, setNotifyVisibility] = useState(false);
+
   useEffect(() => {
-    if (isSuccess) {
+    if (loginIsSuccess) {
+      setNotifyVisibility(true);
       setUserData();
-      setTimeout(() => onClickClose(), 3000);
+      setTimeout(() => {
+        setNotifyVisibility(false);
+        onClickClose();
+      }, 3000);
     }
-  }, [isSuccess]);
-  // console.log('SUCCESS', isSuccess);
-  // console.log('DATA FROM LogIn QUERY', data);
-  // console.log('QUERY STATUS', status);
-  // console.log('ERROR OCCURED', error);
-  // console.log('ERROR OR NOT', isError);
+    if (loginIsError) {
+      setNotifyVisibility(true);
+      setTimeout(() => setNotifyVisibility(false), 5000);
+    }
+  }, [loginIsSuccess, loginIsError]);
+
+  const errorMessages = loginIsError
+    ? loginError.status === 400
+      ? 'Веден неверный логин или пароль'
+      : `Ошибка ${loginError.originalStatus}`
+    : '';
 
   return (
-    <CSSTransition
-      in={isOpened}
-      timeout={200}
-      classNames="my-node"
-      unmountOnExit
-    >
-      <div
-        ref={loginFormContainerRef}
-        className={`loginform__container ${isOpened ? '' : 'ifHidden'}`}
-      >
-        <div
-          ref={loginFormRef}
-          action=""
-          className={`login__form ${isOpened ? '' : 'ifHidden'}`}
-          id="login"
-        >
+    <CSSTransition in={isOpened} timeout={500} classNames="modal" unmountOnExit>
+      <div className={'loginform__container'}>
+        <div className={'login__form'} id="login">
           <div id="loginform__close">
             <RiCloseCircleLine onClick={onClickClose} />
           </div>
@@ -124,37 +120,43 @@ const LoginForm = () => {
             </div>
           </div>
 
-          <p
-            className={`isLoginComplete__error ${
-              isError && error.status === 400 ? '' : 'hidden'
-            }`}
-          >
-            <RiErrorWarningLine />
-            Введен неверный логин или пароль
-          </p>
+          {loginIsError && notifyVisibility ? (
+            <p
+              className={`isLoginComplete__error ${
+                loginIsError && notifyVisibility ? '' : 'hidden'
+              }`}
+            >
+              <RiErrorWarningLine />
+              {errorMessages}
+            </p>
+          ) : (
+            ''
+          )}
 
-          <p
-            className={`isLoginComplete__error ${
-              isError && error.originalStatus > 400 ? '' : 'hidden'
-            }`}
-          >
-            <RiErrorWarningLine />
-            Ошибка {isError && error.originalStatus}. Повторите попытку
-          </p>
-
-          <p
-            className={`isLoginComplete__success ${isSuccess ? '' : 'hidden'}`}
-          >
-            <RiCheckboxCircleLine /> Авторизация выполнена
-          </p>
-
-          <Button
-            id="login__btn"
-            type="submit"
-            text="Войти"
-            action={authorization}
-            disabled={username && password ? false : true}
-          />
+          {loginIsSuccess && notifyVisibility ? (
+            <p
+              className={`isLoginComplete__success ${
+                loginIsSuccess && notifyVisibility ? '' : 'hidden'
+              }`}
+            >
+              <RiCheckboxCircleLine /> Авторизация выполнена
+            </p>
+          ) : (
+            ''
+          )}
+          <div className="loginform__actions">
+            {logInLoading ? (
+              <ModalLoader />
+            ) : (
+              <Button
+                id="login__btn"
+                type="submit"
+                text="Войти"
+                action={authorization}
+                disabled={username && password ? false : true}
+              />
+            )}
+          </div>
         </div>
       </div>
     </CSSTransition>

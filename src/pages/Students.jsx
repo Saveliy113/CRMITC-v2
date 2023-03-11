@@ -170,8 +170,6 @@ const Students = () => {
     }
   }, [directionFilter]);
 
-  console.log('DIRECTIONFILTERVALUE: ', directionFilter);
-
   const columns = [
     'ID',
     'Имя',
@@ -185,7 +183,7 @@ const Students = () => {
   const tableTr =
     currentPage === 'students' && students && students.length !== 0 ? (
       students.map((student, index) => (
-        <tr key={index} onClick={() => navigate(`/student?id=${student.id}`)}>
+        <tr key={index} onClick={() => navigate(`student?id=${student.id}`)}>
           <td data-label="ID">{student.id}</td>
           <td data-label="Имя">{student.full_name}</td>
           <td data-label="Оплата">{student.payment.toLocaleString('ru')}</td>
@@ -442,7 +440,7 @@ const Students = () => {
           <div className="table__actions-box">
             <RowsSlicer />
             <Button text="+Добавить студента" action={onClickClose} />
-            <div className="select__container">
+            {/* <div className="select__container">   //DIRECTION FILTER
               <select
                 onChange={(event) => setDirectionFilter(event.target.value)}
                 className="select__box"
@@ -460,7 +458,7 @@ const Students = () => {
               <div className="icon__container">
                 <RiArrowDownSFill />
               </div>
-            </div>
+            </div> */}
             <Search placeholder="Имя студента" />
           </div>
           <div className="table__box">

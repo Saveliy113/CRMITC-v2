@@ -65,7 +65,6 @@ const BrancheDetails = () => {
     }
 
     if (trailLessonsIsSuccess && activeData === 'trail_lessons') {
-      console.log(trailLessons.filter((lesson) => lesson.branch === branchId));
       dispatch(
         setFetchData({
           page: 'trail_lessons',
@@ -133,14 +132,12 @@ const BrancheDetails = () => {
       currentData.map((lesson, index) => (
         <tr
           key={index}
-          // onClick={() =>
-          //   navigate(`/recruiter?id=${employee.id}&name=${employee.username}`)
-          // }
+          onClick={() =>
+            navigate(`/trail_lessons/trail_lesson?id=${lesson.id}`)
+          }
         >
           <td data-label="ID">{lesson.id}</td>
-          <td data-label="Заголовок">
-            {new Date(lesson.date).toLocaleDateString()}
-          </td>
+          <td data-label="Заголовок">{lesson.title}</td>
           <td data-label="Дата">
             {new Date(lesson.date).toLocaleString().slice(0, -3)}
           </td>

@@ -84,7 +84,10 @@ const RecruiterDetails = () => {
     courses &&
     currentData.length !== 0 ? (
       currentData.map((student, index) => (
-        <tr key={index} onClick={() => navigate(`/student?id=${student.id}`)}>
+        <tr
+          key={index}
+          onClick={() => navigate(`/students/student?id=${student.id}`)}
+        >
           <td data-label="ID">{student.id}</td>
           <td data-label="Студент">{student.full_name}</td>
           <td data-label="Группа">
@@ -113,7 +116,10 @@ const RecruiterDetails = () => {
     students &&
     currentData.length !== 0 ? (
       currentData.map((payment, index) => (
-        <tr key={index}>
+        <tr
+          key={index}
+          onClick={() => navigate(`/payments/payment?id=${payment.id}`)}
+        >
           <td data-label="ID">{payment.id}</td>
           <td data-label="Сумма">{payment.sum}</td>
           <td data-label="Студент">

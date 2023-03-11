@@ -73,7 +73,7 @@ const StudentInfo = () => {
     if (student && coursesIsSuccess) {
       setCourse(courses.find((course) => course.id === student.course));
     }
-    if (student) {
+    if (studentIsSuccess) {
       setStudentReqBody({
         full_name: student.full_name,
         start_mount: student.start_mount,
@@ -88,13 +88,14 @@ const StudentInfo = () => {
         comment: student.comment ? student.comment : '',
       });
     }
-  }, [courses, recruiters, student]);
+  }, [courses, recruiters, student, studentIsSuccess]);
 
   /*----------------------------------------------------------*/
 
   /*------------------STUDENT DELITING, EDITING, PAYMENT ADDING-----------------------*/
 
   const [studentReqBody, setStudentReqBody] = useState({});
+  console.log(studentReqBody);
 
   const [
     deleteStudent,
@@ -565,7 +566,7 @@ const StudentInfo = () => {
                       />
                     </div>
                     <div className="modal__input-container">
-                      <label htmlFor="comment">Комментарий</label>
+                      <label htmlFor="student__comment">Комментарий</label>
                       <textarea
                         onChange={(event) =>
                           setStudentReqBody({
@@ -573,7 +574,7 @@ const StudentInfo = () => {
                             comment: event.target.value,
                           })
                         }
-                        id="name"
+                        id="student__comment"
                         value={studentReqBody.comment}
                       />
                     </div>

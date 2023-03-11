@@ -54,7 +54,10 @@ const MentorDetails = () => {
   const mentorCoursesTableTr =
     currentPage === 'mentor' && coursesData && courses.length !== 0 ? (
       courses.map((course, index) => (
-        <tr key={index} onClick={() => navigate(`/course?id=${course.id}`)}>
+        <tr
+          key={index}
+          onClick={() => navigate(`/courses/course?id=${course.id}`)}
+        >
           <td data-label="ID">{course.id}</td>
           <td data-label="Курс">{course.title}</td>
         </tr>

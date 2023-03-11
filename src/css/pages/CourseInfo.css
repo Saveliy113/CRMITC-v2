@@ -1,6 +1,10 @@
-/* #telegram__link {
-  cursor: pointer;
+/* .card__edit-container .modal__input-container .select__container{
+  width: 70%;
 } */
+
+#telegram__link {
+  cursor: pointer;
+}
 
 .header__title svg {
   width: 80px;

@@ -49,7 +49,7 @@ const CountryDetail = () => {
           <tr
             key={index}
             onClick={() =>
-              navigate(`/branche_details?id=${branche.id}&data=directions`)
+              navigate(`branche_details?id=${branche.id}&data=directions`)
             }
           >
             <td data-label="ID">{branche.id}</td>

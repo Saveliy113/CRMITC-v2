@@ -125,7 +125,7 @@ const Payments = () => {
   const tableTr =
     currentPage === 'payments' && payments && payments.length !== 0 ? (
       payments.map((payment, index) => (
-        <tr key={index} onClick={() => navigate(`/payment?id=${payment.id}`)}>
+        <tr key={index} onClick={() => navigate(`payment?id=${payment.id}`)}>
           <td data-label="ID">{payment.id}</td>
           <td data-label="Имя">
             {studentsIsSuccess

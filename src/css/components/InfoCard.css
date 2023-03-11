@@ -1,12 +1,17 @@
 /*---------------CARD CONTAINERS--------------*/
 
 .card {
-  width: 90%;
-  min-height: 500px;
+  max-width: 90%;
+  min-width: 50%;
+  min-height: 350px;
   padding: 15px;
   padding-bottom: 40px;
-  margin-top: 80px;
+  margin-top: 50px;
   margin-bottom: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   position: relative;
   background-color: whitesmoke;
   border-radius: 40px;
@@ -14,22 +19,25 @@
 }
 
 .card__header {
+  box-sizing: border-box;
   width: 70%;
-  height: 200px;
-  position: absolute;
-  left: 15%;
-  top: -10%;
+  min-height: 150px;
+  max-height: 180px;
+  padding: 20px;
+  position: relative;
+  top: -50px;
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
   border-radius: 20px;
   background-color: lightsteelblue;
-  box-shadow: 0 0 25px black;
+  box-shadow: 0 0 10px black;
 }
 
 .card__content {
   width: 100%;
-  margin-top: 150px;
+  /* margin-top: 100px; */
   display: flex;
   justify-content: center;
   gap: 20px;
@@ -40,10 +48,9 @@
   width: 90%;
   height: 80px;
   position: absolute;
-  left: 4%;
-  bottom: -5%;
+  bottom: -7%;
   border-radius: 20px;
-  box-shadow: 0 0 20px black;
+  box-shadow: 0 0 10px black;
   background-color: lightsteelblue;
 }
 
@@ -211,14 +218,6 @@
 /*----------------------------MEDIA QUERIES------------------------- */
 
 @media (max-width: 768px) {
-  .card {
-    padding-bottom: 50px;
-  }
-
-  .card__content {
-    margin-top: 130px;
-  }
-
   .card__content-item {
     width: 40%;
   }
@@ -244,13 +243,8 @@
 @media (max-width: 585px) {
   .card {
     width: 95%;
-    margin-top: 70px;
+    /* margin-top: 70px; */
     padding-bottom: 0;
-  }
-
-  .card__header {
-    height: 120px;
-    top: -8%;
   }
 
   .header__title svg {
@@ -260,7 +254,7 @@
   }
 
   .card__content {
-    margin-top: 70px;
+    /* margin-top: 70px; */
     margin-bottom: 50px;
   }
 }

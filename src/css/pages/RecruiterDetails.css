@@ -3,4 +3,13 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+/*--------------------MEDIA QUERIES-------------------- */
+
+@media (max-width: 466px) {
+  .recruiter__header {
+    justify-content: flex-start;
+  }
 }

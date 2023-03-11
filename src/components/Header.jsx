@@ -1,15 +1,22 @@
-import React from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+//REACT
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
+//REDUX
+import { useLogOutMutation } from '../services/authApi';
+import { toggleLoginForm, clearUserData } from '../redux/slices/loginFormSlice';
+
+//ICONS
 import { RiLogoutBoxLine } from 'react-icons/ri';
 
+//COMPONENTS
 import Button from '../ui/Button';
 import ItcLogo from '../assets/img/ITClogoW.png';
-import { toggleLoginForm, clearUserData } from '../redux/slices/loginFormSlice';
-import { useLogOutMutation } from '../services/authApi';
 
+//CSS
 import '../css/components/Header.css';
-import { useEffect } from 'react';
+import { clearData } from '../redux/slices/dataSlice';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -21,24 +28,19 @@ const Header = () => {
     dispatch(toggleLoginForm());
   };
 
-  const [logOut, { isSuccess, isError }] = useLogOutMutation();
+  const [logOut, { isSuccess: logOutSuccess, isError: logOutIsError }] =
+    useLogOutMutation();
   const userExit = async () => {
     await logOut(token).unwrap();
   };
-  // console.log('Header ISSUCCESS ' + isSuccess);
-
-  function actionsAfterExit() {
-    if (isSuccess) {
-      // console.log('ActionsAfterExit');
-      dispatch(clearUserData());
-      navigate('/');
-    }
-  }
 
   useEffect(() => {
-    // console.log('Header useeffect');
-    actionsAfterExit();
-  }, [isSuccess]);
+    if (logOutSuccess || logOutIsError) {
+      dispatch(clearUserData());
+      navigate('/');
+      dispatch(clearData());
+    }
+  }, [logOutSuccess, logOutIsError]);
 
   return (
     <div className="header">

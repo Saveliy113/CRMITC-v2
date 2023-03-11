@@ -177,14 +177,14 @@ const TrailLessons = () => {
       trailLessons.map((lesson, index) => (
         <tr
           key={index}
-          onClick={() => navigate(`/trail_lesson?id=${lesson.id}`)}
+          onClick={() => navigate(`trail_lesson?id=${lesson.id}`)}
         >
           <td data-label="ID">{lesson.id}</td>
           <td data-label="Заголовок">{lesson.title}</td>
           <td data-label="Дата">
             {new Date(lesson.date).toLocaleString().slice(0, -3)}
           </td>
-          <td>
+          <td data-label="Филиал">
             {branchesIsSuccess
               ? branches.find((branche) => branche.id === lesson.branch).address
               : '-'}
@@ -244,7 +244,7 @@ const TrailLessons = () => {
       branchesIsSuccess ? (
         <CSSTransition //MODAL WINDOW
           in={isOpened}
-          timeout={500}
+          timeout={200}
           classNames={'modal'}
           unmountOnExit
         >

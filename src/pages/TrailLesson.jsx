@@ -324,8 +324,8 @@ const TrailLesson = () => {
           >
             {client.name}
           </td>
-          <td id="phone__td" data-label="Телефон">
-            <RiPhoneFill />
+          <td data-label="Телефон">
+            <RiPhoneFill id="phone__icon" />
             <a className="link" href={`tel:${client.phone}`}>
               {client.phone}
             </a>

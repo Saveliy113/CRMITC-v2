@@ -26,6 +26,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import Loader from '../ui/Loader';
 import ModalLoader from '../ui/ModalLoader';
 
+//CSS
+import '../css/pages/ClientDetails.css';
+
 const ClientDetails = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -156,7 +159,7 @@ const ClientDetails = () => {
     <div className="paymentDetails__card">
       <ToastContainer />
       <div className="paymentDetails__header">
-        {/* <img src={CreditCards} alt="" /> */}
+        <h3>Клиент</h3>
       </div>
       <div className="paymentDetails__content">
         {isEditing ? (
@@ -282,7 +285,7 @@ const ClientDetails = () => {
               </div>
             </div>
             <div className="modal__input-container">
-              <label htmlFor="description">Комментарий</label>
+              <label htmlFor="client__description">Комментарий</label>
               <textarea
                 onChange={(event) =>
                   setClientReqBody({
@@ -290,14 +293,14 @@ const ClientDetails = () => {
                     description: event.target.value,
                   })
                 }
-                id="description"
+                id="client__description"
                 value={clientReqBody.description}
               />
             </div>
           </div>
         ) : (
           <>
-            <h3>Клиент: {client.name}</h3>
+            <h3>ФИО: {client.name}</h3>
             <h3>
               Пробный урок:{' '}
               {

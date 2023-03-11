@@ -13,14 +13,17 @@ const loginFormSlice = createSlice({
     toggleLoginForm(state) {
       state.isOpened = !state.isOpened;
     },
+
     setToken(state, action) {
       console.log(action.payload);
       state.token = action.payload;
     },
+
     setUsername(state, action) {
       console.log(action.payload);
       state.username = action.payload;
     },
+    
     clearUserData(state) {
       state.token = '';
       state.username = '';

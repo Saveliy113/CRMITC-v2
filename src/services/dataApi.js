@@ -59,7 +59,7 @@ export const dataApi = createApi({
       query: (body) => ({
         method: 'PUT',
         url: `/v1/mainapp/course/${body.courseId}`,
-        body: body.reqBody,
+        body: body.courseReqBody,
       }),
       invalidatesTags: ['Courses'],
     }),
@@ -110,7 +110,7 @@ export const dataApi = createApi({
       query: (body) => ({
         method: 'PUT',
         url: `/v1/students/students/${body.studentId}/`,
-        body: body.reqBody,
+        body: body.studentReqBody,
       }),
       invalidatesTags: ['Students'],
     }),

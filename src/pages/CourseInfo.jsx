@@ -265,7 +265,7 @@ const CourseInfo = () => {
   ];
 
   const tableTrClickHandler = (id) => {
-    navigate(`/student?id=${id}`);
+    navigate(`/students/student?id=${id}`);
   };
 
   const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
@@ -555,7 +555,7 @@ const CourseInfo = () => {
                       </div>
                     </div>
                     <div className="modal__input-container">
-                      <label htmlFor="email">Ментор</label>
+                      <label>Ментор</label>
                       <div className="select__container">
                         <select
                           onChange={(event) =>
@@ -711,28 +711,28 @@ const CourseInfo = () => {
                         <p>Количество студентов: {course.count_students}</p>
                         <p>
                           Ментор:{' '}
-                          <span
-                            onClick={() =>
-                              navigate(
-                                `/mentor?id=${mentor.id}&name=${mentor.full_name}`
-                              )
-                            }
-                            className="p__link"
-                          >
-                            {mentor.first_name}
-                          </span>{' '}
+                          {mentor ? (
+                            <span
+                              onClick={() =>
+                                navigate(
+                                  `/mentor?id=${mentor.id}&name=${mentor.full_name}`
+                                )
+                              }
+                              className="p__link"
+                            >
+                              {mentor.first_name}
+                            </span>
+                          ) : (
+                            '-'
+                          )}
                         </p>
-                        {/* <p onClick={() => navigate(`/course?id=${course.id}`)}>
-                  Группа:{' '}
-                  <span className="p__link">{course ? course.title : ''}</span>
-                </p> */}
                         <p>Цена: {Math.ceil(course.price)} KZT</p>
                         {course.description ? (
                           <p>Описание: {course.description}</p>
                         ) : (
                           ''
                         )}
-                        {true ? (
+                        {course.telegram_group_link ? (
                           <a
                             href={course.telegram_group_link}
                             id="telegram__link"
