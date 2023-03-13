@@ -172,6 +172,7 @@ const TrailLessons = () => {
   const tableTr =
     currentPage === 'trail_lessons' &&
     trailLessonsIsSuccess &&
+    branchesIsSuccess &&
     trailLessons &&
     trailLessons.length !== 0 ? (
       trailLessons.map((lesson, index) => (
@@ -185,7 +186,7 @@ const TrailLessons = () => {
             {new Date(lesson.date).toLocaleString().slice(0, -3)}
           </td>
           <td data-label="Филиал">
-            {branchesIsSuccess
+            {branches
               ? branches.find((branche) => branche.id === lesson.branch).address
               : '-'}
           </td>
@@ -390,7 +391,7 @@ const TrailLessons = () => {
         <div className="table__actions-box">
           <RowsSlicer />
           <Button text="+Добавить урок" action={onClickClose} />
-          <Search placeholder="Имя студента" />
+          <Search placeholder="Название урока" />
         </div>
         <div className="table__box">
           <table className={styles.table}>

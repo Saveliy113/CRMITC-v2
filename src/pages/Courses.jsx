@@ -160,7 +160,13 @@ const Courses = () => {
 
   //-----------------------TABLE-------------------------//
 
-  const columns = ['Филиал', 'Название курса', 'Начало', 'Ментор'];
+  const columns = [
+    'Филиал',
+    'Название курса',
+    'Начало',
+    'Ментор',
+    'Количество студентов',
+  ];
 
   const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
   const tableTr =
@@ -184,12 +190,13 @@ const Courses = () => {
                   )
                 : ''}
             </td>
+            <td data-label="Количество студентов">{course.count_students}</td>
           </tr>
         );
       })
     ) : (
       <tr>
-        <td colspan={4}>No available data</td>
+        <td colSpan={4}>No available data</td>
       </tr>
     );
 

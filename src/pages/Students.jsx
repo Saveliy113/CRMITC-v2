@@ -73,8 +73,8 @@ const Students = () => {
     full_name: '',
     start_mount: '',
     email: '',
-    discount: '',
-    discount_of_cash: '',
+    discount: 0,
+    discount_of_cash: 0,
     phone: '',
     course: 0,
     studies: false,
@@ -87,6 +87,7 @@ const Students = () => {
   const [
     addStudent,
     {
+      data: newStudent,
       isSuccess: addStudentIsSuccess,
       isLoading: addStudentLoading,
       isError: addStudentIsError,
@@ -146,6 +147,7 @@ const Students = () => {
         comment: '',
       });
       notifySuccess('Студент успешно добавлен!');
+      setTimeout(() => navigate(`/students/student?id=${newStudent.id}`), 1500);
     } else if (addStudentIsError) {
       notifyError(addStudentError);
     }
@@ -211,6 +213,7 @@ const Students = () => {
       </tr>
     );
 
+  console.log(reqBody);
   //----------------------------------------------------//
 
   return (
@@ -276,16 +279,20 @@ const Students = () => {
                       discountType.current.value === '%'
                         ? setReqBody({
                             ...reqBody,
-                            discount: event.target.value,
+                            discount: Number(event.target.value),
                           })
                         : setReqBody({
                             ...reqBody,
-                            discount_of_cash: event.target.value,
+                            discount_of_cash: Number(event.target.value),
                           })
                     }
                     type="number"
                     id="discount"
-                    value={reqBody.discount || reqBody.discount_of_cash}
+                    value={
+                      reqBody.discount !== 0 || reqBody.discount_of_cash !== 0
+                        ? reqBody.discount || reqBody.discount_of_cash
+                        : ''
+                    }
                   />
                   <div className="select__container">
                     <select

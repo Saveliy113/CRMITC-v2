@@ -49,10 +49,8 @@ const Branches = () => {
             navigate(`country_details?id=1&country=${country.name}`)
           }
         >
-          <td data-label="id">{countries.map((country) => country.id)}</td>
-          <td data-label="Страна">
-            {countries.map((country) => country.name)}
-          </td>
+          <td data-label="id">{country.id}</td>
+          <td data-label="Страна">{country.name}</td>
         </tr>
       ))
     ) : (

@@ -78,6 +78,10 @@ const dataSlice = createSlice({
                 return data.name
                   .toLowerCase()
                   .includes(action.payload.searchText.toLowerCase());
+              case 'trail_lessons':
+                return data.title
+                  .toLowerCase()
+                  .includes(action.payload.searchText.toLowerCase());
               case 'courses':
                 return data.title
                   .toLowerCase()

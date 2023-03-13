@@ -1,6 +1,5 @@
 //REACT
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 //REDUX
@@ -100,7 +99,8 @@ const CourseInfo = () => {
     full_name: '',
     start_mount: '',
     email: '',
-    discount: '',
+    discount: 0,
+    discount_of_cash: 0,
     phone: '',
     course: courseId,
     studies: false,
@@ -215,7 +215,8 @@ const CourseInfo = () => {
         full_name: '',
         start_mount: '',
         email: '',
-        discount: '',
+        discount: 0,
+        discount_of_cash: 0,
         phone: '',
         course: courseId,
         studies: false,
@@ -234,6 +235,7 @@ const CourseInfo = () => {
   /*---------------------MODAL WINDOW-------------------------*/
 
   const [isOpened, setIsOpened] = useState(false);
+  const discountType = useRef();
 
   const isSrudentAddAllowed =
     studentReqBody.full_name &&
@@ -365,20 +367,55 @@ const CourseInfo = () => {
               </div>
               <div className="modal__input-container">
                 <label htmlFor="discount">Скидка</label>
-                <input
-                  onChange={(event) =>
-                    setStudentReqBody({
-                      ...studentReqBody,
-                      discount: event.target.value,
-                    })
-                  }
-                  type="number"
-                  id="discount"
-                  maxLength="3"
-                  min={0}
-                  max={100}
-                  value={studentReqBody.discount}
-                />
+                <div className="discount__wrapper">
+                  <input
+                    onChange={(event) =>
+                      discountType.current.value === '%'
+                        ? setStudentReqBody({
+                            ...studentReqBody,
+                            discount: Number(event.target.value),
+                          })
+                        : setStudentReqBody({
+                            ...studentReqBody,
+                            discount_of_cash: Number(event.target.value),
+                          })
+                    }
+                    type="number"
+                    id="discount"
+                    value={
+                      studentReqBody.discount !== 0 ||
+                      studentReqBody.discount_of_cash !== 0
+                        ? studentReqBody.discount ||
+                          studentReqBody.discount_of_cash
+                        : ''
+                    }
+                  />
+                  <div className="select__container">
+                    <select
+                      ref={discountType}
+                      onChange={(event) =>
+                        event.target.value === '%'
+                          ? setStudentReqBody({
+                              ...studentReqBody,
+                              discount: studentReqBody.discount_of_cash,
+                              discount_of_cash: 0,
+                            })
+                          : setStudentReqBody({
+                              ...studentReqBody,
+                              discount_of_cash: studentReqBody.discount,
+                              discount: 0,
+                            })
+                      }
+                      className="select__box"
+                    >
+                      <option value="%">%</option>
+                      <option value="сумма">сумма</option>
+                    </select>
+                    <div className="icon__container">
+                      <RiArrowDownSFill />
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="modal__input-container">
                 <label htmlFor="phone">Телефон</label>
