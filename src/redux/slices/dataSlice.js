@@ -57,6 +57,7 @@ const dataSlice = createSlice({
         );
       }
     },
+    filterStudentsByCourse(state, action) {},
     onSearch(state, action) {
       if (!action.payload.searchText) {
         state.searchQuery = '';

@@ -16,6 +16,7 @@ import { setFetchData } from '../redux/slices/dataSlice';
 //COMPONENTS
 import { ToastContainer, toast } from 'react-toastify';
 import { CSSTransition } from 'react-transition-group';
+import ReactInputMask from 'react-input-mask';
 import Pagination from '../ui/Pagination';
 import RowsSlicer from '../ui/RowsSlicer';
 import Search from '../ui/Search';
@@ -25,7 +26,12 @@ import ModalWindow from '../components/ModalWindow';
 import ModalLoader from '../ui/ModalLoader';
 
 //ICONS
-import { RiCheckFill, RiCloseFill, RiArrowDownSFill } from 'react-icons/ri';
+import {
+  RiCheckFill,
+  RiCloseFill,
+  RiArrowDownSFill,
+  RiRestartLine,
+} from 'react-icons/ri';
 
 //CSS
 import '../css/pages/Students.css';
@@ -39,6 +45,21 @@ const Students = () => {
   const navigate = useNavigate();
   const currentPage = useSelector((store) => store.data.page);
 
+  //-----------------------FILTERING BY COURSE-------------------------//
+
+  const [filterByCourses, setFilterByCourses] = useState('');
+  useEffect(() => {
+    if (filterByCourses) {
+      dispatch(
+        setFetchData({
+          page: 'students',
+          data: data.filter(
+            (student) => student.studies && student.course === filterByCourses
+          ),
+        })
+      );
+    }
+  }, [filterByCourses]);
   //-----------------------DATA-------------------------//
 
   const {
@@ -53,14 +74,15 @@ const Students = () => {
     useGetDirectionsQuery();
 
   useEffect(() => {
-    studentsIsSuccess &&
+    if (studentsIsSuccess && !filterByCourses) {
       dispatch(
         setFetchData({
           page: 'students',
           data: data.filter((student) => student.studies),
         })
       );
-  }, [studentsIsSuccess]);
+    }
+  }, [studentsIsSuccess, filterByCourses]);
 
   const students = useSelector((store) => store.data.currentData);
 
@@ -157,21 +179,6 @@ const Students = () => {
 
   //-----------------------TABLE-------------------------//
 
-  const [directionFilter, setDirectionFilter] = useState('');
-  useEffect(() => {
-    if (directionFilter) {
-      dispatch(
-        setFetchData({
-          page: 'students',
-          data: data.filter(
-            (student) =>
-              student.studies && student.direction === directionFilter
-          ),
-        })
-      );
-    }
-  }, [directionFilter]);
-
   const columns = [
     'ID',
     'Имя',
@@ -213,7 +220,6 @@ const Students = () => {
       </tr>
     );
 
-  console.log(reqBody);
   //----------------------------------------------------//
 
   return (
@@ -323,14 +329,14 @@ const Students = () => {
               </div>
               <div className="modal__input-container">
                 <label htmlFor="phone">Телефон</label>
-                <input
+                <ReactInputMask
+                  id="phone"
+                  value={reqBody.phone}
+                  mask="+9999999999999"
+                  maskChar={null}
                   onChange={(event) =>
                     setReqBody({ ...reqBody, phone: event.target.value })
                   }
-                  type="text"
-                  id="phone"
-                  maxLength="15"
-                  value={reqBody.phone}
                 />
               </div>
               <div className="modal__input-container">
@@ -447,25 +453,34 @@ const Students = () => {
           <div className="table__actions-box">
             <RowsSlicer />
             <Button text="+Добавить студента" action={onClickClose} />
-            {/* <div className="select__container">   //DIRECTION FILTER
-              <select
-                onChange={(event) => setDirectionFilter(event.target.value)}
-                className="select__box"
-                value={directionFilter}
-              >
-                <option hidden selected>
-                  Направление
-                </option>
-                {directions.map((direction, i) => (
-                  <option key={i} value={direction.id}>
-                    {direction.title}
+            <div id="filter__container">
+              <div className="select__container">
+                <select
+                  onChange={(event) =>
+                    setFilterByCourses(Number(event.target.value))
+                  }
+                  className="select__box"
+                  value={filterByCourses}
+                >
+                  <option hidden selected>
+                    Выберите курс
                   </option>
-                ))}
-              </select>
-              <div className="icon__container">
-                <RiArrowDownSFill />
+                  {courses.map((course, i) => (
+                    <option key={i} value={course.id}>
+                      {course.title}
+                    </option>
+                  ))}
+                </select>
+                <div className="icon__container">
+                  <RiArrowDownSFill />
+                </div>
               </div>
-            </div> */}
+              <Button
+                text={<RiRestartLine />}
+                action={() => setFilterByCourses('')}
+              ></Button>
+            </div>
+
             <Search placeholder="Имя студента" />
           </div>
           <div className="table__box">

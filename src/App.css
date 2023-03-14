@@ -20,7 +20,7 @@
   flex-direction: column;
   align-items: center;
   margin: 10px 10px 10px 235px;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   width: 80%;
   min-width: 50%;
   padding: 0 20px;
@@ -55,6 +55,10 @@
   transition: opacity 1100ms;
 }
 
+input[type='date'],
+input[type='time'] {
+  color-scheme: dark;
+}
 /* ----------------------------- MEDIA QUERIES ---------------------------- */
 
 @media (max-width: 835px) {

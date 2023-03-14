@@ -32,6 +32,7 @@ import {
 //COMPONENTS
 import { ToastContainer, toast } from 'react-toastify';
 import { CSSTransition } from 'react-transition-group';
+import ReactInputMask from 'react-input-mask';
 import Select from 'react-select';
 import Button from '../ui/Button';
 import InfoCard from '../components/InfoCard';
@@ -383,16 +384,17 @@ const TrailLesson = () => {
               </div>
               <div className="modal__input-container">
                 <label htmlFor="phone">Телефон</label>
-                <input
+                <ReactInputMask
+                  id="phone"
+                  value={clientReqBody.phone}
+                  mask="+9999999999999"
+                  maskChar={null}
                   onChange={(event) =>
                     setClientReqBody({
                       ...clientReqBody,
                       phone: event.target.value,
                     })
                   }
-                  type="text"
-                  id="phone"
-                  value={clientReqBody.phone}
                 />
               </div>
               <div className="modal__input-container">

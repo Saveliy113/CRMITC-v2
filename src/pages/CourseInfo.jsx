@@ -31,6 +31,7 @@ import {
 //COMPONENTS
 import { CSSTransition } from 'react-transition-group';
 import { ToastContainer, toast } from 'react-toastify';
+import ReactInputMask from 'react-input-mask';
 import InfoCard from '../components/InfoCard';
 import Loader from '../ui/Loader';
 import ModalLoader from '../ui/ModalLoader';
@@ -419,17 +420,17 @@ const CourseInfo = () => {
               </div>
               <div className="modal__input-container">
                 <label htmlFor="phone">Телефон</label>
-                <input
+                <ReactInputMask
+                  id="phone"
+                  value={studentReqBody.phone}
+                  mask="+9999999999999"
+                  maskChar={null}
                   onChange={(event) =>
                     setStudentReqBody({
                       ...studentReqBody,
                       phone: event.target.value,
                     })
                   }
-                  type="text"
-                  id="phone"
-                  maxLength="15"
-                  value={studentReqBody.phone}
                 />
               </div>
               <div className="modal__input-container">
