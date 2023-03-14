@@ -20,6 +20,7 @@ const CountryDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentPage = useSelector((store) => store.data.page);
+  const countryId = Number(searchParams.get('id'));
   const country = searchParams.get('country');
 
   //-----------------------DATA-------------------------//
@@ -29,7 +30,12 @@ const CountryDetail = () => {
 
   useEffect(() => {
     if (branchesIsSuccess) {
-      dispatch(setFetchData({ page: 'branches', data: branchesData }));
+      dispatch(
+        setFetchData({
+          page: 'branches',
+          data: branchesData.filter((branche) => branche.country === countryId),
+        })
+      );
     }
   }, [branchesIsSuccess]);
 

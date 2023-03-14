@@ -46,7 +46,7 @@ const Branches = () => {
         <tr
           key={index}
           onClick={() =>
-            navigate(`country_details?id=1&country=${country.name}`)
+            navigate(`country_details?id=${country.id}&country=${country.name}`)
           }
         >
           <td data-label="id">{country.id}</td>
