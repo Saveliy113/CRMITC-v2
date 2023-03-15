@@ -1,7 +1,7 @@
 //REACT
-import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 //REDUX
 import {
@@ -10,20 +10,20 @@ import {
   useGetDirectionsQuery,
   useGetStudentsQuery,
   useGetUsersQuery,
-} from '../services/dataApi';
-import { setFetchData } from '../redux/slices/dataSlice';
+} from "../services/dataApi";
+import { setFetchData } from "../redux/slices/dataSlice";
 
 //COMPONENTS
-import { ToastContainer, toast } from 'react-toastify';
-import { CSSTransition } from 'react-transition-group';
-import ReactInputMask from 'react-input-mask';
-import Pagination from '../ui/Pagination';
-import RowsSlicer from '../ui/RowsSlicer';
-import Search from '../ui/Search';
-import Loader from '../ui/Loader';
-import Button from '../ui/Button';
-import ModalWindow from '../components/ModalWindow';
-import ModalLoader from '../ui/ModalLoader';
+import { ToastContainer, toast } from "react-toastify";
+import { CSSTransition } from "react-transition-group";
+import ReactInputMask from "react-input-mask";
+import Pagination from "../ui/Pagination";
+import RowsSlicer from "../ui/RowsSlicer";
+import Search from "../ui/Search";
+import Loader from "../ui/Loader";
+import Button from "../ui/Button";
+import ModalWindow from "../components/ModalWindow";
+import ModalLoader from "../ui/ModalLoader";
 
 //ICONS
 import {
@@ -31,14 +31,14 @@ import {
   RiCloseFill,
   RiArrowDownSFill,
   RiRestartLine,
-} from 'react-icons/ri';
+} from "react-icons/ri";
 
 //CSS
-import '../css/pages/Students.css';
-import styles from '../ui/Table.module.css';
-import '../css/components/ModalWindow.css';
-import '../ui/Select.css';
-import 'react-toastify/dist/ReactToastify.css';
+import "../css/pages/Students.css";
+import styles from "../ui/Table.module.css";
+import "../css/components/ModalWindow.css";
+import "../ui/Select.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const Students = () => {
   const dispatch = useDispatch();
@@ -47,12 +47,12 @@ const Students = () => {
 
   //-----------------------FILTERING BY COURSE-------------------------//
 
-  const [filterByCourses, setFilterByCourses] = useState('');
+  const [filterByCourses, setFilterByCourses] = useState("");
   useEffect(() => {
     if (filterByCourses) {
       dispatch(
         setFetchData({
-          page: 'students',
+          page: "students",
           data: data.filter(
             (student) => student.studies && student.course === filterByCourses
           ),
@@ -77,7 +77,7 @@ const Students = () => {
     if (studentsIsSuccess && !filterByCourses) {
       dispatch(
         setFetchData({
-          page: 'students',
+          page: "students",
           data: data.filter((student) => student.studies),
         })
       );
@@ -92,17 +92,17 @@ const Students = () => {
 
   const [isOpened, setIsOpened] = useState(false);
   const [reqBody, setReqBody] = useState({
-    full_name: '',
-    start_mount: '',
-    email: '',
+    full_name: "",
+    start_mount: "",
+    email: "",
     discount: 0,
     discount_of_cash: 0,
-    phone: '',
+    phone: "",
     course: 0,
     studies: false,
     recruiter: 0,
     contract: false,
-    comment: '',
+    comment: "",
   });
   const discountType = useRef();
 
@@ -131,44 +131,44 @@ const Students = () => {
 
   const notifySuccess = (text) =>
     toast.success(text, {
-      position: 'top-center',
+      position: "top-center",
       autoClose: 3000,
       hideProgressBar: true,
       closeOnClick: false,
       pauseOnHover: false,
       draggable: false,
       progress: undefined,
-      theme: 'light',
+      theme: "light",
     });
 
   const notifyError = (error) =>
     toast.error(`Ошибка. ${error.data.detail}`, {
-      position: 'top-center',
+      position: "top-center",
       autoClose: 3000,
       hideProgressBar: true,
       closeOnClick: false,
       pauseOnHover: false,
       draggable: false,
       progress: undefined,
-      theme: 'light',
+      theme: "light",
     });
 
   useEffect(() => {
     if (addStudentIsSuccess) {
       setReqBody({
-        full_name: '',
-        start_mount: '',
-        email: '',
-        discount: '',
-        discount_of_cash: '',
-        phone: '',
+        full_name: "",
+        start_mount: "",
+        email: "",
+        discount: "",
+        discount_of_cash: "",
+        phone: "",
         course: 0,
         studies: false,
         recruiter: 0,
         contract: false,
-        comment: '',
+        comment: "",
       });
-      notifySuccess('Студент успешно добавлен!');
+      notifySuccess("Студент успешно добавлен!");
       setTimeout(() => navigate(`/students/student?id=${newStudent.id}`), 1500);
     } else if (addStudentIsError) {
       notifyError(addStudentError);
@@ -180,34 +180,34 @@ const Students = () => {
   //-----------------------TABLE-------------------------//
 
   const columns = [
-    'ID',
-    'Имя',
-    'Оплата',
-    'Общая сумма',
-    'Остаток за текущий месяц',
-    'Рекрутер',
-    'Договор',
+    "ID",
+    "Имя",
+    "Оплата",
+    "Общая сумма",
+    "Остаток за текущий месяц",
+    "Рекрутер",
+    "Договор",
   ];
   const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
   const tableTr =
-    currentPage === 'students' && students && students.length !== 0 ? (
+    currentPage === "students" && students && students.length !== 0 ? (
       students.map((student, index) => (
         <tr key={index} onClick={() => navigate(`student?id=${student.id}`)}>
           <td data-label="ID">{student.id}</td>
           <td data-label="Имя">{student.full_name}</td>
-          <td data-label="Оплата">{student.payment.toLocaleString('ru')}</td>
+          <td data-label="Оплата">{student.payment.toLocaleString("ru")}</td>
           <td data-label="Общая сумма">
-            {student.full_payment.toLocaleString('ru')}
+            {student.full_payment.toLocaleString("ru")}
           </td>
           <td data-label="Остаток за текущий месяц">
-            {student.remainder_for_current_mount.toLocaleString('ru')}
+            {student.remainder_for_current_mount.toLocaleString("ru")}
           </td>
           <td data-label="Рекрутер">
             {recruiterIsSuccess
               ? recruiters.map((recruiter) =>
-                  recruiter.id === student.recruiter ? recruiter.username : ''
+                  recruiter.id === student.recruiter ? recruiter.username : ""
                 )
-              : ''}
+              : ""}
           </td>
           <td data-label="Договор">
             {student.contract ? <RiCheckFill /> : <RiCloseFill />}
@@ -228,7 +228,7 @@ const Students = () => {
         <CSSTransition //MODAL WINDOW
           in={isOpened}
           timeout={500}
-          classNames={'modal'}
+          classNames={"modal"}
           unmountOnExit
         >
           <ModalWindow
@@ -282,7 +282,7 @@ const Students = () => {
                 <div className="discount__wrapper">
                   <input
                     onChange={(event) =>
-                      discountType.current.value === '%'
+                      discountType.current.value === "%"
                         ? setReqBody({
                             ...reqBody,
                             discount: Number(event.target.value),
@@ -297,14 +297,14 @@ const Students = () => {
                     value={
                       reqBody.discount !== 0 || reqBody.discount_of_cash !== 0
                         ? reqBody.discount || reqBody.discount_of_cash
-                        : ''
+                        : ""
                     }
                   />
                   <div className="select__container">
                     <select
                       ref={discountType}
                       onChange={(event) =>
-                        event.target.value === '%'
+                        event.target.value === "%"
                           ? setReqBody({
                               ...reqBody,
                               discount: reqBody.discount_of_cash,
@@ -445,10 +445,10 @@ const Students = () => {
           </ModalWindow>
         </CSSTransition>
       ) : (
-        ''
+        ""
       )}
 
-      {studentsIsSuccess && directionsIsSuccess ? ( //TABLE
+      {studentsIsSuccess && directionsIsSuccess && coursesIsSuccess ? ( //TABLE
         <>
           <div className="table__actions-box">
             <RowsSlicer />
@@ -477,7 +477,7 @@ const Students = () => {
               </div>
               <Button
                 text={<RiRestartLine />}
-                action={() => setFilterByCourses('')}
+                action={() => setFilterByCourses("")}
               ></Button>
             </div>
 
