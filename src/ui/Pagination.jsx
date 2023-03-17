@@ -1,41 +1,29 @@
 //REACT
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 //REDUX
-import { changePage } from '../redux/slices/dataSlice';
+import { changePage } from "../redux/slices/dataSlice";
 
 //ICONS
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { RiArrowRightSLine, RiArrowLeftSLine } from "react-icons/ri";
 
 //COMPONENTS
-import ReactPaginate from 'react-paginate';
+import ReactPaginate from "react-paginate";
 
 //CSS
-import styles from './Pagination.module.css';
+import styles from "./Pagination.module.css";
 
 const Pagination = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  // useEffect(() => {
-  //   setSearchParams({ page: currentPageIndex });
-  // }, []);
+
   const pageCount = useSelector((store) => store.data.pageCount);
   const currentPageIndex = useSelector((store) => store.data.currentPageIndex);
-  const urlPageIndex = Number(searchParams.get('page'));
-  // useEffect(() => {
-  //   if (!urlPageIndex) {
-  //     searchParams.set('page', 1);
-  //     setSearchParams(searchParams);
-  //   }
-  // });
+  const urlPageIndex = Number(searchParams.get("page"));
 
-  // useEffect(() => {
-  //   searchParams.set('page', 1);
-  //   setSearchParams(searchParams);
-  // }, [pageCount]);
-
+  //CHANGE CURRENT PAGE IF PAGE IN URL WAS CHANGED
   useEffect(() => {
     if (urlPageIndex > 0) {
       dispatch(changePage(urlPageIndex - 1));
@@ -43,22 +31,19 @@ const Pagination = () => {
   }, [urlPageIndex]);
 
   const handlePageClick = (event) => {
-    // dispatch(changePage(event.selected));
-    searchParams.set('page', event.selected + 1);
-    // setSearchParams({ page: event.selected + 1 });
+    searchParams.set("page", event.selected + 1);
     setSearchParams(searchParams);
   };
 
   return (
     <ReactPaginate
-      // initialPage={0}
       breakLabel="..."
       forcePage={currentPageIndex}
-      nextLabel={<FaArrowRight />}
+      nextLabel={<RiArrowRightSLine />}
       onPageChange={handlePageClick}
-      pageRangeDisplayed={4}
+      pageRangeDisplayed={3}
       pageCount={pageCount}
-      previousLabel={<FaArrowLeft />}
+      previousLabel={<RiArrowLeftSLine />}
       renderOnZeroPageCount={null}
     />
   );
