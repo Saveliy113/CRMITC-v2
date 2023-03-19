@@ -10,8 +10,8 @@ const loginFormSlice = createSlice({
   name: 'login',
   initialState,
   reducers: {
-    toggleLoginForm(state) {
-      state.isOpened = !state.isOpened;
+    toggleLoginForm(state, action) {
+      state.isOpened = action.payload;
     },
 
     setToken(state, action) {
@@ -23,7 +23,7 @@ const loginFormSlice = createSlice({
       console.log(action.payload);
       state.username = action.payload;
     },
-    
+
     clearUserData(state) {
       state.token = '';
       state.username = '';

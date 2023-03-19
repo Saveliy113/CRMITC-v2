@@ -25,5 +25,5 @@
   box-sizing: border-box;
 }
 .search__container input:focus {
-  border: 2px solid rgb(52, 121, 248);
+  border: 2px solid rgb(151, 136, 255);
 }

@@ -18,6 +18,11 @@
   margin-top: 10px;
   text-decoration: underline;
   cursor: pointer;
+  transition: all 0.2s ease-in;
+}
+
+.header__title h2:hover {
+  color: rgb(151, 136, 255);
 }
 
 .p__link {

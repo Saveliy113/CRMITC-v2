@@ -1,9 +1,9 @@
-version: "1.0"
+version: '3'
 services:
   crmitc-frontend:
-    build: ../crmitc-v2
+    build: .
     container_name: crmitc_frontend_c
     ports:
-      - "3000:3000"
+      - '80:3000'
     stdin_open: true
     tty: true

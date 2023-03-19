@@ -31,8 +31,8 @@ const LoginForm = () => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
-  const onClickClose = () => {
-    dispatch(toggleLoginForm());
+  const onClickClose = (state) => {
+    dispatch(toggleLoginForm(state));
   };
 
   //   -------------------- LOGIN FORM AUTHORIZATION ------------------------ //
@@ -62,7 +62,7 @@ const LoginForm = () => {
     dispatch(setUsername(username));
   };
 
-  //-------------------------------------------------------------------//
+  //----------------------------------------------------------------------//
 
   //-----------------------ACTIONS AFTER RESPONSE-------------------------//
 
@@ -74,8 +74,10 @@ const LoginForm = () => {
       setUserData();
       setTimeout(() => {
         setNotifyVisibility(false);
-        onClickClose();
-      }, 3000);
+        if (isOpened) {
+          onClickClose(false);
+        }
+      }, 500);
     }
     if (loginIsError) {
       setNotifyVisibility(true);
@@ -94,7 +96,7 @@ const LoginForm = () => {
       <div className={'loginform__container'}>
         <div className={'login__form'} id="login">
           <div id="loginform__close">
-            <RiCloseCircleLine onClick={onClickClose} />
+            <RiCloseCircleLine onClick={() => onClickClose(false)} />
           </div>
           <h1>Login</h1>
           <div className="loginform__inputs">

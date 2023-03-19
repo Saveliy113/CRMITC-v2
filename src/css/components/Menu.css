@@ -5,7 +5,7 @@ aside {
   margin: 0;
   padding: 0;
   padding-left: 25px;
-  background: rgb(42, 42, 42);
+  background: rgb(1, 83, 75);
   box-shadow: 5px 5px 10px black;
   border-top-right-radius: 60px;
   border-bottom-right-radius: 60px;
@@ -49,14 +49,14 @@ aside .menu {
 }
 
 .menu a:hover {
-  color: rgb(52, 121, 248);
+  color: rgb(151, 136, 255);
 }
 
 .menu .a.active {
   padding-left: 15px;
-  color: rgb(52, 121, 248);
-  background: rgb(30, 30, 30);
-  border-left: 3px solid rgb(52, 121, 248);
+  color: rgb(151, 136, 255);
+  background: rgb(0, 67, 60);
+  border-left: 3px solid rgb(151, 136, 255);
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;
 }
@@ -130,7 +130,7 @@ aside .menu {
   .menu a:hover,
   .menu .a.active {
     padding: 0;
-    color: rgb(52, 121, 248);
+    color: rgb(151, 136, 255);
     background: none;
     border: none;
     border-radius: 0;
@@ -146,7 +146,7 @@ aside .menu {
     height: 60px;
     position: absolute;
     top: -22px;
-    background: rgb(42, 42, 42);
+    background: rgb(1, 83, 75);
     border-radius: 50%;
     z-index: -1;
     transition: all 0.5s ease-in-out;
@@ -161,7 +161,7 @@ aside .menu {
     left: -14px;
     background: transparent;
     border-radius: 50%;
-    box-shadow: 12px 10px rgb(42, 42, 42);
+    box-shadow: 12px 10px rgb(1, 83, 75);
   }
 
   .indicator::after {
@@ -173,7 +173,7 @@ aside .menu {
     right: -14px;
     background: transparent;
     border-radius: 50%;
-    box-shadow: -12px 10px rgb(42, 42, 42);
+    box-shadow: -12px 10px rgb(1, 83, 75);
   }
 
   .menu a:nth-child(1).active ~ .indicator {
@@ -207,22 +207,22 @@ aside .menu {
   }
 
   .menu a:nth-child(1).active ~ .indicator {
-    transform: translateX(-166px);
+    transform: translateX(-170px);
   }
   .menu a:nth-child(2).active ~ .indicator {
-    transform: translateX(-100px);
+    transform: translateX(-105px);
   }
   .menu a:nth-child(3).active ~ .indicator {
-    transform: translateX(-33px);
+    transform: translateX(-38px);
   }
   .menu a:nth-child(4).active ~ .indicator {
     transform: translateX(27px);
   }
   .menu a:nth-child(5).active ~ .indicator {
-    transform: translateX(92px);
+    transform: translateX(97px);
   }
   .menu a:nth-child(6).active ~ .indicator {
-    transform: translateX(167px);
+    transform: translateX(169px);
   }
 }
 

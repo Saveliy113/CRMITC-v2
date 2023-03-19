@@ -6,7 +6,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: rgb(30, 30, 30);
+  background-color: rgb(0, 67, 60); /* MAIN BACKGROUND */
   color: #fff;
   width: 100%;
   min-height: 100vh;
@@ -36,8 +36,18 @@
 }
 
 #hello-text {
-  max-width: 900px;
-  word-break: break-all;
+  max-width: 95%;
+  height: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  word-break: break-word;
+}
+
+#hello-text h1 {
+  margin: 0;
 }
 
 .page-enter {
@@ -73,7 +83,7 @@ input[type='time'] {
   }
   .content {
     min-width: 90%;
-    height: 70%;
+    /* height: 70%; */
     margin-bottom: 75px;
     margin-left: 10px;
   }

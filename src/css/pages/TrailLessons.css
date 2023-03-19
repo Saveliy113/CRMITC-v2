@@ -37,7 +37,7 @@
 }
 
 .multi-select__dropdown-indicator:hover svg {
-  color: rgb(52, 121, 248);
+  color: rgb(151, 136, 255);
 }
 
 .multi-select__indicator-separator {
@@ -45,7 +45,6 @@
 }
 
 .multi-select__indicators {
-  background-color: lightgray !important;
   border-top-right-radius: 8px !important;
   border-bottom-right-radius: 8px !important;
 }

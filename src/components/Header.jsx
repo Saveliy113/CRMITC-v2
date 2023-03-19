@@ -25,7 +25,7 @@ const Header = () => {
   const token = useSelector((store) => store.login.token);
 
   const loginFormOpen = () => {
-    dispatch(toggleLoginForm());
+    dispatch(toggleLoginForm(true));
   };
 
   const [logOut, { isSuccess: logOutSuccess, isError: logOutIsError }] =

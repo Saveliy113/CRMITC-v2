@@ -15,7 +15,7 @@
   position: relative;
   background-color: whitesmoke;
   border-radius: 40px;
-  box-shadow: 0 0 8px rgb(52, 121, 248);
+  box-shadow: 0 0 8px rgb(151, 136, 255);
 }
 
 .card__header {
@@ -125,6 +125,10 @@
   font-size: large;
   text-decoration: underline;
   cursor: pointer;
+}
+
+.p__link:hover {
+  color: rgb(151, 136, 255);
 }
 
 .item__text a {
