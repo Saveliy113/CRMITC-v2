@@ -1,32 +1,32 @@
 //REACt
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
 
 //COMPONENTS
-import Header from './components/Header';
-import Menu from './components/Menu';
-import LoginForm from './components/LoginForm';
+import Header from "./components/Header";
+import Menu from "./components/Menu";
+import LoginForm from "./components/LoginForm";
 
 //PAGES
-import Main from './pages/Main';
-import CountryDetail from './pages/CountryDetails';
-import Branches from './pages/Branches';
-import BrancheDetails from './pages/BrancheDetails';
-import Direction from './pages/Direction';
-import TrailLessons from './pages/TrailLessons';
-import TrailLesson from './pages/TrailLesson';
-import ClientDetails from './pages/ClientDetails';
-import RecruiterDetails from './pages/RecruiterDetails';
-import MentorDetails from './pages/MentorDetails';
-import Courses from './pages/Courses';
-import CourseInfo from './pages/CourseInfo';
-import Students from './pages/Students';
-import StudentInfo from './pages/StudentInfo';
-import Payments from './pages/Payments';
-import PaymentDetails from './pages/PaymentDetails';
-import NotFound from './pages/NotFound';
+import Main from "./pages/Main";
+import CountryDetail from "./pages/CountryDetails";
+import Branches from "./pages/Branches";
+import BrancheDetails from "./pages/BrancheDetails";
+import Direction from "./pages/Direction";
+import TrailLessons from "./pages/TrailLessons";
+import TrailLesson from "./pages/TrailLesson";
+import ClientDetails from "./pages/ClientDetails";
+import RecruiterDetails from "./pages/RecruiterDetails";
+import MentorDetails from "./pages/MentorDetails";
+import Courses from "./pages/Courses";
+import CourseInfo from "./pages/CourseInfo";
+import Students from "./pages/Students";
+import StudentInfo from "./pages/StudentInfo";
+import Payments from "./pages/Payments";
+import PaymentDetails from "./pages/PaymentDetails";
+import NotFound from "./pages/NotFound";
 
 //CSS
-import './App.css';
+import "./App.css";
 
 function App() {
   return (
