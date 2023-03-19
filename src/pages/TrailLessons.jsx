@@ -160,8 +160,7 @@ const TrailLessons = () => {
   //-----------------------------------------------//
 
   //-----------------------TABLE-------------------------//
-  console.log(trailLessons);
-  console.log(branches);
+
   const columns = [
     "ID",
     "Заголовок",

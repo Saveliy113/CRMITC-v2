@@ -1,7 +1,7 @@
 //REACT
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 //REDUX
 import {
@@ -15,8 +15,8 @@ import {
   useDeleteTrailLessonMutation,
   useAddClientMutation,
   useGetClientStatusQuery,
-} from '../services/dataApi';
-import { setFetchData } from '../redux/slices/dataSlice';
+} from "../services/dataApi";
+import { setFetchData } from "../redux/slices/dataSlice";
 
 //ICONS
 import {
@@ -27,29 +27,29 @@ import {
   RiSave3Fill,
   RiFileInfoLine,
   RiPhoneFill,
-} from 'react-icons/ri';
+} from "react-icons/ri";
 
 //COMPONENTS
-import { ToastContainer, toast } from 'react-toastify';
-import { CSSTransition } from 'react-transition-group';
-import ReactInputMask from 'react-input-mask';
-import Select from 'react-select';
-import Button from '../ui/Button';
-import InfoCard from '../components/InfoCard';
-import ModalWindow from '../components/ModalWindow';
-import Loader from '../ui/Loader';
-import ModalLoader from '../ui/ModalLoader';
+import { ToastContainer, toast } from "react-toastify";
+import { CSSTransition } from "react-transition-group";
+import ReactInputMask from "react-input-mask";
+import Select from "react-select";
+import Button from "../ui/Button";
+import InfoCard from "../components/InfoCard";
+import ModalWindow from "../components/ModalWindow";
+import Loader from "../ui/Loader";
+import ModalLoader from "../ui/ModalLoader";
 
 //CSS
-import '../css/pages/TrailLesson.css';
-import styles from '../ui/Table.module.css';
+import "../css/pages/TrailLesson.css";
+import styles from "../ui/Table.module.css";
 
 const TrailLesson = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
-  const lessonId = Number(searchParams.get('id'));
+  const lessonId = Number(searchParams.get("id"));
   const currentPage = useSelector((store) => store.data.page);
 
   //-----------------------DATA-------------------------//
@@ -72,7 +72,7 @@ const TrailLesson = () => {
     clientsIsSuccess &&
       dispatch(
         setFetchData({
-          page: 'trail_lesson',
+          page: "trail_lesson",
           data: clientsData.filter(
             (client) => client.trail_lesson === lessonId
           ),
@@ -215,13 +215,13 @@ const TrailLesson = () => {
 
   const [isOpened, setIsOpened] = useState(false);
   const [clientReqBody, setClientReqBody] = useState({
-    name: '',
-    phone: '',
-    whatsapp: '',
-    comment: '',
+    name: "",
+    phone: "",
+    whatsapp: "",
+    comment: "",
     trail_lesson: lessonId,
-    status: '',
-    recruiter: '',
+    status: "",
+    recruiter: "",
   });
 
   const isClientAddAllowed = clientReqBody.name ? true : false; //THIS INPUT FIELD MUST BE FILLED
@@ -249,32 +249,32 @@ const TrailLesson = () => {
 
   const notifySuccess = (text) =>
     toast.success(`${text}`, {
-      position: 'top-center',
+      position: "top-center",
       autoClose: 2500,
       hideProgressBar: true,
       closeOnClick: false,
       pauseOnHover: false,
       draggable: false,
       progress: undefined,
-      theme: 'light',
+      theme: "light",
     });
 
   const notifyError = (err) =>
     toast.error(`Ошибка ${err.status}. Повторите попытку.`, {
-      position: 'top-center',
+      position: "top-center",
       autoClose: 3000,
       hideProgressBar: true,
       closeOnClick: false,
       pauseOnHover: false,
       draggable: false,
       progress: undefined,
-      theme: 'light',
+      theme: "light",
     });
 
   useEffect(() => {
     if (deleteCompleted) {
-      notifySuccess('Пробный урок успешно удален!');
-      setTimeout(() => navigate('/trail_lessons'), 1500);
+      notifySuccess("Пробный урок успешно удален!");
+      setTimeout(() => navigate("/trail_lessons"), 1500);
     }
     if (deleteError) {
       notifyError(error);
@@ -283,7 +283,7 @@ const TrailLesson = () => {
 
   useEffect(() => {
     if (editIsSuccess) {
-      notifySuccess('Изменения внесены успешно!');
+      notifySuccess("Изменения внесены успешно!");
       setTimeout(() => {
         setIsEditing(false);
         window.scrollTo(0, 150);
@@ -297,7 +297,7 @@ const TrailLesson = () => {
   useEffect(() => {
     if (addClientIsSuccess) {
       setClientReqBody({});
-      notifySuccess('Клиент успешно добавлен!');
+      notifySuccess("Клиент успешно добавлен!");
     } else if (addClientIsError) {
       notifyError(addClientError);
     }
@@ -307,10 +307,10 @@ const TrailLesson = () => {
 
   //-----------------------TABLE-------------------------//
 
-  const columns = ['ID', 'Имя', 'Телефон', 'Дата записи'];
+  const columns = ["ID", "Имя", "Телефон", "Дата записи"];
   const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
   const tableTr =
-    currentPage === 'trail_lesson' &&
+    currentPage === "trail_lesson" &&
     clientsIsSuccess &&
     clients &&
     clients.length !== 0 ? (
@@ -348,6 +348,18 @@ const TrailLesson = () => {
 
   //----------------------------------------------------//
 
+  const findBranch = (id) => {
+    const branch = branches.find((branch) => branch.id == id);
+    if (branch) {
+      return branch.address;
+    } else {
+      return "-";
+    }
+  };
+
+  console.log(trailLesson);
+  console.log(mentors);
+
   return (
     <>
       <ToastContainer />
@@ -356,7 +368,7 @@ const TrailLesson = () => {
         <CSSTransition //MODAL WINDOW
           in={isOpened}
           timeout={500}
-          classNames={'modal'}
+          classNames={"modal"}
           unmountOnExit
         >
           <ModalWindow
@@ -511,7 +523,7 @@ const TrailLesson = () => {
           </ModalWindow>
         </CSSTransition>
       ) : (
-        ''
+        ""
       )}
 
       {branchesIsSuccess &&
@@ -673,15 +685,7 @@ const TrailLesson = () => {
                         <RiFileInfoLine />
                       </div>
                       <div className="item__text">
-                        <p>
-                          {trailLesson.branch
-                            ? `Филиал: ${
-                                branches.find(
-                                  (branch) => branch.id === trailLesson.branch
-                                ).address
-                              }`
-                            : ''}
-                        </p>
+                        <p>{`Филиал: ${findBranch(trailLesson.branch)}`}</p>
                         <p>Количество записавшихся: {clients.length}</p>
                         <p>Дата: {trailLesson.date.slice(0, 10)}</p>
                         <p>
@@ -693,7 +697,7 @@ const TrailLesson = () => {
                             .map(
                               (direction, i, arr) =>
                                 ` ${direction.title}${
-                                  i === arr.length - 1 ? '' : ','
+                                  i === arr.length - 1 ? "" : ","
                                 }`
                             )}
                         </p>
@@ -706,7 +710,7 @@ const TrailLesson = () => {
                             .map(
                               (mentor, i, arr) =>
                                 ` ${mentor.first_name}${
-                                  i === arr.length - 1 ? '' : ','
+                                  i === arr.length - 1 ? "" : ","
                                 }`
                             )}
                         </p>
@@ -719,14 +723,14 @@ const TrailLesson = () => {
                             .map(
                               (mentor, i, arr) =>
                                 ` ${mentor.username}${
-                                  i === arr.length - 1 ? '' : ','
+                                  i === arr.length - 1 ? "" : ","
                                 }`
                             )}
                         </p>
                         <p>
                           {trailLesson.description
                             ? `Описание: ${trailLesson.description}`
-                            : ''}
+                            : ""}
                         </p>
                       </div>
                     </div>
@@ -755,7 +759,7 @@ const TrailLesson = () => {
                         window.scrollTo({
                           left: 0,
                           top: 280,
-                          behavior: 'smooth',
+                          behavior: "smooth",
                         });
                       }}
                     />
