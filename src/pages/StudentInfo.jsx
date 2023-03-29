@@ -1,7 +1,7 @@
 //REACT
-import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { CSSTransition } from "react-transition-group";
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { CSSTransition } from 'react-transition-group';
 
 //REDUX
 import {
@@ -12,7 +12,7 @@ import {
   useGetPaymentsByStudentIdQuery,
   useGetStudentByIdQuery,
   useGetUsersQuery,
-} from "../services/dataApi";
+} from '../services/dataApi';
 
 //ICONS
 import {
@@ -23,38 +23,39 @@ import {
   RiArrowDownSFill,
   RiArrowGoBackLine,
   RiSave3Fill,
-} from "react-icons/ri";
+} from 'react-icons/ri';
 import {
   MdAttachMoney,
   MdSchool,
   MdEngineering,
   MdContacts,
-} from "react-icons/md";
-import { BsFillFilePersonFill } from "react-icons/bs";
+} from 'react-icons/md';
+import { BsFillFilePersonFill } from 'react-icons/bs';
 
 //COMPONENTS
-import { ToastContainer, toast } from "react-toastify";
-import InfoCard from "../components/InfoCard";
-import ModalWindow from "../components/ModalWindow";
-import Loader from "../ui/Loader";
-import ModalLoader from "../ui/ModalLoader";
-import Button from "../ui/Button";
+import { ToastContainer, toast } from 'react-toastify';
+import ReactInputMask from 'react-input-mask';
+import InfoCard from '../components/InfoCard';
+import ModalWindow from '../components/ModalWindow';
+import Loader from '../ui/Loader';
+import ModalLoader from '../ui/ModalLoader';
+import Button from '../ui/Button';
 
 //CSS
-import styles from "../ui/Table.module.css";
-import "../css/pages/StudentInfo.css";
-import "react-toastify/dist/ReactToastify.css";
+import styles from '../ui/Table.module.css';
+import '../css/pages/StudentInfo.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const StudentInfo = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
-  const studentId = Number(searchParams.get("id"));
+  const studentId = Number(searchParams.get('id'));
 
   /*--------------------------DATA----------------------------*/
 
-  const [recruiter, setRecruiter] = useState("");
-  const [course, setCourse] = useState("");
+  const [recruiter, setRecruiter] = useState('');
+  const [course, setCourse] = useState('');
 
   const { data: student, isSuccess: studentIsSuccess } =
     useGetStudentByIdQuery(studentId);
@@ -81,11 +82,13 @@ const StudentInfo = () => {
         discount: student.discount,
         discount_of_cash: student.discount_of_cash,
         phone: student.phone,
+        whatsapp: student.whatsapp,
+        telegram: student.telegram,
         course: student.course,
         studies: student.studies,
         recruiter: student.recruiter,
         contract: student.contract,
-        comment: student.comment ? student.comment : "",
+        comment: student.comment,
       });
     }
   }, [courses, recruiters, student, studentIsSuccess]);
@@ -147,8 +150,8 @@ const StudentInfo = () => {
   const [isOpened, setIsOpened] = useState(false);
   const [paymentReqBody, setPaymentReqBody] = useState({
     student: studentId,
-    sum: "",
-    comment: "",
+    sum: '',
+    comment: '',
   });
   const discountType = useRef();
 
@@ -166,32 +169,32 @@ const StudentInfo = () => {
 
   const notifySuccess = (text) =>
     toast.success(`${text}`, {
-      position: "top-center",
+      position: 'top-center',
       autoClose: 2500,
       hideProgressBar: true,
       closeOnClick: false,
       pauseOnHover: false,
       draggable: false,
       progress: undefined,
-      theme: "light",
+      theme: 'light',
     });
 
   const notifyError = (err) =>
     toast.error(`Ошибка ${err.status}. Повторите попытку.`, {
-      position: "top-center",
+      position: 'top-center',
       autoClose: 3000,
       hideProgressBar: true,
       closeOnClick: false,
       pauseOnHover: false,
       draggable: false,
       progress: undefined,
-      theme: "light",
+      theme: 'light',
     });
 
   useEffect(() => {
     if (deleteCompleted) {
-      notifySuccess("Студент успешно удален!");
-      setTimeout(() => navigate("/students"), 1500);
+      notifySuccess('Студент успешно удален!');
+      setTimeout(() => navigate('/students'), 500);
     }
     if (deleteError) {
       notifyError(error);
@@ -200,8 +203,8 @@ const StudentInfo = () => {
 
   useEffect(() => {
     if (editIsSuccess) {
-      notifySuccess("Изменения внесены успешно!");
-      setTimeout(() => setIsEditing(false), 2500);
+      notifySuccess('Изменения внесены успешно!');
+      setTimeout(() => setIsEditing(false), 500);
     }
     if (editIsError) {
       notifyError(editError);
@@ -210,8 +213,8 @@ const StudentInfo = () => {
 
   useEffect(() => {
     if (addPaymentSuccess) {
-      setPaymentReqBody({ student: studentId, sum: "", recruiter: "" });
-      notifySuccess("Платеж успешно добавлен!");
+      setPaymentReqBody({ student: studentId, sum: '', recruiter: '' });
+      notifySuccess('Платеж успешно добавлен!');
     } else if (addPaymentIsError) {
       notifyError(addPaymentError);
     }
@@ -221,7 +224,7 @@ const StudentInfo = () => {
 
   /*------------------------TABLE-----------------------------*/
 
-  const columns = ["ID", "Сумма", "Рекрутер", "Дата", "Комментарий"];
+  const columns = ['ID', 'Сумма', 'Рекрутер', 'Дата', 'Комментарий'];
   const [studentPayments, setStudentPayments] = useState();
 
   useEffect(() => {
@@ -234,16 +237,16 @@ const StudentInfo = () => {
       studentPayments.map((student, index) => (
         <tr key={index} onClick={() => navigate(`/payment?id=${student.id}`)}>
           <td data-label="ID">{student.id}</td>
-          <td data-label="Сумма">{student.sum.toLocaleString("ru")}</td>
+          <td data-label="Сумма">{student.sum.toLocaleString('ru')}</td>
           <td data-label="Рекрутер">
             {recruitersIsSuccess &&
               recruiters.map((recruiter) =>
-                recruiter.id === student.recruiter ? recruiter.username : ""
+                recruiter.id === student.recruiter ? recruiter.username : ''
               )}
           </td>
           <td data-label="Дата">{student.date.slice(0, 10)}</td>
           <td data-label="Комменатарий">
-            {student.comment ? student.comment : "-"}
+            {student.comment ? student.comment : '-'}
           </td>
         </tr>
       ))
@@ -261,7 +264,7 @@ const StudentInfo = () => {
         <CSSTransition //MODAL WINDOW
           in={isOpened}
           timeout={500}
-          classNames={"modal"}
+          classNames={'modal'}
           unmountOnExit
         >
           <ModalWindow
@@ -350,7 +353,7 @@ const StudentInfo = () => {
           </ModalWindow>
         </CSSTransition>
       ) : (
-        ""
+        ''
       )}
 
       {studentIsSuccess && coursesIsSuccess && studentPaymentsIsSuccess ? (
@@ -423,7 +426,7 @@ const StudentInfo = () => {
                       <div className="discount__wrapper">
                         <input
                           onChange={(event) =>
-                            discountType.current.value === "%"
+                            discountType.current.value === '%'
                               ? setStudentReqBody({
                                   ...studentReqBody,
                                   discount: event.target.value,
@@ -444,7 +447,7 @@ const StudentInfo = () => {
                           <select
                             ref={discountType}
                             onChange={(event) =>
-                              event.target.value === "%"
+                              event.target.value === '%'
                                 ? setStudentReqBody({
                                     ...studentReqBody,
                                     discount: studentReqBody.discount_of_cash,
@@ -480,6 +483,36 @@ const StudentInfo = () => {
                         id="phone"
                         maxLength="15"
                         value={studentReqBody.phone}
+                      />
+                    </div>
+                    <div className="modal__input-container">
+                      <label htmlFor="whatsapp">Whatsapp</label>
+                      <ReactInputMask
+                        id="whatsapp"
+                        value={studentReqBody.whatsapp}
+                        mask="+9999999999999"
+                        maskChar={null}
+                        onChange={(event) =>
+                          setStudentReqBody({
+                            ...studentReqBody,
+                            whatsapp: event.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="modal__input-container">
+                      <label htmlFor="telegram">Telegram</label>
+                      <input
+                        onChange={(event) =>
+                          setStudentReqBody({
+                            ...studentReqBody,
+                            telegram: event.target.value,
+                          })
+                        }
+                        type="text"
+                        id="telegram"
+                        maxLength="255"
+                        value={studentReqBody.telegram}
                       />
                     </div>
                     <div className="modal__input-container">
@@ -588,21 +621,21 @@ const StudentInfo = () => {
                         <MdSchool />
                       </div>
                       <div className="item__text">
-                        <p>{student.studies ? "Учится" : "Не учится"}</p>
+                        <p>{student.studies ? 'Учится' : 'Не учится'}</p>
                         <p
                           onClick={() =>
                             navigate(`/courses/course?id=${course.id}`)
                           }
                         >
-                          Группа:{" "}
+                          Группа:{' '}
                           <span className="p__link">
-                            {course ? course.title : ""}
+                            {course ? course.title : ''}
                           </span>
                         </p>
                         <p>
                           {student.contract
-                            ? "Договор заключен"
-                            : "Нет договора"}
+                            ? 'Договор заключен'
+                            : 'Нет договора'}
                         </p>
                         <p>Месяц начала: {student.start_mount}</p>
                       </div>
@@ -615,22 +648,22 @@ const StudentInfo = () => {
                         <p>Скидка: {student.full_discount}</p>
                         <p>
                           {`Полная сумма: ${student.full_payment.toLocaleString(
-                            "ru"
+                            'ru'
                           )} ${student.currency}`}
                         </p>
                         <p>
-                          {`Оплата: ${student.payment.toLocaleString("ru")} ${
+                          {`Оплата: ${student.payment.toLocaleString('ru')} ${
                             student.currency
                           }`}
                         </p>
                         <p>
                           {`Остаток за тек. месяц: ${student.remainder_for_current_mount.toLocaleString(
-                            "ru"
+                            'ru'
                           )} ${student.currency}`}
                         </p>
                         <p>
                           {`Остаток всего: ${student.remainder.toLocaleString(
-                            "ru"
+                            'ru'
                           )} ${student.currency}`}
                         </p>
                       </div>
@@ -641,14 +674,14 @@ const StudentInfo = () => {
                       </div>
                       <div className="item__text">
                         <p>
-                          Рекрутер:{" "}
+                          Рекрутер:{' '}
                           <span
                             className="p__link"
                             onClick={() =>
                               navigate(`/recruiter?id=${recruiter.id}`)
                             }
                           >
-                            {recruiter ? recruiter.username : ""}
+                            {recruiter ? recruiter.username : ''}
                           </span>
                         </p>
                         <p>Дата записи: 11.11.2022</p>
@@ -660,7 +693,7 @@ const StudentInfo = () => {
                         <MdContacts />
                       </div>
                       <div className="item__text">
-                        <p>Email: {student.email ? student.email : "-"}</p>
+                        <p>Email: {student.email ? student.email : '-'}</p>
                         <p>
                           Телефон:
                           {student.phone ? (
@@ -671,31 +704,38 @@ const StudentInfo = () => {
                               {student.phone}
                             </a>
                           ) : (
-                            "-"
+                            '-'
                           )}
                         </p>
                         {student.whatsapp ? (
                           <a
-                            href={student.whatsapp}
+                            href={` https://wa.me/${student.whatsapp}`}
                             id="whatsapp__link"
                             target="blank"
                           >
                             <RiWhatsappFill />
                           </a>
                         ) : (
-                          ""
+                          ''
                         )}
 
-                        {student.telegram_link ? (
+                        {student.telegram ? (
                           <a
-                            href={student.telegram_link}
+                            href={`https://telegram.me/${
+                              student.telegram.includes('@')
+                                ? student.telegram.slice(
+                                    1,
+                                    student.telegram.length
+                                  )
+                                : student.telegram
+                            }`}
                             id="telegram__link"
                             target="blank"
                           >
                             <RiTelegramFill />
                           </a>
                         ) : (
-                          ""
+                          ''
                         )}
                       </div>
                     </div>
@@ -723,7 +763,7 @@ const StudentInfo = () => {
                         window.scrollTo({
                           left: 0,
                           top: 280,
-                          behavior: "smooth",
+                          behavior: 'smooth',
                         });
                       }}
                     />

@@ -103,6 +103,8 @@ const CourseInfo = () => {
     discount: 0,
     discount_of_cash: 0,
     phone: '',
+    whatsapp: '',
+    telegram: '',
     course: courseId,
     studies: false,
     recruiter: 0,
@@ -190,7 +192,7 @@ const CourseInfo = () => {
   useEffect(() => {
     if (deleteCompleted) {
       notifySuccess('Курс успешно удален!');
-      setTimeout(() => navigate('/courses'), 1500);
+      setTimeout(() => navigate('/courses'), 500);
     }
     if (deleteError) {
       notifyError(error);
@@ -203,7 +205,7 @@ const CourseInfo = () => {
       setTimeout(() => {
         setIsEditing(false);
         window.scrollTo(0, 150);
-      }, 1000);
+      }, 500);
     }
     if (editIsError) {
       notifyError(editError);
@@ -219,6 +221,8 @@ const CourseInfo = () => {
         discount: 0,
         discount_of_cash: 0,
         phone: '',
+        whatsapp: '',
+        telegram: '',
         course: courseId,
         studies: false,
         recruiter: 0,
@@ -431,6 +435,36 @@ const CourseInfo = () => {
                       phone: event.target.value,
                     })
                   }
+                />
+              </div>
+              <div className="modal__input-container">
+                <label htmlFor="whatsapp">Whatsapp</label>
+                <ReactInputMask
+                  id="whatsapp"
+                  value={studentReqBody.whatsapp}
+                  mask="+9999999999999"
+                  maskChar={null}
+                  onChange={(event) =>
+                    setStudentReqBody({
+                      ...studentReqBody,
+                      whatsapp: event.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="modal__input-container">
+                <label htmlFor="telegram">Telegram</label>
+                <input
+                  onChange={(event) =>
+                    setStudentReqBody({
+                      ...studentReqBody,
+                      telegram: event.target.value,
+                    })
+                  }
+                  type="text"
+                  id="telegram"
+                  maxLength="255"
+                  value={studentReqBody.telegram}
                 />
               </div>
               <div className="modal__input-container">
