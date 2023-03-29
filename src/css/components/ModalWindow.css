@@ -15,7 +15,7 @@
 
 .modal__window {
   width: 500px;
-  min-height: 320px;
+  height: fit-content;
   max-height: 70%;
   margin: auto;
   padding: 30px;

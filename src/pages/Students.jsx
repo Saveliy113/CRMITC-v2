@@ -85,6 +85,7 @@ const Students = () => {
   }, [studentsIsSuccess, filterByCourses]);
 
   const students = useSelector((store) => store.data.currentData);
+  console.log(recruiters)
 
   //----------------------------------------------------//
 

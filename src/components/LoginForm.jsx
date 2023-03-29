@@ -87,7 +87,7 @@ const LoginForm = () => {
 
   const errorMessages = loginIsError
     ? loginError.status === 400
-      ? 'Веден неверный логин или пароль'
+      ? 'Введен неверный логин или пароль'
       : `Ошибка ${loginError.originalStatus}`
     : '';
 
