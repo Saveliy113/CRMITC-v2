@@ -235,7 +235,10 @@ const StudentInfo = () => {
   const tableTr =
     studentPayments && studentPayments.length !== 0 ? (
       studentPayments.map((student, index) => (
-        <tr key={index} onClick={() => navigate(`/payment?id=${student.id}`)}>
+        <tr
+          key={index}
+          onClick={() => navigate(`/payments/payment?id=${student.id}`)}
+        >
           <td data-label="ID">{student.id}</td>
           <td data-label="Сумма">{student.sum.toLocaleString('ru')}</td>
           <td data-label="Рекрутер">
