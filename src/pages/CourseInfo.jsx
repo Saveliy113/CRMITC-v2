@@ -269,6 +269,7 @@ const CourseInfo = () => {
     'Остаток за текущий месяц',
     'Рекрутер',
     'Договор',
+    'Учится',
   ];
 
   const tableTrClickHandler = (id) => {
@@ -298,6 +299,9 @@ const CourseInfo = () => {
           </td>
           <td data-label="Договор">
             {student.contract ? <RiCheckFill /> : <RiCloseFill />}
+          </td>
+          <td data-label="Учится">
+            {student.studies ? <RiCheckFill /> : <RiCloseFill />}
           </td>
         </tr>
       ))

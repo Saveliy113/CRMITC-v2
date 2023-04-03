@@ -126,7 +126,7 @@ const PaymentDetails = () => {
   useEffect(() => {
     if (deleteCompleted) {
       notifySuccess('Изменения внесены успешно!');
-      setTimeout(() => setIsEditing(false), 1000);
+      setTimeout(() => setIsEditing(false), 500);
     }
     if (deleteError) {
       notifyError(deleteError);
@@ -136,7 +136,7 @@ const PaymentDetails = () => {
   useEffect(() => {
     if (editIsSuccess) {
       notifySuccess('Изменения внесены успешно!');
-      setTimeout(() => setIsEditing(false), 1500);
+      setTimeout(() => setIsEditing(false), 500);
     }
     if (editIsError) {
       notifyError(editError);

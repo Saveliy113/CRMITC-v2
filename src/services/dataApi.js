@@ -1,28 +1,28 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const dataApi = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://165.22.49.123:5000/api/",
+    baseUrl: 'http://165.22.49.123:5000/api/',
     prepareHeaders: (headers, { getState }) => {
       const {
         login: { token },
       } = getState();
-      headers.set("Authorization", token ? `Token ${token}` : "");
+      headers.set('Authorization', token ? `Token ${token}` : '');
       return headers;
     },
   }),
   tagTypes: [
-    "Courses",
-    "Students",
-    "Payments",
-    "StudentPayments",
-    "Clients",
-    "TrailLessons",
+    'Courses',
+    'Students',
+    'Payments',
+    'StudentPayments',
+    'Clients',
+    'TrailLessons',
   ],
-  reducerPath: "dataApi",
+  reducerPath: 'dataApi',
   endpoints: (build) => ({
     getUsers: build.query({
-      query: () => "users/users/",
+      query: () => 'users/users/',
     }),
 
     getUserById: build.query({
@@ -30,7 +30,7 @@ export const dataApi = createApi({
     }),
 
     getBranches: build.query({
-      query: () => "/v1/branches/branches/",
+      query: () => '/v1/branches/branches/',
     }),
 
     getBranchById: build.query({
@@ -38,49 +38,49 @@ export const dataApi = createApi({
     }),
 
     getCourses: build.query({
-      query: () => "/v1/mainapp/course/",
-      providesTags: ["Courses"],
+      query: () => '/v1/mainapp/course/',
+      providesTags: ['Courses'],
     }),
 
     getCourseById: build.query({
       query: (courseId) => `/v1/mainapp/course/${courseId}`,
-      providesTags: ["Courses"],
+      providesTags: ['Courses'],
     }),
 
     addCourse: build.mutation({
       query: (body) => ({
-        method: "POST",
-        url: "/v1/mainapp/course/",
+        method: 'POST',
+        url: '/v1/mainapp/course/',
         body,
       }),
-      invalidatesTags: ["Courses"],
+      invalidatesTags: ['Courses'],
     }),
     editCourse: build.mutation({
       query: (body) => ({
-        method: "PUT",
+        method: 'PUT',
         url: `/v1/mainapp/course/${body.courseId}`,
         body: body.courseReqBody,
       }),
-      invalidatesTags: ["Courses"],
+      invalidatesTags: ['Courses'],
     }),
 
     deleteCourse: build.mutation({
       query: (courseId) => ({
-        method: "DELETE",
+        method: 'DELETE',
         url: `/v1/mainapp/course/${courseId}`,
       }),
     }),
 
     getMentors: build.query({
-      query: () => "/v1/mainapp/mentor/",
+      query: () => '/v1/mainapp/mentor/',
     }),
 
     getCountries: build.query({
-      query: () => "/v1/branches/countries/",
+      query: () => '/v1/branches/countries/',
     }),
 
     getDirections: build.query({
-      query: () => "/v1/branches/direction/",
+      query: () => '/v1/branches/direction/',
     }),
 
     getDirectionById: build.query({
@@ -88,157 +88,157 @@ export const dataApi = createApi({
     }),
 
     getStudents: build.query({
-      query: () => "v1/students/students/",
-      providesTags: ["Students"],
+      query: () => 'v1/students/students/',
+      providesTags: ['Students'],
     }),
 
     getStudentById: build.query({
       query: (studentId) => `/v1/students/students/${studentId}`,
-      providesTags: ["Students"],
+      providesTags: ['Students'],
     }),
 
     addStudent: build.mutation({
       query: (body) => ({
-        method: "POST",
-        url: "/v1/students/students/",
+        method: 'POST',
+        url: '/v1/students/students/',
         body,
       }),
-      invalidatesTags: ["Students", "Courses"],
+      invalidatesTags: ['Students', 'Courses'],
     }),
 
     editStudent: build.mutation({
       query: (body) => ({
-        method: "PUT",
+        method: 'PUT',
         url: `/v1/students/students/${body.studentId}/`,
         body: body.studentReqBody,
       }),
-      invalidatesTags: ["Students"],
+      invalidatesTags: ['Students'],
     }),
 
     deleteStudent: build.mutation({
       query: (studentId) => ({
-        method: "DELETE",
+        method: 'DELETE',
         url: `/v1/students/students/${studentId}`,
       }),
-      invalidatesTags: ["Students"],
+      invalidatesTags: ['Students'],
     }),
 
     getStudentsPayments: build.query({
-      query: () => "v1/students/payment_students/",
-      providesTags: ["Payments"],
+      query: () => 'v1/students/payment_students/',
+      providesTags: ['Payments'],
     }),
 
     getPaymentsByStudentId: build.query({
       query: (studentId) =>
         `v1/students/payment_students/?student=${studentId}`,
-      providesTags: ["StudentPayments"],
+      providesTags: ['StudentPayments'],
     }),
 
     getPaymentById: build.query({
       query: (paymentId) => `/v1/students/payment_students/${paymentId}/`,
-      providesTags: ["StudentPayments"],
+      providesTags: ['StudentPayments'],
     }),
 
     addPayment: build.mutation({
       query: (reqBody) => ({
-        method: "POST",
-        url: "/v1/students/payment_students/",
+        method: 'POST',
+        url: '/v1/students/payment_students/',
         body: reqBody,
       }),
-      invalidatesTags: ["StudentPayments", "Students"],
+      invalidatesTags: ['StudentPayments', 'Students'],
     }),
 
     editPayment: build.mutation({
       query: (body) => ({
-        method: "PATCH",
-        url: `/v1/students/payment_students?${body.paymentId}/`,
+        method: 'PATCH',
+        url: `/v1/students/payment_students/${body.paymentId}/`,
         body: body.reqBody,
       }),
-      invalidatesTags: ["StudentPayments"],
+      invalidatesTags: ['StudentPayments'],
     }),
 
     deletePayment: build.mutation({
       query: (paymentId) => ({
-        method: "DELETE",
-        url: `/v1/students/payment_students?${paymentId}/`,
+        method: 'DELETE',
+        url: `/v1/students/payment_students/${paymentId}/`,
       }),
-      invalidatesTags: ["StudentPayments"],
+      invalidatesTags: ['StudentPayments'],
     }),
 
     getTrailLessons: build.query({
-      query: () => "/v2/sales/trail_lessons/",
-      providesTags: ["TrailLessons"],
+      query: () => '/v2/sales/trail_lessons/',
+      providesTags: ['TrailLessons'],
     }),
 
     getTrailLessonById: build.query({
       query: (lessonId) => `/v2/sales/trail_lessons/${lessonId}`,
-      providesTags: ["TrailLessons"],
+      providesTags: ['TrailLessons'],
     }),
 
     addTrailLesson: build.mutation({
       query: (body) => ({
-        method: "POST",
-        url: "/v2/sales/trail_lessons/",
+        method: 'POST',
+        url: '/v2/sales/trail_lessons/',
         body,
       }),
-      invalidatesTags: ["TrailLessons"],
+      invalidatesTags: ['TrailLessons'],
     }),
 
     editTrailLesson: build.mutation({
       query: (body) => ({
-        method: "PUT",
+        method: 'PUT',
         url: `/v2/sales/trail_lessons/${body.lessonId}`,
         body: body.reqBody,
       }),
-      invalidatesTags: ["TrailLessons"],
+      invalidatesTags: ['TrailLessons'],
     }),
 
     deleteTrailLesson: build.mutation({
       query: (lessonId) => ({
-        method: "DELETE",
+        method: 'DELETE',
         url: `/v2/sales/trail_lessons/${lessonId}`,
       }),
-      invalidatesTags: ["TrailLessons"],
+      invalidatesTags: ['TrailLessons'],
     }),
 
     getClients: build.query({
-      query: () => "/v2/sales/clients/",
-      providesTags: ["Clients"],
+      query: () => '/v2/sales/clients/',
+      providesTags: ['Clients'],
     }),
 
     getClientById: build.query({
       query: (clientId) => `/v2/sales/clients/${clientId}/`,
-      providesTags: ["Clients"],
+      providesTags: ['Clients'],
     }),
 
     getClientStatus: build.query({
-      query: () => "/v2/sales/client_status/",
+      query: () => '/v2/sales/client_status/',
     }),
 
     addClient: build.mutation({
       query: (body) => ({
-        method: "POST",
+        method: 'POST',
         url: `/v2/sales/clients/`,
         body: body,
       }),
-      invalidatesTags: ["TrailLessons", "Clients"],
+      invalidatesTags: ['TrailLessons', 'Clients'],
     }),
 
     editClient: build.mutation({
       query: (body) => ({
-        method: "PUT",
+        method: 'PUT',
         url: `/v2/sales/clients/${body.clientId}/`,
         body: body.reqBody,
       }),
-      invalidatesTags: ["Clients"],
+      invalidatesTags: ['Clients'],
     }),
 
     deleteClient: build.mutation({
       query: (clientId) => ({
-        method: "DELETE",
+        method: 'DELETE',
         url: `/v2/sales/clients/${clientId}/`,
       }),
-      invalidatesTags: ["Clients"],
+      invalidatesTags: ['Clients'],
     }),
   }),
 });
