@@ -179,7 +179,6 @@ const Students = () => {
     }
   }, [addStudentIsSuccess, addStudentIsError]);
 
-  console.log(reqBody);
 
   //-----------------------------------------------//
 

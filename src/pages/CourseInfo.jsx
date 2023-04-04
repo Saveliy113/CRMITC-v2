@@ -63,6 +63,8 @@ const CourseInfo = () => {
   const { data: recruiters, isSuccess: recruitersIsSuccess } =
     useGetUsersQuery();
 
+  console.log(course);
+
   useEffect(() => {
     if (course) {
       setCourseStudents(course.student_course);
@@ -96,6 +98,7 @@ const CourseInfo = () => {
   /*-----------------COURSE EDITING, DELITING and STUDENT ADDING----------------------*/
 
   const [courseReqBody, setCourseReqBody] = useState({});
+  console.log(courseReqBody);
   const [studentReqBody, setStudentReqBody] = useState({
     full_name: '',
     start_mount: '',
@@ -727,7 +730,11 @@ const CourseInfo = () => {
                         }
                         type="number"
                         id="price"
-                        value={Math.ceil(courseReqBody.price)}
+                        value={
+                          courseReqBody.price
+                            ? Math.ceil(courseReqBody.price)
+                            : ''
+                        }
                       />
                     </div>
                     <div className="modal__input-container">
@@ -736,12 +743,16 @@ const CourseInfo = () => {
                         onChange={(event) =>
                           setCourseReqBody({
                             ...courseReqBody,
-                            telegram_froup_link: event.target.value,
+                            telegram_group_link: event.target.value,
                           })
                         }
                         type="text"
                         id="telegram"
-                        value={courseReqBody.telegram_group_link}
+                        value={
+                          courseReqBody.telegram_group_link
+                            ? courseReqBody.telegram_group_link
+                            : ''
+                        }
                       />
                     </div>
                     <div className="modal__input-container">
@@ -750,7 +761,7 @@ const CourseInfo = () => {
                         onChange={(event) =>
                           setCourseReqBody({
                             ...courseReqBody,
-                            is_active: event.target.checked,
+                            is_active: !event.target.checked,
                           })
                         }
                         type="checkbox"
@@ -767,7 +778,7 @@ const CourseInfo = () => {
                             description: event.target.value,
                           })
                         }
-                        id="comment"
+                        id="course__comment"
                         value={courseReqBody.description}
                       />
                     </div>
