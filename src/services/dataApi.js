@@ -58,7 +58,7 @@ export const dataApi = createApi({
     editCourse: build.mutation({
       query: (body) => ({
         method: 'PUT',
-        url: `/v1/mainapp/course/${body.courseId}`,
+        url: `/v1/mainapp/course/${body.courseId}/`,
         body: body.courseReqBody,
       }),
       invalidatesTags: ['Courses'],

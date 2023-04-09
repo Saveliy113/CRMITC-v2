@@ -30,7 +30,8 @@ const LoginForm = () => {
   const isOpened = useSelector((state) => state.login.isOpened);
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
-
+  console.log(username);
+  console.log(password);
   const onClickClose = (state) => {
     dispatch(toggleLoginForm(state));
   };
@@ -107,6 +108,7 @@ const LoginForm = () => {
                 id="username"
                 placeholder="Логин"
                 maxLength="15"
+                value={username}
               />
               <i className="bx bx-user"></i>
             </div>
@@ -117,6 +119,7 @@ const LoginForm = () => {
                 id="password"
                 placeholder="Пароль"
                 maxLength="15"
+                value={password}
               />
               <i className="bx bx-lock-open-alt"></i>
             </div>
