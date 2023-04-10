@@ -35,7 +35,7 @@ function App() {
       <LoginForm />
       <div className="content">
         <Header />
-        <Routes>
+        <Routes errorElement={<h1>dfsdss</h1>}>
           <Route path="/" element={<Main />} />
           <Route path="/branches" element={<Branches />} />
           <Route path="branches/:country_details" element={<CountryDetail />} />

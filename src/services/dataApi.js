@@ -76,7 +76,7 @@ export const dataApi = createApi({
     }),
 
     getCountries: build.query({
-      query: () => '/v1/branches/countries/',
+      query: () => '/v1/branches/countriesa/',
     }),
 
     getDirections: build.query({

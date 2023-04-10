@@ -16,6 +16,7 @@ import { useGetCountriesQuery } from '../services/dataApi';
 //CSS
 import '../css/pages/Students.css';
 import styles from '../ui/Table.module.css';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 const Branches = () => {
   const dispatch = useDispatch();
@@ -25,8 +26,12 @@ const Branches = () => {
 
   //-----------------------DATA-------------------------//
 
-  const { data: countriesData, isSuccess: countriesIsSuccess } =
-    useGetCountriesQuery();
+  const {
+    data: countriesData,
+    isSuccess: countriesIsSuccess,
+    isError,
+    error,
+  } = useGetCountriesQuery();
 
   useEffect(() => {
     countriesIsSuccess &&
@@ -34,6 +39,12 @@ const Branches = () => {
   }, [countriesIsSuccess]);
 
   const countries = useSelector((store) => store.data.currentData);
+
+  useEffect(() => {
+    if (isError) {
+      throw new Response("Not Found", { status: 404 });
+    }
+  }, [isError]);
 
   //----------------------------------------------------//
 
