@@ -63,8 +63,6 @@ const CourseInfo = () => {
   const { data: recruiters, isSuccess: recruitersIsSuccess } =
     useGetUsersQuery();
 
-  console.log(course);
-
   useEffect(() => {
     if (course) {
       setCourseStudents(course.student_course);
@@ -98,7 +96,6 @@ const CourseInfo = () => {
   /*-----------------COURSE EDITING, DELITING and STUDENT ADDING----------------------*/
 
   const [courseReqBody, setCourseReqBody] = useState({});
-  console.log(courseReqBody);
   const [studentReqBody, setStudentReqBody] = useState({
     full_name: '',
     start_mount: '',

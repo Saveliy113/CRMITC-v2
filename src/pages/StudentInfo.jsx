@@ -65,6 +65,8 @@ const StudentInfo = () => {
   const { data: studentPaymentsData, isSuccess: studentPaymentsIsSuccess } =
     useGetPaymentsByStudentIdQuery(studentId);
 
+  console.log(student);
+
   useEffect(() => {
     if (student && recruitersIsSuccess) {
       setRecruiter(
@@ -687,8 +689,13 @@ const StudentInfo = () => {
                             {recruiter ? recruiter.username : ''}
                           </span>
                         </p>
-                        <p>Дата записи: 11.11.2022</p>
-                        <p>Комментарий: Нет комментария</p>
+                        <p>Дата записи: {student.create_at.slice(0, 10)}</p>
+                        <p>
+                          Комментарий:{' '}
+                          {student.comment
+                            ? student.comment
+                            : 'нет комментария'}
+                        </p>
                       </div>
                     </div>
                     <div className="card__content-item">

@@ -179,7 +179,6 @@ const Students = () => {
     }
   }, [addStudentIsSuccess, addStudentIsError]);
 
-
   //-----------------------------------------------//
 
   //-----------------------TABLE-------------------------//
@@ -494,11 +493,13 @@ const Students = () => {
                   <option hidden selected>
                     Выберите курс
                   </option>
-                  {courses.map((course, i) => (
-                    <option key={i} value={course.id}>
-                      {course.title}
-                    </option>
-                  ))}
+                  {courses
+                    .filter((course) => course.is_active)
+                    .map((course, i) => (
+                      <option key={i} value={course.id}>
+                        {course.title}
+                      </option>
+                    ))}
                 </select>
                 <div className="icon__container">
                   <RiArrowDownSFill />
