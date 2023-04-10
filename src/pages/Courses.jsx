@@ -30,6 +30,7 @@ import ModalWindow from '../components/ModalWindow';
 //CSS
 import '../css/pages/Students.css';
 import styles from '../ui/Table.module.css';
+import useErrorHandler from '../hooks/useErrorHandler';
 
 const Courses = () => {
   const dispatch = useDispatch();

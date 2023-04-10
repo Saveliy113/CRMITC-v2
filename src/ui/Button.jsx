@@ -4,23 +4,22 @@ import { useEffect } from 'react';
 import styles from './Button.module.css';
 
 const Button = ({ type, text, action, disabled }) => {
-  console.log(action);
-  const keyPressHandler = (event) => {
-    if (event.key === 'Enter') {
-      // action();
-      console.log('111');
-    }
-  };
+  // const keyPressHandler = (event) => {
+  //   if (event.key === 'Enter') {
+  //     // action();
+  //     console.log('111');
+  //   }
+  // };
 
-  useEffect(() => {
-    window.addEventListener('keydown', (event) => {
-      keyPressHandler(event);
-    });
+  // useEffect(() => {
+  //   window.addEventListener('keydown', (event) => {
+  //     keyPressHandler(event);
+  //   });
 
-    return window.removeEventListener('keydown', (event) => {
-      keyPressHandler(event);
-    });
-  });
+  //   return window.removeEventListener('keydown', (event) => {
+  //     keyPressHandler(event);
+  //   });
+  // });
 
   return (
     <button

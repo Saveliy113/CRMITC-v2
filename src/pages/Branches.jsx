@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 //COMPONENTS
+import { ToastContainer, toast } from 'react-toastify';
 import Pagination from '../ui/Pagination';
 import RowsSlicer from '../ui/RowsSlicer';
 import Search from '../ui/Search';
 import Loader from '../ui/Loader';
+import Test from '../components/Test';
 
 //REDUX
 import { setFetchData } from '../redux/slices/dataSlice';
@@ -17,6 +19,7 @@ import { useGetCountriesQuery } from '../services/dataApi';
 import '../css/pages/Students.css';
 import styles from '../ui/Table.module.css';
 import ErrorBoundary from '../components/ErrorBoundary';
+import useErrorHandler from '../hooks/useErrorHandler';
 
 const Branches = () => {
   const dispatch = useDispatch();
@@ -24,11 +27,14 @@ const Branches = () => {
   const columns = ['ID', 'Страна'];
   const currentPage = useSelector((store) => store.data.page);
 
+  console.log(ErrorBoundary.getDerivedStateFromError('error'));
+
   //-----------------------DATA-------------------------//
 
   const {
     data: countriesData,
     isSuccess: countriesIsSuccess,
+    isLoading: countriesIsLoading,
     isError,
     error,
   } = useGetCountriesQuery();
@@ -40,11 +46,7 @@ const Branches = () => {
 
   const countries = useSelector((store) => store.data.currentData);
 
-  useEffect(() => {
-    if (isError) {
-      throw new Response("Not Found", { status: 404 });
-    }
-  }, [isError]);
+  useErrorHandler(error);
 
   //----------------------------------------------------//
 
@@ -91,6 +93,7 @@ const Branches = () => {
       ) : (
         <Loader />
       )}
+      <Test hasError />
     </>
   );
 };

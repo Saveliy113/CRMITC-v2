@@ -30,8 +30,7 @@ const LoginForm = () => {
   const isOpened = useSelector((state) => state.login.isOpened);
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  console.log(username);
-  console.log(password);
+
   const onClickClose = (state) => {
     dispatch(toggleLoginForm(state));
   };

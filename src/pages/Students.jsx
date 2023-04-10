@@ -39,10 +39,12 @@ import styles from '../ui/Table.module.css';
 import '../css/components/ModalWindow.css';
 import '../ui/Select.css';
 import 'react-toastify/dist/ReactToastify.css';
+import useNotify from '../hooks/useNotify';
 
 const Students = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { notify } = useNotify();
   const currentPage = useSelector((store) => store.data.page);
 
   //-----------------------FILTERING BY COURSE-------------------------//
@@ -131,30 +133,6 @@ const Students = () => {
 
   //----------------ACTIONS AFTER QUERY RESPONSE------------------//
 
-  const notifySuccess = (text) =>
-    toast.success(text, {
-      position: 'top-center',
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: 'light',
-    });
-
-  const notifyError = (error) =>
-    toast.error(`Ошибка. ${error.data.detail}`, {
-      position: 'top-center',
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: 'light',
-    });
-
   useEffect(() => {
     if (addStudentIsSuccess) {
       setReqBody({
@@ -172,10 +150,10 @@ const Students = () => {
         contract: false,
         comment: '',
       });
-      notifySuccess('Студент успешно добавлен!');
+      notify({ message: 'Студент успешно добавлен!', type: 'success' });
       setTimeout(() => navigate(`/students/student?id=${newStudent.id}`), 1500);
     } else if (addStudentIsError) {
-      notifyError(addStudentError);
+      notify({ message: addStudentError, type: 'error' });
     }
   }, [addStudentIsSuccess, addStudentIsError]);
 

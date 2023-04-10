@@ -45,6 +45,7 @@ import Button from '../ui/Button';
 import styles from '../ui/Table.module.css';
 import '../css/pages/StudentInfo.css';
 import 'react-toastify/dist/ReactToastify.css';
+import formatDate from '../utils/formatDate';
 
 const StudentInfo = () => {
   let [searchParams, setSearchParams] = useSearchParams();
@@ -689,7 +690,7 @@ const StudentInfo = () => {
                             {recruiter ? recruiter.username : ''}
                           </span>
                         </p>
-                        <p>Дата записи: {student.create_at.slice(0, 10)}</p>
+                        <p>Дата записи: {formatDate(student.create_at)}</p>
                         <p>
                           Комментарий:{' '}
                           {student.comment
