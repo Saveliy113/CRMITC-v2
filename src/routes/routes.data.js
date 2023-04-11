@@ -1,6 +1,7 @@
 //PAGES
-import BrancheDetails from '../pages/BrancheDetails';
-import Branches from '../pages/Branches';
+import Branches from '../pages/branches/Branches';
+import CountryeDetails from '../pages/branches/countryDetails/CountryDetails';
+import BrancheDetails from '../pages/branches/brancheDetails/BrancheDetails';
 import ClientDetails from '../pages/ClientDetails';
 import CourseInfo from '../pages/CourseInfo';
 import Courses from '../pages/Courses';
@@ -27,6 +28,10 @@ export const routes = [
   },
   {
     path: '/branches/:country_details',
+    component: CountryeDetails,
+  },
+  {
+    path: '/branches/:country_details/:branche_details',
     component: BrancheDetails,
   },
   {
