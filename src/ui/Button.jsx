@@ -1,28 +1,30 @@
-import React from 'react';
-import { useEffect } from 'react';
+//REACT
+import { useEffect, useRef } from 'react';
 
+//CSS
 import styles from './Button.module.css';
 
-const Button = ({ type, text, action, disabled }) => {
-  // const keyPressHandler = (event) => {
-  //   if (event.key === 'Enter') {
-  //     // action();
-  //     console.log('111');
-  //   }
-  // };
+const Button = ({ type, text, action, disabled, actionOnEnter = false }) => {
+  const buttonRef = useRef();
 
-  // useEffect(() => {
-  //   window.addEventListener('keydown', (event) => {
-  //     keyPressHandler(event);
-  //   });
+  useEffect(() => {
+    const keyPressHandler = (event) => {
+      if (!disabled && actionOnEnter && event.key === 'Enter') {
+        buttonRef.current.focus();
+        action();
+      }
+    };
 
-  //   return window.removeEventListener('keydown', (event) => {
-  //     keyPressHandler(event);
-  //   });
-  // });
+    window.addEventListener('keydown', keyPressHandler);
+
+    return () => {
+      window.removeEventListener('keydown', keyPressHandler);
+    };
+  }, [action, disabled]);
 
   return (
     <button
+      ref={buttonRef}
       className={styles.btn}
       onClick={action}
       disabled={disabled}

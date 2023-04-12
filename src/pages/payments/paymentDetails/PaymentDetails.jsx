@@ -1,6 +1,8 @@
 //REACT
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import useNotify from '../../../hooks/useNotify';
+import useErrorHandler from '../../../hooks/useErrorHandler';
 
 //REDUX
 import {
@@ -9,7 +11,10 @@ import {
   useGetPaymentByIdQuery,
   useGetStudentsQuery,
   useGetUsersQuery,
-} from '../services/dataApi';
+} from '../../../services/dataApi';
+
+//UTILS
+import formatDate from '../../../utils/formatDate';
 
 //ICONS
 import {
@@ -21,29 +26,43 @@ import {
 } from 'react-icons/ri';
 
 //COMPONENTS
-import { ToastContainer, toast } from 'react-toastify';
-import CreditCards from '../assets/img/credit_cards.png';
-import ModalLoader from '../ui/ModalLoader';
-import Loader from '../ui/Loader';
+import CreditCards from '../../../assets/img/credit_cards.png';
+import ModalLoader from '../../../ui/ModalLoader';
+import Loader from '../../../ui/Loader';
 
 //CSS
-import '../css/pages/PaymentDetails.css';
+import './PaymentDetails.css';
 
 const PaymentDetails = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { notify } = useNotify();
+
   const [isEditing, setIsEditing] = useState(false);
   const [recruiter, setRecruiter] = useState('');
+  const paymentId = searchParams.get('id');
 
   /*--------------------------DATA----------------------------*/
 
-  const paymentId = searchParams.get('id');
+  const {
+    data: payment,
+    isSuccess: paymentIsSuccess,
+    error: paymentError,
+  } = useGetPaymentByIdQuery(paymentId);
 
-  const { data: payment, isSuccess: paymentIsSuccess } =
-    useGetPaymentByIdQuery(paymentId);
-  const { data: recruiters, isSuccess: recruiterIsSuccess } =
-    useGetUsersQuery();
-  const { data: students, isSuccess: studentsIsSuccess } =
-    useGetStudentsQuery();
+  const {
+    data: recruiters,
+    isSuccess: recruiterIsSuccess,
+    error: recruitersError,
+  } = useGetUsersQuery();
+
+  const {
+    data: students,
+    isSuccess: studentsIsSuccess,
+    error: studentsError,
+  } = useGetStudentsQuery();
+
+  //QUERIES ERRORS HANDLING
+  useErrorHandler([paymentError, recruitersError, studentsError]);
 
   useEffect(() => {
     if (payment) {
@@ -99,47 +118,23 @@ const PaymentDetails = () => {
 
   /*-----------------ACTIONS AFTER RESPONSE-------------------*/
 
-  const notifySuccess = (text) =>
-    toast.success(`${text}`, {
-      position: 'top-center',
-      autoClose: 2500,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: 'light',
-    });
-
-  const notifyError = (err) =>
-    toast.error(`Ошибка. ${err.data.detail}`, {
-      position: 'top-center',
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: 'light',
-    });
-
   useEffect(() => {
     if (deleteCompleted) {
-      notifySuccess('Изменения внесены успешно!');
+      notify({ message: 'Изменения внесены успешно!', type: 'success' });
       setTimeout(() => setIsEditing(false), 500);
     }
     if (deleteError) {
-      notifyError(deleteError);
+      notify({ message: deleteError, type: 'error' });
     }
   }, [deleteCompleted, deleteIsError]);
 
   useEffect(() => {
     if (editIsSuccess) {
-      notifySuccess('Изменения внесены успешно!');
+      notify({ message: 'Изменения внесены успешно!', type: 'success' });
       setTimeout(() => setIsEditing(false), 500);
     }
     if (editIsError) {
-      notifyError(editError);
+      notify({ message: editError, type: 'error' });
     }
   }, [editIsSuccess, editIsError]);
 
@@ -152,7 +147,6 @@ const PaymentDetails = () => {
 
   return payment && recruiter && students ? (
     <div className="paymentDetails__card">
-      <ToastContainer />
       <div className="paymentDetails__header">
         <img src={CreditCards} alt="" />
       </div>
@@ -232,7 +226,7 @@ const PaymentDetails = () => {
             </h3>
             <h3>Сумма: {payment.sum.toLocaleString('ru')}</h3>
             <h3>Рекрутер: {recruiter.username}</h3>
-            <h3>Дата: {payment.date.slice(0, 10)}</h3>
+            <h3>Дата: {formatDate(payment.date)}</h3>
             <h3>
               Комментарий:{' '}
               {payment.comment ? payment.comment : 'нет комментария'}

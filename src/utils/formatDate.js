@@ -1,5 +1,11 @@
 const formatDate = (initialDate) => {
   const date = new Date(initialDate);
+
+  //RETURN RESPONSE FROM BACKEND IF DATE IS INVALID
+  if (!Date.parse(date)) {
+    return initialDate;
+  }
+
   const day = date.getDate();
   const monthNumber = date.getMonth() + 1;
   let monthTitle;

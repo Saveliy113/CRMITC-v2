@@ -14,6 +14,7 @@ import Loader from '../ui/Loader';
 //CSS
 import styles from '../ui/Table.module.css';
 import { useGetCoursesQuery } from '../services/dataApi';
+import useErrorHandler from '../hooks/useErrorHandler';
 
 const MentorDetails = () => {
   const dispatch = useDispatch();
@@ -29,8 +30,13 @@ const MentorDetails = () => {
     data: coursesData,
     isSuccess: coursesSuccess,
     isLoading: coursesDataLoading,
+    error: coursesDataError,
   } = useGetCoursesQuery();
 
+  //QUERIES ERRORS HANDLING
+  useErrorHandler([coursesDataError]);
+
+  //SETTING DATA TO REDUX
   useEffect(() => {
     if (coursesSuccess) {
       dispatch(

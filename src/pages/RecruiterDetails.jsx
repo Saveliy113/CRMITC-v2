@@ -11,6 +11,9 @@ import {
 } from '../services/dataApi';
 import { setFetchData } from '../redux/slices/dataSlice';
 
+//UTILS
+import formatDate from '../utils/formatDate';
+
 //ICONS
 import { RiArrowDownSFill } from 'react-icons/ri';
 
@@ -22,24 +25,41 @@ import Loader from '../ui/Loader';
 //CSS
 import '../css/pages/RecruiterDetails.css';
 import styles from '../ui/Table.module.css';
+import useErrorHandler from '../hooks/useErrorHandler';
 
 const RecruiterDetails = () => {
-  const [activeData, setActiveData] = useState('studentsHistory');
-  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [activeData, setActiveData] = useState('studentsHistory');
+  const [searchParams, setSearchParams] = useSearchParams();
   const recruiterId = Number(searchParams.get('id'));
   const recruiterName = searchParams.get('name');
 
   //-----------------------DATA-------------------------//
 
-  const { data: payments, isSuccess: paymentsIsSuccess } =
-    useGetStudentsPaymentsQuery();
+  const {
+    data: payments,
+    isSuccess: paymentsIsSuccess,
+    error: paymentsError,
+  } = useGetStudentsPaymentsQuery();
 
-  const { data: students, isSuccess: studentsIsSuccess } =
-    useGetStudentsQuery();
+  const {
+    data: students,
+    isSuccess: studentsIsSuccess,
+    error: studentsError,
+  } = useGetStudentsQuery();
 
-  const { data: courses, isSuccess: coursesIsSuccess } = useGetCoursesQuery();
+  const {
+    data: courses,
+    isSuccess: coursesIsSuccess,
+    error: coursesError,
+  } = useGetCoursesQuery();
+
+  //QUERIES ERRORS HANDLING
+  useErrorHandler([paymentsError, studentsError, coursesError]);
+
+  //SETTING DATA TO REDUX
 
   useEffect(() => {
     if (studentsIsSuccess && activeData === 'studentsHistory') {
@@ -66,7 +86,7 @@ const RecruiterDetails = () => {
   //----------------------------------------------------//
 
   //-----------------------TABLE-------------------------//
-
+  console.log(students);
   const studentsHistoryColumns = [
     'ID',
     'Студент',
@@ -93,9 +113,11 @@ const RecruiterDetails = () => {
           <td data-label="Группа">
             {courses.find((course) => course.id === student.course).title}
           </td>
-          <td data-label="Оплата">{student.payment.toLocaleString('ru')}</td>
-          <td data-label="Скидка">{student.discount}</td>
-          <td data-label="Дата">{student.create_at.slice(0, 10)}</td>
+          <td data-label="Оплата">{`${student.payment.toLocaleString('ru')} ${
+            student.currency
+          }`}</td>
+          <td data-label="Скидка">{student.full_discount}</td>
+          <td data-label="Дата">{formatDate(student.create_at)}</td>
           <td data-label="Комментарий">
             {student.comment ? student.comment : '-'}
           </td>
@@ -128,7 +150,7 @@ const RecruiterDetails = () => {
                 .full_name
             }
           </td>
-          <td data-label="Дата">{payment.date.slice(0, 10)}</td>
+          <td data-label="Дата">{formatDate(payment.date)}</td>
           <td data-label="Комментарий">
             {payment.comment ? payment.comment : '-'}
           </td>

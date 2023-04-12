@@ -15,7 +15,7 @@ import { changePage, setFetchData } from '../../../redux/slices/dataSlice';
 
 //COMPONENTS
 import DirectionsTable from './DirectionsTable';
-import TrailLessonsTable from './TrailLessonsTable';
+import TrailLessonsTable from './BranchLessonsTable';
 import EmployeesTable from './EmployeesTable';
 import InfoCard from '../../../components/InfoCard';
 import Loader from '../../../ui/Loader';

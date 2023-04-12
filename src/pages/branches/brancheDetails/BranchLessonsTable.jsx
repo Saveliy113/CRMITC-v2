@@ -1,4 +1,8 @@
+//REACT
 import { useNavigate } from 'react-router-dom';
+
+//UTILS
+import formatDate from '../../..//utils/formatDate';
 
 //CSS
 import styles from '../../../ui/Table.module.css';
@@ -21,9 +25,7 @@ const TrailLessonsTable = ({ currentPage, currentData, additionalData }) => {
         >
           <td data-label="ID">{lesson.id}</td>
           <td data-label="Заголовок">{lesson.title}</td>
-          <td data-label="Дата">
-            {new Date(lesson.date).toLocaleString().slice(0, -3)}
-          </td>
+          <td data-label="Дата">{formatDate(lesson.date)}</td>
           <td data-label="Количество участников">
             {
               additionalData.filter(

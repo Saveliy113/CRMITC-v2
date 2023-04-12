@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
+import useNotify from '../../../hooks/useNotify';
 
 //REDUX
 import {
@@ -12,7 +13,7 @@ import {
   useGetPaymentsByStudentIdQuery,
   useGetStudentByIdQuery,
   useGetUsersQuery,
-} from '../services/dataApi';
+} from '../../../services/dataApi';
 
 //ICONS
 import {
@@ -35,22 +36,26 @@ import { BsFillFilePersonFill } from 'react-icons/bs';
 //COMPONENTS
 import { ToastContainer, toast } from 'react-toastify';
 import ReactInputMask from 'react-input-mask';
-import InfoCard from '../components/InfoCard';
-import ModalWindow from '../components/ModalWindow';
-import Loader from '../ui/Loader';
-import ModalLoader from '../ui/ModalLoader';
-import Button from '../ui/Button';
+import InfoCard from '../../../components/InfoCard';
+import ModalWindow from '../../../components/ModalWindow';
+import Loader from '../../../ui/Loader';
+import ModalLoader from '../../../ui/ModalLoader';
+import Button from '../../../ui/Button';
 
 //CSS
-import styles from '../ui/Table.module.css';
-import '../css/pages/StudentInfo.css';
+import './StudentInfo.css';
 import 'react-toastify/dist/ReactToastify.css';
-import formatDate from '../utils/formatDate';
+import formatDate from '../../../utils/formatDate';
+import useErrorHandler from '../../../hooks/useErrorHandler';
+import StudentInfoTable from './StudentInfoTable';
 
 const StudentInfo = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { notify } = useNotify();
   const [isEditing, setIsEditing] = useState(false);
+  const [studentPayments, setStudentPayments] = useState();
+
   const studentId = Number(searchParams.get('id'));
 
   /*--------------------------DATA----------------------------*/
@@ -58,15 +63,37 @@ const StudentInfo = () => {
   const [recruiter, setRecruiter] = useState('');
   const [course, setCourse] = useState('');
 
-  const { data: student, isSuccess: studentIsSuccess } =
-    useGetStudentByIdQuery(studentId);
-  const { data: recruiters, isSuccess: recruitersIsSuccess } =
-    useGetUsersQuery();
-  const { data: courses, isSuccess: coursesIsSuccess } = useGetCoursesQuery();
-  const { data: studentPaymentsData, isSuccess: studentPaymentsIsSuccess } =
-    useGetPaymentsByStudentIdQuery(studentId);
+  const {
+    data: student,
+    isSuccess: studentIsSuccess,
+    error: studentError,
+  } = useGetStudentByIdQuery(studentId);
 
-  console.log(student);
+  const {
+    data: recruiters,
+    isSuccess: recruitersIsSuccess,
+    error: recruitersError,
+  } = useGetUsersQuery();
+
+  const {
+    data: courses,
+    isSuccess: coursesIsSuccess,
+    error: coursesError,
+  } = useGetCoursesQuery();
+
+  const {
+    data: studentPaymentsData,
+    isSuccess: studentPaymentsIsSuccess,
+    error: studentPaymentsError,
+  } = useGetPaymentsByStudentIdQuery(studentId);
+
+  //QUERIES ERRORS HANDLING
+  useErrorHandler([
+    studentError,
+    recruitersError,
+    coursesError,
+    studentPaymentsError,
+  ]);
 
   useEffect(() => {
     if (student && recruitersIsSuccess) {
@@ -96,9 +123,13 @@ const StudentInfo = () => {
     }
   }, [courses, recruiters, student, studentIsSuccess]);
 
+  useEffect(() => {
+    studentPaymentsIsSuccess && setStudentPayments(studentPaymentsData);
+  }, [studentPaymentsIsSuccess, studentPaymentsData]);
+
   /*----------------------------------------------------------*/
 
-  /*------------------STUDENT DELITING, EDITING, PAYMENT ADDING-----------------------*/
+  /*------------------STUDENT DELETING, EDITING, PAYMENT ADDING-----------------------*/
 
   const [studentReqBody, setStudentReqBody] = useState({});
 
@@ -170,97 +201,34 @@ const StudentInfo = () => {
 
   /*-----------------ACTIONS AFTER RESPONSE-------------------*/
 
-  const notifySuccess = (text) =>
-    toast.success(`${text}`, {
-      position: 'top-center',
-      autoClose: 2500,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: 'light',
-    });
-
-  const notifyError = (err) =>
-    toast.error(`Ошибка ${err.status}. Повторите попытку.`, {
-      position: 'top-center',
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: 'light',
-    });
-
   useEffect(() => {
     if (deleteCompleted) {
-      notifySuccess('Студент успешно удален!');
+      notify({ message: 'Студент успешно удален!', type: 'success' });
       setTimeout(() => navigate('/students'), 500);
     }
     if (deleteError) {
-      notifyError(error);
+      notify({ message: error, type: 'error' });
     }
   }, [deleteCompleted, deleteError]);
 
   useEffect(() => {
     if (editIsSuccess) {
-      notifySuccess('Изменения внесены успешно!');
+      notify({ message: 'Изменения внесены успешно!', type: 'success' });
       setTimeout(() => setIsEditing(false), 500);
     }
     if (editIsError) {
-      notifyError(editError);
+      notify({ message: editError, type: 'error' });
     }
   }, [editIsSuccess, editIsError]);
 
   useEffect(() => {
     if (addPaymentSuccess) {
       setPaymentReqBody({ student: studentId, sum: '', recruiter: '' });
-      notifySuccess('Платеж успешно добавлен!');
+      notify({ message: 'Платеж успешно добавлен!', type: 'success' });
     } else if (addPaymentIsError) {
-      notifyError(addPaymentError);
+      notify({ message: addPaymentError, type: 'error' });
     }
   }, [addPaymentSuccess, addPaymentIsError]);
-
-  /*----------------------------------------------------------*/
-
-  /*------------------------TABLE-----------------------------*/
-
-  const columns = ['ID', 'Сумма', 'Рекрутер', 'Дата', 'Комментарий'];
-  const [studentPayments, setStudentPayments] = useState();
-
-  useEffect(() => {
-    studentPaymentsIsSuccess && setStudentPayments(studentPaymentsData);
-  }, [studentPaymentsIsSuccess, studentPaymentsData]);
-
-  const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
-  const tableTr =
-    studentPayments && studentPayments.length !== 0 ? (
-      studentPayments.map((student, index) => (
-        <tr
-          key={index}
-          onClick={() => navigate(`/payments/payment?id=${student.id}`)}
-        >
-          <td data-label="ID">{student.id}</td>
-          <td data-label="Сумма">{student.sum.toLocaleString('ru')}</td>
-          <td data-label="Рекрутер">
-            {recruitersIsSuccess &&
-              recruiters.map((recruiter) =>
-                recruiter.id === student.recruiter ? recruiter.username : ''
-              )}
-          </td>
-          <td data-label="Дата">{student.date.slice(0, 10)}</td>
-          <td data-label="Комменатарий">
-            {student.comment ? student.comment : '-'}
-          </td>
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td colSpan={5}>No available Data</td>
-      </tr>
-    );
 
   /*----------------------------------------------------------*/
 
@@ -753,7 +721,6 @@ const StudentInfo = () => {
                   </>
                 )}
               </div>
-              <ToastContainer />
               <div className="card__footer">
                 {deleteLoading || editIsLoading ? (
                   <ModalLoader />
@@ -790,12 +757,10 @@ const StudentInfo = () => {
             {/* <Search /> */}
           </div>
           <div className="table__box">
-            <table className={styles.table}>
-              <thead>
-                <tr>{tableTh}</tr>
-              </thead>
-              <tbody>{tableTr}</tbody>
-            </table>
+            <StudentInfoTable
+              studentPayments={studentPayments}
+              additionalData={recruiters}
+            />
           </div>
         </>
       ) : (

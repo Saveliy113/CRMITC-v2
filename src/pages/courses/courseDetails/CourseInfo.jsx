@@ -1,6 +1,8 @@
 //REACT
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import useErrorHandler from '../../../hooks/useErrorHandler';
+import useNotify from '../../../hooks/useNotify';
 
 //REDUX
 import {
@@ -11,7 +13,10 @@ import {
   useAddStudentMutation,
   useDeleteCourseMutation,
   useEditCourseMutation,
-} from '../services/dataApi';
+} from '../../../services/dataApi';
+
+//UTILS
+import formatDate from '../../../utils/formatDate';
 
 //ICONS
 import {
@@ -23,29 +28,28 @@ import {
   RiSave3Fill,
   RiFileInfoLine,
   RiCalendarEventFill,
-  RiCheckFill,
-  RiCloseFill,
   RiBookOpenLine,
 } from 'react-icons/ri';
 
 //COMPONENTS
 import { CSSTransition } from 'react-transition-group';
-import { ToastContainer, toast } from 'react-toastify';
+import CourseInfoTable from './CourseInfoTable';
 import ReactInputMask from 'react-input-mask';
-import InfoCard from '../components/InfoCard';
-import Loader from '../ui/Loader';
-import ModalLoader from '../ui/ModalLoader';
-import Button from '../ui/Button';
-import ModalWindow from '../components/ModalWindow';
+import InfoCard from '../../../components/InfoCard';
+import Loader from '../../../ui/Loader';
+import ModalLoader from '../../../ui/ModalLoader';
+import Button from '../../../ui/Button';
+import ModalWindow from '../../../components/ModalWindow';
 
 //CSS
-import styles from '../ui/Table.module.css';
-import '../css/pages/CourseInfo.css';
+import './CourseInfo.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const CourseInfo = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { notify } = useNotify();
+
   const courseId = Number(searchParams.get('id'));
   const [isEditing, setIsEditing] = useState(false);
 
@@ -55,14 +59,41 @@ const CourseInfo = () => {
   const [direction, setDirection] = useState('');
   const [courseStudents, setCourseStudents] = useState([]);
 
-  const { data: course, isSuccess: courseIsSuccess } =
-    useGetCourseByIdQuery(courseId);
-  const { data: mentors, isSuccess: mentorsIsSuccess } = useGetMentorsQuery();
-  const { data: directions, isSuccess: directionsIsSuccess } =
-    useGetDirectionsQuery();
-  const { data: recruiters, isSuccess: recruitersIsSuccess } =
-    useGetUsersQuery();
+  const {
+    data: course,
+    isSuccess: courseIsSuccess,
+    error: courseError,
+  } = useGetCourseByIdQuery(courseId);
 
+  console.log(course);
+
+  const {
+    data: mentors,
+    isSuccess: mentorsIsSuccess,
+    error: mentorsError,
+  } = useGetMentorsQuery();
+
+  const {
+    data: directions,
+    isSuccess: directionsIsSuccess,
+    directionsError,
+  } = useGetDirectionsQuery();
+
+  const {
+    data: recruiters,
+    isSuccess: recruitersIsSuccess,
+    error: recruitersError,
+  } = useGetUsersQuery();
+
+  //QUERIES ERRORS HANDLING
+  useErrorHandler([
+    courseError,
+    mentorsError,
+    directionsError,
+    recruitersError,
+  ]);
+
+  //SETTING DATA TO REDUX
   useEffect(() => {
     if (course) {
       setCourseStudents(course.student_course);
@@ -165,50 +196,26 @@ const CourseInfo = () => {
 
   /*-----------------ACTIONS AFTER RESPONSE-------------------*/
 
-  const notifySuccess = (text) =>
-    toast.success(`${text}`, {
-      position: 'top-center',
-      autoClose: 2500,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: 'light',
-    });
-
-  const notifyError = (err) =>
-    toast.error(`Ошибка ${err.status}. Повторите попытку.`, {
-      position: 'top-center',
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: 'light',
-    });
-
   useEffect(() => {
     if (deleteCompleted) {
-      notifySuccess('Курс успешно удален!');
+      notify({ message: 'Курс успешно удален!', type: 'success' });
       setTimeout(() => navigate('/courses'), 500);
     }
     if (deleteError) {
-      notifyError(error);
+      notify({ message: error, type: 'error' });
     }
   }, [deleteCompleted, deleteError]);
 
   useEffect(() => {
     if (editIsSuccess) {
-      notifySuccess('Изменения внесены успешно!');
+      notify({ message: 'Изменения внесены успешно!', type: 'success' });
       setTimeout(() => {
         setIsEditing(false);
         window.scrollTo(0, 150);
       }, 500);
     }
     if (editIsError) {
-      notifyError(editError);
+      notify({ message: editError, type: 'error' });
     }
   }, [editIsSuccess, editIsError]);
 
@@ -229,9 +236,9 @@ const CourseInfo = () => {
         contract: false,
         comment: '',
       });
-      notifySuccess('Студент успешно добавлен!');
+      notify({ message: 'Студент успешно добавлен!', type: 'success' });
     } else if (addStudentIsError) {
-      notifyError(addStudentError);
+      notify({ message: addStudentError, type: 'error' });
     }
   }, [addStudentSuccess, addStudentIsError]);
 
@@ -242,7 +249,7 @@ const CourseInfo = () => {
   const [isOpened, setIsOpened] = useState(false);
   const discountType = useRef();
 
-  const isSrudentAddAllowed =
+  const isStudentAddAllowed =
     studentReqBody.full_name &&
     studentReqBody.course &&
     studentReqBody.recruiter
@@ -256,60 +263,6 @@ const CourseInfo = () => {
   const addStudentHandler = () => {
     addStudent(studentReqBody).unwrap();
   };
-
-  /*----------------------------------------------------------*/
-
-  /*------------------------TABLE-----------------------------*/
-
-  const columns = [
-    'ID',
-    'Имя',
-    'Оплата',
-    'Общая сумма',
-    'Остаток за текущий месяц',
-    'Рекрутер',
-    'Договор',
-    'Учится',
-  ];
-
-  const tableTrClickHandler = (id) => {
-    navigate(`/students/student?id=${id}`);
-  };
-
-  const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
-  const tableTr =
-    courseStudents && courseStudents.length !== 0 ? (
-      courseStudents.map((student, index) => (
-        <tr key={index} onClick={() => tableTrClickHandler(student.id)}>
-          <td data-label="ID">{student.id}</td>
-          <td data-label="Имя">{student.full_name}</td>
-          <td data-label="Оплата">{student.payment.toLocaleString('ru')}</td>
-          <td data-label="Общая сумма">
-            {student.full_payment.toLocaleString('ru')}
-          </td>
-          <td data-label="Остаток за текущий месяц">
-            {student.remainder_for_current_mount.toLocaleString('ru')}
-          </td>
-          <td data-label="Рекрутер">
-            {recruitersIsSuccess
-              ? recruiters.map((recruiter) =>
-                  recruiter.id === student.recruiter ? recruiter.username : ''
-                )
-              : ''}
-          </td>
-          <td data-label="Договор">
-            {student.contract ? <RiCheckFill /> : <RiCloseFill />}
-          </td>
-          <td data-label="Учится">
-            {student.studies ? <RiCheckFill /> : <RiCloseFill />}
-          </td>
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td colSpan={8}>No available data</td>
-      </tr>
-    );
 
   /*----------------------------------------------------------*/
 
@@ -550,7 +503,7 @@ const CourseInfo = () => {
                 <Button
                   text="Добавить"
                   action={addStudentHandler}
-                  disabled={!isSrudentAddAllowed}
+                  disabled={!isStudentAddAllowed}
                 />
               )}
             </div>
@@ -834,16 +787,18 @@ const CourseInfo = () => {
                         <RiCalendarEventFill />
                       </div>
                       <div className="item__text">
-                        <p>Дата начала: {course.date_start}</p>
-                        <p>Дата окончания: {course.finish_date}</p>
+                        <p>Дата начала: {formatDate(course.date_start)}</p>
+                        <p>Дата окончания: {formatDate(course.finish_date)}</p>
                         <p>Сейчас идет: {course.current_month} месяц</p>
-                        <p>Следующий месяц начинается: {course.next_month}</p>
+                        <p>
+                          Следующий месяц начинается:{' '}
+                          {formatDate(course.next_month)}
+                        </p>
                       </div>
                     </div>
                   </>
                 )}
               </div>
-              <ToastContainer />
 
               <div className="card__footer">
                 {deleteLoading || editIsLoading ? (
@@ -879,12 +834,10 @@ const CourseInfo = () => {
             <Button text="+Добавить студента" action={onClickClose} />
           </div>
           <div className="table__box">
-            <table className={styles.table}>
-              <thead>
-                <tr>{tableTh}</tr>
-              </thead>
-              <tbody>{tableTr}</tbody>
-            </table>
+            <CourseInfoTable
+              courseStudents={courseStudents}
+              additionalData={recruiters}
+            />
           </div>
         </>
       ) : (

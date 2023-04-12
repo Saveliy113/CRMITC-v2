@@ -1,6 +1,8 @@
 //REACT
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import useErrorHandler from '../hooks/useErrorHandler';
+import useNotify from '../hooks/useNotify';
 
 //REDUX
 import {
@@ -22,7 +24,6 @@ import {
 } from 'react-icons/ri';
 
 //COMPONENTS
-import { ToastContainer, toast } from 'react-toastify';
 import Loader from '../ui/Loader';
 import ModalLoader from '../ui/ModalLoader';
 
@@ -32,20 +33,46 @@ import '../css/pages/ClientDetails.css';
 const ClientDetails = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { notify } = useNotify();
+
   const [isEditing, setIsEditing] = useState(false);
   const clientId = Number(searchParams.get('id'));
 
   //-----------------------DATA-------------------------//
 
-  const { data: trailLessons, isSuccess: trailLessonsIsSuccess } =
-    useGetTrailLessonsQuery();
-  const { data: client, isSuccess: clientIsSuccess } =
-    useGetClientByIdQuery(clientId);
-  const { data: clientStatus, isSuccess: clientStatusIsSuccess } =
-    useGetClientStatusQuery();
-  const { data: recruiters, isSuccess: recruitersIsSuccess } =
-    useGetUsersQuery();
+  const {
+    data: trailLessons,
+    isSuccess: trailLessonsIsSuccess,
+    error: trailLessonsError,
+  } = useGetTrailLessonsQuery();
 
+  const {
+    data: client,
+    isSuccess: clientIsSuccess,
+    error: clientError,
+  } = useGetClientByIdQuery(clientId);
+
+  const {
+    data: clientStatus,
+    isSuccess: clientStatusIsSuccess,
+    error: clientStatusError,
+  } = useGetClientStatusQuery();
+
+  const {
+    data: recruiters,
+    isSuccess: recruitersIsSuccess,
+    error: recruitersError,
+  } = useGetUsersQuery();
+
+  //QUERIES ERRORS HANDLING
+  useErrorHandler([
+    trailLessonsError,
+    clientError,
+    clientStatusError,
+    recruitersError,
+  ]);
+
+  //SETTING QUERY REQUEST BODY
   useEffect(() => {
     if (clientIsSuccess && trailLessonsIsSuccess && recruitersIsSuccess) {
       setClientReqBody({
@@ -103,50 +130,26 @@ const ClientDetails = () => {
 
   /*-----------------ACTIONS AFTER RESPONSE-------------------*/
 
-  const notifySuccess = (text) =>
-    toast.success(`${text}`, {
-      position: 'top-center',
-      autoClose: 2500,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: 'light',
-    });
-
-  const notifyError = (err) =>
-    toast.error(`Ошибка ${err.status}. Повторите попытку.`, {
-      position: 'top-center',
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: 'light',
-    });
-
   useEffect(() => {
     if (deleteCompleted) {
-      notifySuccess('Клиент успешно удален!');
-      setTimeout(() => navigate(-1), 2000);
+      notify({ message: 'Клиент успешно удален!', type: 'success' });
+      setTimeout(() => navigate(-1), 500);
     }
     if (deleteError) {
-      notifyError(error);
+      notify({ message: error, type: 'error' });
     }
   }, [deleteCompleted, deleteError]);
 
   useEffect(() => {
     if (editIsSuccess) {
-      notifySuccess('Изменения внесены успешно!');
+      notify({ message: 'Изменения внесены успешно!', type: 'success' });
       setTimeout(() => {
         setIsEditing(false);
         window.scrollTo(0, 150);
-      }, 1000);
+      }, 500);
     }
     if (editIsError) {
-      notifyError(editError);
+      notify({ message: editError, type: 'error' });
     }
   }, [editIsSuccess, editIsError]);
 
@@ -157,7 +160,6 @@ const ClientDetails = () => {
     recruitersIsSuccess &&
     trailLessonsIsSuccess ? (
     <div className="paymentDetails__card">
-      <ToastContainer />
       <div className="paymentDetails__header">
         <h3>Клиент</h3>
       </div>
@@ -325,7 +327,11 @@ const ClientDetails = () => {
             </h3>
             {client.comment ? <h3>Комментарий: {client.comment}</h3> : ''}
             {client.whatsapp ? (
-              <a href={client.whatsapp} id="whatsapp__link" target="blank">
+              <a
+                href={`https://wa.me/${client.whatsapp}`}
+                id="whatsapp__link"
+                target="blank"
+              >
                 <RiWhatsappFill />
               </a>
             ) : (

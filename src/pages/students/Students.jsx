@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import useNotify from '../../hooks/useNotify';
 
 //REDUX
 import {
@@ -10,41 +11,36 @@ import {
   useGetDirectionsQuery,
   useGetStudentsQuery,
   useGetUsersQuery,
-} from '../services/dataApi';
-import { setFetchData } from '../redux/slices/dataSlice';
+} from '../../services/dataApi';
+import { setFetchData } from '../../redux/slices/dataSlice';
 
 //COMPONENTS
-import { ToastContainer, toast } from 'react-toastify';
 import { CSSTransition } from 'react-transition-group';
+import StudentsTable from './StudentsTable';
 import ReactInputMask from 'react-input-mask';
-import Pagination from '../ui/Pagination';
-import RowsSlicer from '../ui/RowsSlicer';
-import Search from '../ui/Search';
-import Loader from '../ui/Loader';
-import Button from '../ui/Button';
-import ModalWindow from '../components/ModalWindow';
-import ModalLoader from '../ui/ModalLoader';
+import Pagination from '../../ui/Pagination';
+import RowsSlicer from '../../ui/RowsSlicer';
+import Search from '../../ui/Search';
+import Loader from '../../ui/Loader';
+import Button from '../../ui/Button';
+import ModalWindow from '../../components/ModalWindow';
+import ModalLoader from '../../ui/ModalLoader';
 
 //ICONS
-import {
-  RiCheckFill,
-  RiCloseFill,
-  RiArrowDownSFill,
-  RiRestartLine,
-} from 'react-icons/ri';
+import { RiArrowDownSFill, RiRestartLine } from 'react-icons/ri';
 
 //CSS
-import '../css/pages/Students.css';
-import styles from '../ui/Table.module.css';
-import '../css/components/ModalWindow.css';
-import '../ui/Select.css';
+import './Students.css';
+import '../../css/components/ModalWindow.css';
+import '../../ui/Select.css';
 import 'react-toastify/dist/ReactToastify.css';
-import useNotify from '../hooks/useNotify';
+import useErrorHandler from '../../hooks/useErrorHandler';
 
 const Students = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { notify } = useNotify();
+
   const currentPage = useSelector((store) => store.data.page);
 
   //-----------------------FILTERING BY COURSE-------------------------//
@@ -62,19 +58,35 @@ const Students = () => {
       );
     }
   }, [filterByCourses]);
+
   //-----------------------DATA-------------------------//
 
   const {
     data,
     isSuccess: studentsIsSuccess,
     isLoading,
+    error: studentsError,
   } = useGetStudentsQuery();
-  const { data: recruiters, isSuccess: recruiterIsSuccess } =
-    useGetUsersQuery();
-  const { data: courses, isSuccess: coursesIsSuccess } = useGetCoursesQuery();
-  const { data: directions, isSuccess: directionsIsSuccess } =
-    useGetDirectionsQuery();
 
+  const {
+    data: recruiters,
+    isSuccess: recruiterIsSuccess,
+    error: recruitersError,
+  } = useGetUsersQuery();
+
+  const {
+    data: courses,
+    isSuccess: coursesIsSuccess,
+    error: coursesError,
+  } = useGetCoursesQuery();
+
+  const {
+    data: directions,
+    isSuccess: directionsIsSuccess,
+    error: directionsError,
+  } = useGetDirectionsQuery();
+
+  //SETTING DATA TO REEDUX
   useEffect(() => {
     if (studentsIsSuccess && !filterByCourses) {
       dispatch(
@@ -85,6 +97,14 @@ const Students = () => {
       );
     }
   }, [studentsIsSuccess, filterByCourses]);
+
+  //QUERIES ERRORS HANDLING
+  useErrorHandler([
+    studentsError,
+    recruitersError,
+    coursesError,
+    directionsError,
+  ]);
 
   const students = useSelector((store) => store.data.currentData);
 
@@ -158,51 +178,6 @@ const Students = () => {
   }, [addStudentIsSuccess, addStudentIsError]);
 
   //-----------------------------------------------//
-
-  //-----------------------TABLE-------------------------//
-
-  const columns = [
-    'ID',
-    'Имя',
-    'Оплата',
-    'Общая сумма',
-    'Остаток за текущий месяц',
-    'Рекрутер',
-    'Договор',
-  ];
-  const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
-  const tableTr =
-    currentPage === 'students' && students && students.length !== 0 ? (
-      students.map((student, index) => (
-        <tr key={index} onClick={() => navigate(`student?id=${student.id}`)}>
-          <td data-label="ID">{student.id}</td>
-          <td data-label="Имя">{student.full_name}</td>
-          <td data-label="Оплата">{student.payment.toLocaleString('ru')}</td>
-          <td data-label="Общая сумма">
-            {student.full_payment.toLocaleString('ru')}
-          </td>
-          <td data-label="Остаток за текущий месяц">
-            {student.remainder_for_current_mount.toLocaleString('ru')}
-          </td>
-          <td data-label="Рекрутер">
-            {recruiterIsSuccess
-              ? recruiters.map((recruiter) =>
-                  recruiter.id === student.recruiter ? recruiter.username : ''
-                )
-              : ''}
-          </td>
-          <td data-label="Договор">
-            {student.contract ? <RiCheckFill /> : <RiCloseFill />}
-          </td>
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td colSpan={7}>No available data</td>
-      </tr>
-    );
-
-  //----------------------------------------------------//
 
   return (
     <>
@@ -431,7 +406,6 @@ const Students = () => {
                 />
               </div>
             </div>
-            <ToastContainer />
             <div className="modal__actions">
               {addStudentLoading ? (
                 <ModalLoader isLoading={isLoading} />
@@ -492,12 +466,11 @@ const Students = () => {
             <Search placeholder="Имя студента" />
           </div>
           <div className="table__box">
-            <table className={styles.table}>
-              <thead>
-                <tr>{tableTh}</tr>
-              </thead>
-              <tbody>{tableTr}</tbody>
-            </table>
+            <StudentsTable
+              currentPage={currentPage}
+              students={students}
+              additionalData={{ recruiters, courses }}
+            />
           </div>
           <Pagination />
         </>

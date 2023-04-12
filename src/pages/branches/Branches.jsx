@@ -15,7 +15,7 @@ import { setFetchData } from '../../redux/slices/dataSlice';
 import { useGetCountriesQuery } from '../../services/dataApi';
 
 //CSS
-import '../../css/pages/Students.css';
+import '../students/Students.css';
 
 const Branches = () => {
   const dispatch = useDispatch();

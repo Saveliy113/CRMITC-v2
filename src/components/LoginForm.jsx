@@ -49,11 +49,17 @@ const LoginForm = () => {
   ] = useLogInMutation();
 
   const authorization = async () => {
+    // console.log({
+    //   password,
+    //   username,
+    // });
     await logIn({
       password,
       username,
     }).unwrap();
   };
+
+  const isLoginAllowed = !!username && !!password;
 
   //-----------------------SAVING TOKEN TO REDUX-------------------------//
 
@@ -154,10 +160,11 @@ const LoginForm = () => {
             ) : (
               <Button
                 id="login__btn"
-                type="submit"
+                // type="submit"
                 text="Войти"
                 action={authorization}
-                disabled={username && password ? false : true}
+                disabled={isLoginAllowed ? false : true}
+                actionOnEnter={true}
               />
             )}
           </div>

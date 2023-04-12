@@ -1,7 +1,9 @@
 //REACT
-import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import useErrorHandler from '../../../hooks/useErrorHandler';
+import useNotify from '../../../hooks/useNotify';
 
 //REDUX
 import {
@@ -15,8 +17,11 @@ import {
   useDeleteTrailLessonMutation,
   useAddClientMutation,
   useGetClientStatusQuery,
-} from "../services/dataApi";
-import { setFetchData } from "../redux/slices/dataSlice";
+} from '../../../services/dataApi';
+import { setFetchData } from '../../../redux/slices/dataSlice';
+
+//UTILS
+import formatDate from '../../../utils/formatDate';
 
 //ICONS
 import {
@@ -27,52 +32,92 @@ import {
   RiSave3Fill,
   RiFileInfoLine,
   RiPhoneFill,
-} from "react-icons/ri";
+} from 'react-icons/ri';
 
 //COMPONENTS
-import { ToastContainer, toast } from "react-toastify";
-import { CSSTransition } from "react-transition-group";
-import ReactInputMask from "react-input-mask";
-import Select from "react-select";
-import Button from "../ui/Button";
-import InfoCard from "../components/InfoCard";
-import ModalWindow from "../components/ModalWindow";
-import Loader from "../ui/Loader";
-import ModalLoader from "../ui/ModalLoader";
+import { CSSTransition } from 'react-transition-group';
+import ReactInputMask from 'react-input-mask';
+import Select from 'react-select';
+import Button from '../../../ui/Button';
+import InfoCard from '../../../components/InfoCard';
+import ModalWindow from '../../../components/ModalWindow';
+import Loader from '../../../ui/Loader';
+import ModalLoader from '../../../ui/ModalLoader';
 
 //CSS
-import "../css/pages/TrailLesson.css";
-import styles from "../ui/Table.module.css";
+import './TrailLesson.css';
+import TrailLessonTable from './TrailLessonTable';
 
 const TrailLesson = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { notify } = useNotify();
   const [isEditing, setIsEditing] = useState(false);
-  const lessonId = Number(searchParams.get("id"));
+  const lessonId = Number(searchParams.get('id'));
   const currentPage = useSelector((store) => store.data.page);
 
   //-----------------------DATA-------------------------//
 
-  const { data: clientsData, isSuccess: clientsIsSuccess } =
-    useGetClientsQuery();
-  const { data: trailLesson, isSuccess: trailLessonIsSuccess } =
-    useGetTrailLessonByIdQuery(lessonId);
-  const { data: recruiters, isSuccess: recruitersIsSuccess } =
-    useGetUsersQuery();
-  const { data: clientStatus, isSuccess: clientStatusIsSuccess } =
-    useGetClientStatusQuery();
-  const { data: mentors, isSuccess: mentorsIsSuccess } = useGetMentorsQuery();
-  const { data: branches, isSuccess: branchesIsSuccess } =
-    useGetBranchesQuery();
-  const { data: directions, isSuccess: directionsIsSuccess } =
-    useGetDirectionsQuery();
+  const {
+    data: clientsData,
+    isSuccess: clientsIsSuccess,
+    error: clientsError,
+  } = useGetClientsQuery();
 
+  const {
+    data: trailLesson,
+    isSuccess: trailLessonIsSuccess,
+    error: trailLessonError,
+  } = useGetTrailLessonByIdQuery(lessonId);
+
+  const {
+    data: recruiters,
+    isSuccess: recruitersIsSuccess,
+    error: recruitersError,
+  } = useGetUsersQuery();
+
+  const {
+    data: clientStatus,
+    isSuccess: clientStatusIsSuccess,
+    error: clientStatusError,
+  } = useGetClientStatusQuery();
+
+  const {
+    data: mentors,
+    isSuccess: mentorsIsSuccess,
+    error: mentorsError,
+  } = useGetMentorsQuery();
+
+  const {
+    data: branches,
+    isSuccess: branchesIsSuccess,
+    error: branchesError,
+  } = useGetBranchesQuery();
+
+  const {
+    data: directions,
+    isSuccess: directionsIsSuccess,
+    error: directionsError,
+  } = useGetDirectionsQuery();
+
+  //QUERIES ERRORS HANDLING
+  useErrorHandler([
+    clientsError,
+    trailLessonError,
+    recruitersError,
+    clientStatusError,
+    mentorsError,
+    branchesError,
+    directionsError,
+  ]);
+
+  //SETTING DATA TO REDUX
   useEffect(() => {
     clientsIsSuccess &&
       dispatch(
         setFetchData({
-          page: "trail_lesson",
+          page: 'trail_lesson',
           data: clientsData.filter(
             (client) => client.trail_lesson === lessonId
           ),
@@ -215,13 +260,13 @@ const TrailLesson = () => {
 
   const [isOpened, setIsOpened] = useState(false);
   const [clientReqBody, setClientReqBody] = useState({
-    name: "",
-    phone: "",
-    whatsapp: "",
-    comment: "",
+    name: '',
+    phone: '',
+    whatsapp: '',
+    comment: '',
     trail_lesson: lessonId,
-    status: "",
-    recruiter: "",
+    status: '',
+    recruiter: '',
   });
 
   const isClientAddAllowed = clientReqBody.name ? true : false; //THIS INPUT FIELD MUST BE FILLED
@@ -247,104 +292,41 @@ const TrailLesson = () => {
 
   /*-----------------ACTIONS AFTER RESPONSE-------------------*/
 
-  const notifySuccess = (text) =>
-    toast.success(`${text}`, {
-      position: "top-center",
-      autoClose: 2500,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: "light",
-    });
-
-  const notifyError = (err) =>
-    toast.error(`Ошибка ${err.status}. Повторите попытку.`, {
-      position: "top-center",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: "light",
-    });
-
   useEffect(() => {
     if (deleteCompleted) {
-      notifySuccess("Пробный урок успешно удален!");
-      setTimeout(() => navigate("/trail_lessons"), 1500);
+      notify({ message: 'Пробный урок успешно удален!', type: 'success' });
+      setTimeout(() => navigate('/trail_lessons'), 1500);
     }
     if (deleteError) {
-      notifyError(error);
+      notify({ message: error, type: 'error' });
     }
   }, [deleteCompleted, deleteError]);
 
   useEffect(() => {
     if (editIsSuccess) {
-      notifySuccess("Изменения внесены успешно!");
+      notify({ message: 'Изменения внесены успешно!', type: 'success' });
       setTimeout(() => {
         setIsEditing(false);
         window.scrollTo(0, 150);
-      }, 1000);
+      }, 500);
     }
     if (editIsError) {
-      notifyError(editError);
+      notify({ message: editError, type: 'error' });
     }
   }, [editIsSuccess, editIsError]);
 
   useEffect(() => {
     if (addClientIsSuccess) {
       setClientReqBody({});
-      notifySuccess("Клиент успешно добавлен!");
+      notify({ message: 'Клиент успешно добавлен!', type: 'success' });
     } else if (addClientIsError) {
-      notifyError(addClientError);
+      notify({ message: addClientError, type: 'error' });
     }
   }, [addClientIsSuccess, addClientIsError]);
 
   /*----------------------------------------------------------*/
 
   //-----------------------TABLE-------------------------//
-
-  const columns = ["ID", "Имя", "Телефон", "Дата записи"];
-  const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
-  const tableTr =
-    currentPage === "trail_lesson" &&
-    clientsIsSuccess &&
-    clients &&
-    clients.length !== 0 ? (
-      clients.map((client, index) => (
-        <tr key={index} className="clients__table-tr">
-          <td data-label="ID">{client.id}</td>
-
-          <td
-            className="link"
-            data-label="Имя"
-            onClick={() => navigate(`/client_details?id=${client.id}`)}
-          >
-            {client.name}
-          </td>
-          <td data-label="Телефон">
-            <RiPhoneFill id="phone__icon" />
-            <a className="link" href={`tel:${client.phone}`}>
-              {client.phone}
-            </a>
-          </td>
-          <td data-label="Дата записи">
-            {`${new Date(client.create_at).toLocaleDateString()} ${new Date(
-              client.create_at
-            )
-              .toLocaleTimeString()
-              .slice(0, -3)}`}
-          </td>
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td colSpan={5}>No available data</td>
-      </tr>
-    );
 
   //----------------------------------------------------//
 
@@ -353,22 +335,17 @@ const TrailLesson = () => {
     if (branch) {
       return branch.address;
     } else {
-      return "-";
+      return '-';
     }
   };
 
-  console.log(trailLesson);
-  console.log(mentors);
-
   return (
     <>
-      <ToastContainer />
-
       {trailLessonIsSuccess && recruitersIsSuccess ? (
         <CSSTransition //MODAL WINDOW
           in={isOpened}
           timeout={500}
-          classNames={"modal"}
+          classNames={'modal'}
           unmountOnExit
         >
           <ModalWindow
@@ -523,7 +500,7 @@ const TrailLesson = () => {
           </ModalWindow>
         </CSSTransition>
       ) : (
-        ""
+        ''
       )}
 
       {branchesIsSuccess &&
@@ -687,7 +664,7 @@ const TrailLesson = () => {
                       <div className="item__text">
                         <p>{`Филиал: ${findBranch(trailLesson.branch)}`}</p>
                         <p>Количество записавшихся: {clients.length}</p>
-                        <p>Дата: {trailLesson.date.slice(0, 10)}</p>
+                        <p>Дата: {formatDate(trailLesson.date)}</p>
                         <p>
                           Направления:
                           {directions
@@ -697,7 +674,7 @@ const TrailLesson = () => {
                             .map(
                               (direction, i, arr) =>
                                 ` ${direction.title}${
-                                  i === arr.length - 1 ? "" : ","
+                                  i === arr.length - 1 ? '' : ','
                                 }`
                             )}
                         </p>
@@ -710,7 +687,7 @@ const TrailLesson = () => {
                             .map(
                               (mentor, i, arr) =>
                                 ` ${mentor.first_name}${
-                                  i === arr.length - 1 ? "" : ","
+                                  i === arr.length - 1 ? '' : ','
                                 }`
                             )}
                         </p>
@@ -723,21 +700,20 @@ const TrailLesson = () => {
                             .map(
                               (mentor, i, arr) =>
                                 ` ${mentor.username}${
-                                  i === arr.length - 1 ? "" : ","
+                                  i === arr.length - 1 ? '' : ','
                                 }`
                             )}
                         </p>
                         <p>
                           {trailLesson.description
                             ? `Описание: ${trailLesson.description}`
-                            : ""}
+                            : ''}
                         </p>
                       </div>
                     </div>
                   </>
                 )}
               </div>
-              <ToastContainer />
 
               <div className="card__footer">
                 {deleteLoading || editIsLoading ? (
@@ -759,7 +735,7 @@ const TrailLesson = () => {
                         window.scrollTo({
                           left: 0,
                           top: 280,
-                          behavior: "smooth",
+                          behavior: 'smooth',
                         });
                       }}
                     />
@@ -773,12 +749,7 @@ const TrailLesson = () => {
             <Button text="+Добавить клиента" action={onClickClose} />
           </div>
           <div className="table__box">
-            <table className={styles.table}>
-              <thead>
-                <tr>{tableTh}</tr>
-              </thead>
-              <tbody>{tableTr}</tbody>
-            </table>
+            <TrailLessonTable currentPage={currentPage} clients={clients} />
           </div>
         </>
       ) : (

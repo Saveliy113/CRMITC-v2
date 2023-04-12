@@ -4,49 +4,67 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 //REDUX
-import { setFetchData } from '../redux/slices/dataSlice';
+import { setFetchData } from '../../redux/slices/dataSlice';
 import {
   useAddCourseMutation,
   useGetBranchesQuery,
   useGetCoursesQuery,
   useGetDirectionsQuery,
   useGetMentorsQuery,
-} from '../services/dataApi';
+} from '../../services/dataApi';
 
 //ICONS
 import { RiArrowDownSFill } from 'react-icons/ri';
 
 //COMPONENTS
-import { ToastContainer, toast } from 'react-toastify';
 import { CSSTransition } from 'react-transition-group';
-import Button from '../ui/Button';
-import Pagination from '../ui/Pagination';
-import Search from '../ui/Search';
-import RowsSlicer from '../ui/RowsSlicer';
-import Loader from '../ui/Loader';
-import ModalLoader from '../ui/ModalLoader';
-import ModalWindow from '../components/ModalWindow';
+import CoursesTable from './CoursesTable';
+import Button from '../../ui/Button';
+import Pagination from '../../ui/Pagination';
+import Search from '../../ui/Search';
+import RowsSlicer from '../../ui/RowsSlicer';
+import Loader from '../../ui/Loader';
+import ModalLoader from '../../ui/ModalLoader';
+import ModalWindow from '../../components/ModalWindow';
 
 //CSS
-import '../css/pages/Students.css';
-import styles from '../ui/Table.module.css';
-import useErrorHandler from '../hooks/useErrorHandler';
+import '../students/Students.css';
+import useErrorHandler from '../../hooks/useErrorHandler';
+import useNotify from '../../hooks/useNotify';
 
 const Courses = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { notify } = useNotify();
   const currentPage = useSelector((store) => store.data.page);
 
   //-----------------------DATA-------------------------//
 
-  const { data: coursesData, isSuccess: coursesIsSuccess } =
-    useGetCoursesQuery();
-  const { data: branches, isSuccess: branchesIsSuccess } =
-    useGetBranchesQuery();
-  const { data: mentors, isSuccess: mentorsIsSuccess } = useGetMentorsQuery();
-  const { data: directions, isSuccess: directionsIsSuccess } =
-    useGetDirectionsQuery();
+  const {
+    data: coursesData,
+    isSuccess: coursesIsSuccess,
+    error: coursesError,
+  } = useGetCoursesQuery();
 
+  const {
+    data: branches,
+    isSuccess: branchesIsSuccess,
+    error: branchesError,
+  } = useGetBranchesQuery();
+
+  const {
+    data: mentors,
+    isSuccess: mentorsIsSuccess,
+    error: mentorsError,
+  } = useGetMentorsQuery();
+
+  const {
+    data: directions,
+    isSuccess: directionsIsSuccess,
+    error: directionsError,
+  } = useGetDirectionsQuery();
+
+  //SETTING DATA TO REDUX
   useEffect(() => {
     coursesIsSuccess &&
       dispatch(
@@ -56,6 +74,9 @@ const Courses = () => {
         })
       );
   }, [coursesData, coursesIsSuccess]);
+
+  //QUERIES ERRORS HANDLING
+  useErrorHandler([coursesError, branchesError, mentorsError, directionsError]);
 
   const courses = useSelector((store) => store.data.currentData);
 
@@ -111,30 +132,6 @@ const Courses = () => {
 
   //----------------ACTIONS AFTER QUERY RESPONSE------------------//
 
-  const notifySuccess = (text) =>
-    toast.success(`${text}`, {
-      position: 'top-center',
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: 'light',
-    });
-
-  const notifyError = (err) =>
-    toast.error(`Ошибка. ${err.data.detail}`, {
-      position: 'top-center',
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: 'light',
-    });
-
   useEffect(() => {
     if (addCourseSuccess) {
       setCourseReqBody({
@@ -150,10 +147,10 @@ const Courses = () => {
         telegram_group_link: '',
         is_active: true,
       });
-      notifySuccess('Курс успешно добавлен');
+      notify({ message: 'Курс успешно добавлен', type: 'success' });
       setIsOpened(false);
     } else if (addCourseIsError) {
-      notifyError(addCourseError);
+      notify({ message: addCourseError, type: 'error' });
     }
   }, [addCourseSuccess, addCourseIsError]);
 
@@ -161,49 +158,9 @@ const Courses = () => {
 
   //-----------------------TABLE-------------------------//
 
-  const columns = [
-    'Филиал',
-    'Название курса',
-    'Начало',
-    'Ментор',
-    'Количество студентов',
-  ];
-
-  const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
-  const tableTr =
-    currentPage === 'courses' && courses && courses.length !== 0 ? (
-      courses.map((course, index) => {
-        return (
-          <tr key={index} onClick={() => navigate(`course?id=${course.id}`)}>
-            <td data-label="Филиал">
-              {branchesIsSuccess
-                ? branches.map((branch) =>
-                    branch.id === course.branch ? branch.address : ''
-                  )
-                : ''}
-            </td>
-            <td data-label="Название курса">{course.title}</td>
-            <td data-label="Начало">{course.date_start}</td>
-            <td data-label="Ментор">
-              {mentorsIsSuccess
-                ? mentors.map((mentor) =>
-                    mentor.id === course.mentor ? mentor.first_name : ''
-                  )
-                : ''}
-            </td>
-            <td data-label="Количество студентов">{course.count_students}</td>
-          </tr>
-        );
-      })
-    ) : (
-      <tr>
-        <td colSpan={4}>No available data</td>
-      </tr>
-    );
-
   return (
     <>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       {directionsIsSuccess && mentorsIsSuccess ? ( //MODAL WINDOW
         <CSSTransition
           in={isOpened}
@@ -386,7 +343,6 @@ const Courses = () => {
                 />
               </div>
             </div>
-            <ToastContainer />
             <div className="modal__actions">
               {addCourseLoading ? (
                 <ModalLoader isLoading={addCourseLoading} />
@@ -414,12 +370,11 @@ const Courses = () => {
             <Search placeholder="Название курса" />
           </div>
           <div className="table__box">
-            <table className={styles.table}>
-              <thead>
-                <tr>{tableTh}</tr>
-              </thead>
-              <tbody>{tableTr}</tbody>
-            </table>
+            <CoursesTable
+              currentPage={currentPage}
+              courses={courses}
+              additionalData={{ branches, mentors }}
+            />
             <Pagination />
           </div>
         </>

@@ -1,10 +1,11 @@
 //REACT
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import useNotify from '../../hooks/useNotify';
 
 //REDUX
-import { setFetchData } from "../redux/slices/dataSlice";
+import { setFetchData } from '../../redux/slices/dataSlice';
 import {
   useAddTrailLessonMutation,
   useGetBranchesQuery,
@@ -13,50 +14,89 @@ import {
   useGetMentorsQuery,
   useGetTrailLessonsQuery,
   useGetUsersQuery,
-} from "../services/dataApi";
+} from '../../services/dataApi';
 
 //ICONS
 
 //COMPONENTS
-import { CSSTransition } from "react-transition-group";
-import { ToastContainer, toast } from "react-toastify";
-import RowsSlicer from "../ui/RowsSlicer";
-import Loader from "../ui/Loader";
-import Pagination from "../ui/Pagination";
-import ModalWindow from "../components/ModalWindow";
-import ModalLoader from "../ui/ModalLoader";
-import Search from "../ui/Search";
-import Button from "../ui/Button";
-import Select from "react-select";
+import { CSSTransition } from 'react-transition-group';
+import { ToastContainer, toast } from 'react-toastify';
+import RowsSlicer from '../../ui/RowsSlicer';
+import Loader from '../../ui/Loader';
+import Pagination from '../../ui/Pagination';
+import ModalWindow from '../../components/ModalWindow';
+import ModalLoader from '../../ui/ModalLoader';
+import Search from '../../ui/Search';
+import Button from '../../ui/Button';
+import Select from 'react-select';
 
 //CSS
-import styles from "../ui/Table.module.css";
-import "react-toastify/dist/ReactToastify.css";
-import "../css/pages/TrailLessons.css";
+import styles from '../..//ui/Table.module.css';
+import 'react-toastify/dist/ReactToastify.css';
+import './TrailLessons.css';
+import useErrorHandler from '../../hooks/useErrorHandler';
+import TrailLessonsTable from './TrailLessonsTable';
 
 const TrailLessons = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { notify } = useNotify();
   const currentPage = useSelector((store) => store.data.page);
 
   //-----------------------DATA-------------------------//
 
-  const { data: trailLessonsData, isSuccess: trailLessonsIsSuccess } =
-    useGetTrailLessonsQuery();
-  const { data: recruiters, isSuccess: recruitersIsSuccess } =
-    useGetUsersQuery();
-  const { data: mentors, isSuccess: mentorsIsSuccess } = useGetMentorsQuery();
-  const { data: branches, isSuccess: branchesIsSuccess } =
-    useGetBranchesQuery();
-  const { data: directions, isSuccess: directionsIsSuccess } =
-    useGetDirectionsQuery();
-  const { data: clients, isSuccess: clientsIsSuccess } = useGetClientsQuery();
+  const {
+    data: trailLessonsData,
+    isSuccess: trailLessonsIsSuccess,
+    error: trailLessonsError,
+  } = useGetTrailLessonsQuery();
 
+  const {
+    data: recruiters,
+    isSuccess: recruitersIsSuccess,
+    error: recruitersError,
+  } = useGetUsersQuery();
+
+  const {
+    data: mentors,
+    isSuccess: mentorsIsSuccess,
+    error: mentorsError,
+  } = useGetMentorsQuery();
+
+  const {
+    data: branches,
+    isSuccess: branchesIsSuccess,
+    error: branchesError,
+  } = useGetBranchesQuery();
+
+  const {
+    data: directions,
+    isSuccess: directionsIsSuccess,
+    error: directionsError,
+  } = useGetDirectionsQuery();
+
+  const {
+    data: clients,
+    isSuccess: clientsIsSuccess,
+    error: clientsError,
+  } = useGetClientsQuery();
+
+  //QUERIES ERRORS HANDLING
+  useErrorHandler([
+    trailLessonsError,
+    recruitersError,
+    mentorsError,
+    branchesError,
+    directionsError,
+    clientsError,
+  ]);
+
+  //SETTING DATA TO REDUX
   useEffect(() => {
     trailLessonsIsSuccess &&
       dispatch(
         setFetchData({
-          page: "trail_lessons",
+          page: 'trail_lessons',
           data: trailLessonsData,
         })
       );
@@ -70,10 +110,10 @@ const TrailLessons = () => {
 
   const [isOpened, setIsOpened] = useState(false);
   const [reqBody, setReqBody] = useState({
-    title: "",
-    date: "",
-    description: "",
-    branch: "",
+    title: '',
+    date: '',
+    description: '',
+    branch: '',
     directions: [],
     mentors: [],
     recruiter: [],
@@ -115,103 +155,25 @@ const TrailLessons = () => {
 
   //----------------ACTIONS AFTER QUERY RESPONSE------------------//
 
-  const notifySuccess = (text) =>
-    toast.success(text, {
-      position: "top-center",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: "light",
-    });
-
-  const notifyError = (error) =>
-    toast.error(`Ошибка. ${error.data.detail}`, {
-      position: "top-center",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: "light",
-    });
-
   useEffect(() => {
     if (addTrailLessonIsSuccess) {
       setReqBody({
-        title: "",
-        date: "",
-        description: "",
-        branch: "",
+        title: '',
+        date: '',
+        description: '',
+        branch: '',
         directions: [],
         mentors: [],
         recruiter: [],
       });
-      notifySuccess("Пробный урок успешно добавлен!");
-      setTimeout(() => setIsOpened(false), 1500);
+      notify({ message: 'Пробный урок успешно добавлен!', type: 'success' });
+      setTimeout(() => setIsOpened(false), 500);
     } else if (addTrailLessonIsError) {
-      notifyError(addTrailLessonError);
+      notify({ message: addTrailLessonError, type: 'Error' });
     }
   }, [addTrailLessonIsSuccess, addTrailLessonIsError]);
 
   //-----------------------------------------------//
-
-  //-----------------------TABLE-------------------------//
-
-  const columns = [
-    "ID",
-    "Заголовок",
-    "Дата",
-    "Филиал",
-    "Количество участников",
-  ];
-
-  //FINDING BRANCH FOR TABLE DATA
-  const findBranch = (id) => {
-    const branch = branches.find((branch) => branch.id == id);
-    if (branch) {
-      return branch.address;
-    } else {
-      return "-";
-    }
-  };
-
-  const tableTh = columns.map((item, index) => <th key={index}>{item}</th>);
-  const tableTr =
-    currentPage === "trail_lessons" &&
-    trailLessonsIsSuccess &&
-    branchesIsSuccess &&
-    trailLessons &&
-    trailLessons.length !== 0 ? (
-      trailLessons.map((lesson, index) => (
-        <tr
-          key={index}
-          onClick={() => navigate(`trail_lesson?id=${lesson.id}`)}
-        >
-          <td data-label="ID">{lesson.id}</td>
-          <td data-label="Заголовок">{lesson.title}</td>
-          <td data-label="Дата">
-            {new Date(lesson.date).toLocaleString().slice(0, -3)}
-          </td>
-          <td data-label="Филиал">{findBranch(lesson.branch)}</td>
-          <td data-label="Количество участников">
-            {clientsIsSuccess
-              ? clients.filter((client) => client.trail_lesson === lesson.id)
-                  .length
-              : "-"}
-          </td>
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td colSpan={5}>No available data</td>
-      </tr>
-    );
-
-  //----------------------------------------------------//
 
   //-----------------------REACT SELECT-------------------------//
 
@@ -244,7 +206,7 @@ const TrailLessons = () => {
     mentorsIsSuccess &&
     recruitersIsSuccess ? (
     <>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
 
       {directionsIsSuccess &&
       mentorsIsSuccess &&
@@ -253,7 +215,7 @@ const TrailLessons = () => {
         <CSSTransition //MODAL WINDOW
           in={isOpened}
           timeout={200}
-          classNames={"modal"}
+          classNames={'modal'}
           unmountOnExit
         >
           <ModalWindow
@@ -391,7 +353,7 @@ const TrailLessons = () => {
           </ModalWindow>
         </CSSTransition>
       ) : (
-        ""
+        ''
       )}
 
       <>
@@ -401,12 +363,11 @@ const TrailLessons = () => {
           <Search placeholder="Название урока" />
         </div>
         <div className="table__box">
-          <table className={styles.table}>
-            <thead>
-              <tr>{tableTh}</tr>
-            </thead>
-            <tbody>{tableTr}</tbody>
-          </table>
+          <TrailLessonsTable
+            currentPage={currentPage}
+            trailLessons={trailLessons}
+            additionalData={{ branches, clients }}
+          />
         </div>
         <Pagination />
       </>
