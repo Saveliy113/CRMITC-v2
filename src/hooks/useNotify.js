@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 
 const useNotify = () => {
   const notify = ({ message, type }) => {
+    toast.dismiss();
     if (type === 'error') {
       toast.error(`${message}`, {
         position: 'top-center',

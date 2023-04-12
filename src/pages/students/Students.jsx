@@ -43,9 +43,12 @@ const Students = () => {
 
   const currentPage = useSelector((store) => store.data.page);
 
-  //-----------------------FILTERING BY COURSE-------------------------//
+  //-----------------------FILTERING-------------------------//
 
   const [filterByCourses, setFilterByCourses] = useState('');
+  const [filterByRemainder, setFilterByRemainder] = useState(false);
+  console.log(filterByRemainder);
+
   useEffect(() => {
     if (filterByCourses) {
       dispatch(
@@ -58,6 +61,19 @@ const Students = () => {
       );
     }
   }, [filterByCourses]);
+
+  useEffect(() => {
+    if (filterByRemainder) {
+      dispatch(
+        setFetchData({
+          page: 'students',
+          data: data.filter(
+            (student) => student.remainder_for_current_mount > 0
+          ),
+        })
+      );
+    }
+  }, [filterByRemainder]);
 
   //-----------------------DATA-------------------------//
 
@@ -88,7 +104,7 @@ const Students = () => {
 
   //SETTING DATA TO REEDUX
   useEffect(() => {
-    if (studentsIsSuccess && !filterByCourses) {
+    if (studentsIsSuccess && !filterByCourses && !filterByRemainder) {
       dispatch(
         setFetchData({
           page: 'students',
@@ -96,7 +112,7 @@ const Students = () => {
         })
       );
     }
-  }, [studentsIsSuccess, filterByCourses]);
+  }, [studentsIsSuccess, filterByCourses, filterByRemainder]);
 
   //QUERIES ERRORS HANDLING
   useErrorHandler([
@@ -107,6 +123,8 @@ const Students = () => {
   ]);
 
   const students = useSelector((store) => store.data.currentData);
+
+  console.log(students);
 
   //----------------------------------------------------//
 
@@ -461,6 +479,17 @@ const Students = () => {
                 text={<RiRestartLine />}
                 action={() => setFilterByCourses('')}
               ></Button>
+            </div>
+
+            <div id="filter__container">
+              <label htmlFor="remainder__check">Задолженность</label>
+              <input
+                type="checkbox"
+                name="remainder"
+                id="remainder__check"
+                onChange={() => setFilterByRemainder(!filterByRemainder)}
+                value={filterByRemainder}
+              />
             </div>
 
             <Search placeholder="Имя студента" />

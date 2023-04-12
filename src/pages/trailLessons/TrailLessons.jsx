@@ -20,7 +20,6 @@ import {
 
 //COMPONENTS
 import { CSSTransition } from 'react-transition-group';
-import { ToastContainer, toast } from 'react-toastify';
 import RowsSlicer from '../../ui/RowsSlicer';
 import Loader from '../../ui/Loader';
 import Pagination from '../../ui/Pagination';
@@ -206,8 +205,6 @@ const TrailLessons = () => {
     mentorsIsSuccess &&
     recruitersIsSuccess ? (
     <>
-      {/* <ToastContainer /> */}
-
       {directionsIsSuccess &&
       mentorsIsSuccess &&
       recruitersIsSuccess &&

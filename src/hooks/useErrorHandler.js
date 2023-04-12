@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { toggleLoginForm } from '../redux/slices/loginFormSlice';
 import useNotify from './useNotify';
+import { clearUserData } from '../redux/slices/loginFormSlice';
 
 const useErrorHandler = (errors = []) => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const useErrorHandler = (errors = []) => {
         message: 'Для работы с системой необходимо авторизоваться.',
         type: 'error',
       });
+      dispatch(clearUserData());
       navigate('/');
       setTimeout(() => dispatch(toggleLoginForm(true)), 300);
     } else {

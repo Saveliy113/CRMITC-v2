@@ -8,6 +8,7 @@ import useErrorHandler from '../../../hooks/useErrorHandler';
 import {
   useGetBranchByIdQuery,
   useGetClientsQuery,
+  useGetMentorsQuery,
   useGetTrailLessonsQuery,
   useGetUsersQuery,
 } from '../../../services/dataApi';
@@ -25,9 +26,11 @@ import Pagination from '../../../ui/Pagination';
 //ICONS
 import { RiBook3Line, RiBuilding4Line, RiComputerLine } from 'react-icons/ri';
 import { MdEngineering } from 'react-icons/md';
+import { GiTeacher } from 'react-icons/gi';
 
 //CSS
 import './BrancheDetails.css';
+import MentorsTable from './MentorsTable';
 
 const BrancheDetails = () => {
   const dispatch = useDispatch();
@@ -67,12 +70,16 @@ const BrancheDetails = () => {
     error: clientsError,
   } = useGetClientsQuery();
 
+  const { data: mentors, isSuccess: mentorsIsSuccess, error: mentorsError } = useGetMentorsQuery()
+
+  console.log(mentors)
   //QUERIES ERRORS HANDLING
   useErrorHandler([
     branchError,
     employeesError,
     trailLessonsError,
     clientsError,
+    mentorsError
   ]);
 
   //SETTING DATA TO REDUX
@@ -95,7 +102,11 @@ const BrancheDetails = () => {
     if (employeesIsSuccess && activeData === 'employees') {
       dispatch(setFetchData({ page: 'employees', data: employees }));
     }
-  }, [activeData, branchIsSuccess, employeesIsSuccess]);
+
+    if (mentorsIsSuccess && activeData === 'mentors') {
+      dispatch(setFetchData({ page: 'mentors', data: mentors }));
+    }
+  }, [activeData, branchIsSuccess, employeesIsSuccess, mentorsIsSuccess]);
 
   //CHANGING DATA IF URL PARAMETER 'DATA' HAS BEEN CHANGED
   useEffect(() => {
@@ -147,6 +158,15 @@ const BrancheDetails = () => {
               <MdEngineering />
               Сотрудники
             </button>
+            <button //MENTORS BUTTON
+              className={`branch__card-button ${
+                activeData === 'mentors' ? 'active' : ''
+              }`}
+              onClick={() => changeData('mentors')}
+            >
+              <GiTeacher />
+              Сотрудники
+            </button>
           </div>
         </div>
       </InfoCard>
@@ -173,6 +193,13 @@ const BrancheDetails = () => {
 
           {activeData === 'employees' && (
             <EmployeesTable
+              currentPage={currentPage}
+              currentData={currentData}
+            />
+          )}
+
+          {activeData === 'mentors' && (
+            <MentorsTable
               currentPage={currentPage}
               currentData={currentData}
             />

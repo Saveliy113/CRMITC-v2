@@ -305,7 +305,6 @@ const StudentInfo = () => {
                 />
               </div>
             </div>
-            <ToastContainer />
             <div className="modal__actions">
               {addPayemntLoading ? (
                 <ModalLoader isLoading={addPayemntLoading} />

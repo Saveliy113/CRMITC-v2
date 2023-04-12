@@ -160,7 +160,6 @@ const Courses = () => {
 
   return (
     <>
-      {/* <ToastContainer /> */}
       {directionsIsSuccess && mentorsIsSuccess ? ( //MODAL WINDOW
         <CSSTransition
           in={isOpened}
