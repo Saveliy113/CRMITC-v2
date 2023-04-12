@@ -9,7 +9,6 @@ import Menu from './components/Menu';
 import LoginForm from './components/LoginForm';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorScreen from './components/ErrorScreen';
-import ModalLoader from './ui/ModalLoader';
 
 //CSS
 import './App.css';
@@ -36,7 +35,6 @@ function App() {
             );
           })}
         </Routes>
-        <ModalLoader />
         <ToastContainer />
       </div>
     </div>

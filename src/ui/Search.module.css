@@ -1,3 +1,5 @@
+@import '../assets/styles/_variables.css';
+
 .search__container {
   display: flex;
   flex-direction: column;
@@ -13,6 +15,8 @@
   color: whitesmoke;
 }
 .search__container input {
+  box-sizing: border-box;
+  width: 250px;
   max-width: 250px;
   height: 40px;
   border-radius: 10px;
@@ -21,9 +25,9 @@
   padding-left: 10px;
   font-family: inherit;
   font-size: large;
-  transition: all 0.2s ease;
   box-sizing: border-box;
+  transition: all 0.2s ease;
 }
 .search__container input:focus {
-  border: 2px solid rgb(151, 136, 255);
+  border: 1px solid var(--accent_3);
 }

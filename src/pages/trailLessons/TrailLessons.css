@@ -1,3 +1,5 @@
+@import '../../assets/styles/_variables.css';
+
 .multi-select__control {
   width: fit-content !important;
   min-height: 40px !important;
@@ -37,7 +39,7 @@
 }
 
 .multi-select__dropdown-indicator:hover svg {
-  color: rgb(151, 136, 255);
+  color: var(--accent_3);
 }
 
 .multi-select__indicator-separator {

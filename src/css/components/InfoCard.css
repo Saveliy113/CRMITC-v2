@@ -1,3 +1,5 @@
+@import '../../assets/styles/_variables.css';
+
 /*---------------CARD CONTAINERS--------------*/
 
 .card {
@@ -15,7 +17,7 @@
   position: relative;
   background-color: whitesmoke;
   border-radius: 40px;
-  box-shadow: 0 0 8px rgb(151, 136, 255);
+  /* box-shadow: 0 0 8px var(--accent_3); */
 }
 
 .card__header {
@@ -68,7 +70,7 @@
   width: 130px;
   height: 130px;
   margin-bottom: 10px;
-  color: rgb(52, 121, 248);
+  color: var(--accent_3);
 }
 
 .header__title h1 {
@@ -86,7 +88,7 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  border: 1px solid rgb(52, 121, 248);
+  border: 1px solid var(--accent_3);
   border-radius: 10px;
   color: black;
 }
@@ -99,7 +101,7 @@
 }
 
 .card__content-item .item__icon svg {
-  color: rgb(52, 121, 248);
+  color: var(--accent_3);
   width: 100%;
   height: 100%;
 }
@@ -128,7 +130,7 @@
 }
 
 .p__link:hover {
-  color: rgb(151, 136, 255);
+  color: var(--accent_3);
 }
 
 .item__text a {
@@ -165,7 +167,7 @@
 }
 
 .card__edit-container .select__box {
-  border: 1px solid rgb(52, 121, 248);
+  border: 1px solid var(--accent_3);
   border-radius: 10px;
 }
 
@@ -178,7 +180,7 @@
 }
 
 #edit__container-back:hover {
-  color: #0088cc;
+  color: var(--accent_3);
   transform: scale(1.1);
 }
 

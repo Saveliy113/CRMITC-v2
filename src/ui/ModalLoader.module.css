@@ -1,4 +1,4 @@
-@import 
+@import '../assets/styles/_variables.css';
 
 .modal__loader {
   display: inline-block;
@@ -16,17 +16,17 @@
   animation: modal__loader 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
 .modal__loader div:nth-child(1) {
-  background: rgb(52, 121, 248);
+  background: var(--accent_1);
   left: 8px;
   animation-delay: -0.24s;
 }
 .modal__loader div:nth-child(2) {
-  background: #ffc400ec;
+  background: var(--accent_2);
   left: 32px;
   animation-delay: -0.12s;
 }
 .modal__loader div:nth-child(3) {
-  background: rgb(52, 121, 248);
+  background: var(--accent_1);
   left: 56px;
   animation-delay: 0;
 }

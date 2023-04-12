@@ -1,3 +1,5 @@
+@import '../assets/styles/_variables.css';
+
 .select__container {
   display: flex;
   justify-content: center;
@@ -41,6 +43,6 @@
 }
 
 .select__container:hover svg {
-  color: rgb(151, 136, 255);
+  color: var(--accent_3);
   width: 100px;
 }

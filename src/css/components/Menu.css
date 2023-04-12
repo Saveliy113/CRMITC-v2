@@ -1,3 +1,5 @@
+@import '../../assets/styles/_variables.css';
+
 aside {
   width: 200px;
   height: 100%;
@@ -5,8 +7,8 @@ aside {
   margin: 0;
   padding: 0;
   padding-left: 25px;
-  background: rgb(1, 83, 75);
-  box-shadow: 5px 5px 10px black;
+  background: var(--main_2);
+  /* box-shadow: 5px 5px 10px black; */
   border-top-right-radius: 60px;
   border-bottom-right-radius: 60px;
   z-index: 1;
@@ -49,14 +51,14 @@ aside .menu {
 }
 
 .menu a:hover {
-  color: rgb(151, 136, 255);
+  color: var(--accent_3);
 }
 
 .menu .a.active {
   padding-left: 15px;
-  color: rgb(151, 136, 255);
-  background: rgb(0, 67, 60);
-  border-left: 3px solid rgb(151, 136, 255);
+  color: var(--accent_3);
+  background: var(--main);
+  border-left: 3px solid var(--accent_3);
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;
 }
@@ -130,7 +132,7 @@ aside .menu {
   .menu a:hover,
   .menu .a.active {
     padding: 0;
-    color: rgb(151, 136, 255);
+    color: var(--accent_3);
     background: none;
     border: none;
     border-radius: 0;
@@ -146,7 +148,7 @@ aside .menu {
     height: 60px;
     position: absolute;
     top: -22px;
-    background: rgb(1, 83, 75);
+    background: var(--main_2);
     border-radius: 50%;
     z-index: -1;
     transition: all 0.5s ease-in-out;
@@ -161,7 +163,7 @@ aside .menu {
     left: -14px;
     background: transparent;
     border-radius: 50%;
-    box-shadow: 12px 10px rgb(1, 83, 75);
+    box-shadow: 12px 10px var(--main_2);
   }
 
   .indicator::after {
@@ -173,7 +175,7 @@ aside .menu {
     right: -14px;
     background: transparent;
     border-radius: 50%;
-    box-shadow: -12px 10px rgb(1, 83, 75);
+    box-shadow: -12px 10px var(--main_2);
   }
 
   .menu a:nth-child(1).active ~ .indicator {
@@ -207,22 +209,22 @@ aside .menu {
   }
 
   .menu a:nth-child(1).active ~ .indicator {
-    transform: translateX(-170px);
+    transform: translateX(-168px);
   }
   .menu a:nth-child(2).active ~ .indicator {
-    transform: translateX(-105px);
+    transform: translateX(-106px);
   }
   .menu a:nth-child(3).active ~ .indicator {
-    transform: translateX(-38px);
+    transform: translateX(-36px);
   }
   .menu a:nth-child(4).active ~ .indicator {
     transform: translateX(27px);
   }
   .menu a:nth-child(5).active ~ .indicator {
-    transform: translateX(97px);
+    transform: translateX(95px);
   }
   .menu a:nth-child(6).active ~ .indicator {
-    transform: translateX(169px);
+    transform: translateX(168px);
   }
 }
 
@@ -255,18 +257,18 @@ aside .menu {
     transform: translateX(-146px);
   }
   .menu a:nth-child(2).active ~ .indicator {
-    transform: translateX(-93px);
+    transform: translateX(-91px);
   }
   .menu a:nth-child(3).active ~ .indicator {
-    transform: translateX(-35px);
+    transform: translateX(-33px);
   }
   .menu a:nth-child(4).active ~ .indicator {
-    transform: translateX(24px);
+    transform: translateX(23px);
   }
   .menu a:nth-child(5).active ~ .indicator {
-    transform: translateX(85px);
+    transform: translateX(82px);
   }
   .menu a:nth-child(6).active ~ .indicator {
-    transform: translateX(145px);
+    transform: translateX(144px);
   }
 }

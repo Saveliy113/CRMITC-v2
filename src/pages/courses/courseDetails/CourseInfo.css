@@ -1,3 +1,5 @@
+@import '../../../assets/styles/_variables.css';
+
 /* .card__edit-container .modal__input-container .select__container{
   width: 70%;
 } */
@@ -22,7 +24,7 @@
 }
 
 .header__title h2:hover {
-  color: rgb(151, 136, 255);
+  color: var(--accent_3);
 }
 
 .p__link {

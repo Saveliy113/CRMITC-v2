@@ -1,3 +1,5 @@
+@import '../../assets/styles/_variables.css';
+
 /* CONTAINERS */
 .loginform__container {
   position: absolute;
@@ -23,8 +25,8 @@
   align-items: center;
   overflow: hidden;
   border-radius: 20px;
-  background-color: rgb(0, 67, 60);
-  box-shadow: 1px 1px 2px rgb(151, 136, 255);
+  background-color: var(--main);
+  box-shadow: 1px 1px 2px var(--accent_3);
   transition: all 0.5s ease-in-out;
 }
 
@@ -41,14 +43,14 @@
 }
 
 .login__form input {
-  font-family: "Comfortaa";
+  font-family: 'Comfortaa';
   font-size: 1.2rem;
   border: none;
   background: none;
   display: block;
   margin: 10px auto;
   text-align: center;
-  border: 1px solid rgb(151, 136, 255);
+  border: 1px solid var(--accent_3);
   padding: 0.8rem 0.6rem;
   width: 220px;
   outline: none;

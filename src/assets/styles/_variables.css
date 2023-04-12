@@ -1,0 +1,14 @@
+:root {
+  /* MAIN BACKGROUND COLORS */
+  /* --main: rgb(0, 67, 60); */
+  --main: #024648;
+  /* --main_2: rgb(1, 83, 75); */
+  --main_2: #1C7F82;
+
+  /* COLORS FOR LOADERS */
+  --accent_1: rgb(136, 227, 255);
+  --accent_2: rgb(87, 255, 157);
+
+  /* HOVER COLOR FOR BUTTONS, INPUTS AND OTHER ELEMENTS */
+  --accent_3: rgb(151, 136, 255);
+}
