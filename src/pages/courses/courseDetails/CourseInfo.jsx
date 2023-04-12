@@ -42,7 +42,7 @@ import Button from '../../../ui/Button';
 import ModalWindow from '../../../components/ModalWindow';
 
 //CSS
-import './CourseInfo.css';
+import styles from './CourseInfo.module.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const CourseInfo = () => {
@@ -518,7 +518,7 @@ const CourseInfo = () => {
           <InfoCard>
             <div className="card">
               <div className="card__header">
-                <div className="header__title">
+                <div className={styles.header__title}>
                   <RiBookOpenLine />
                   <h1>{course.title}</h1>
                   <h2
@@ -621,7 +621,7 @@ const CourseInfo = () => {
                           })
                         }
                         type="date"
-                        id="date_start"
+                        id={styles.date_start}
                         value={courseReqBody.date_start}
                       />
                     </div>
@@ -635,7 +635,7 @@ const CourseInfo = () => {
                           })
                         }
                         type="time"
-                        id="time_start"
+                        id={styles.time_start}
                         value={courseReqBody.time_start}
                       />
                     </div>
@@ -649,7 +649,7 @@ const CourseInfo = () => {
                           })
                         }
                         type="time"
-                        id="time_end"
+                        id={styles.time_end}
                         value={courseReqBody.time_end}
                       />
                     </div>
@@ -728,7 +728,7 @@ const CourseInfo = () => {
                             description: event.target.value,
                           })
                         }
-                        id="course__comment"
+                        id={styles.course__comment}
                         value={courseReqBody.description}
                       />
                     </div>
@@ -755,7 +755,7 @@ const CourseInfo = () => {
                                   `/mentor?id=${mentor.id}&name=${mentor.full_name}`
                                 )
                               }
-                              className="p__link"
+                              className={styles.p__link}
                             >
                               {mentor.first_name}
                             </span>
@@ -772,7 +772,7 @@ const CourseInfo = () => {
                         {course.telegram_group_link ? (
                           <a
                             href={course.telegram_group_link}
-                            id="telegram__link"
+                            id={styles.telegram__link}
                             target="blank"
                           >
                             <RiTelegramFill />

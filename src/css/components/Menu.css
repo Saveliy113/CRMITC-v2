@@ -188,7 +188,7 @@ aside .menu {
     transform: translateX(-50px);
   }
   .menu a:nth-child(4).active ~ .indicator {
-    transform: translateX(36px);
+    transform: translateX(38px);
   }
   .menu a:nth-child(5).active ~ .indicator {
     transform: translateX(131px);

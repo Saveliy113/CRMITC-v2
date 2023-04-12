@@ -4,8 +4,18 @@
   width: 70%;
 } */
 
+#date_start,
+#time_start,
+#time_end {
+  color-scheme: light;
+}
+
 #telegram__link {
   cursor: pointer;
+}
+
+.header__title {
+  color: var(--accent_3);
 }
 
 .header__title svg {
@@ -28,6 +38,7 @@
 }
 
 .p__link {
+  cursor: pointer;
   font-weight: 700;
   text-decoration: underline;
 }

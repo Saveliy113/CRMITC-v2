@@ -24,7 +24,7 @@
   box-sizing: border-box;
   width: 70%;
   min-height: 150px;
-  max-height: 180px;
+  max-height: fit-content;
   padding: 20px;
   position: relative;
   top: -50px;
