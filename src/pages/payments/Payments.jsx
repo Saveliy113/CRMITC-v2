@@ -30,6 +30,7 @@ import ModalLoader from '../../ui/ModalLoader';
 import '../students/Students.css';
 import 'react-toastify/dist/ReactToastify.css';
 import PaymentsTable from './PaymentsTable';
+import useErrorHandler from '../../hooks/useErrorHandler';
 
 const Payments = () => {
   const dispatch = useDispatch();
@@ -39,15 +40,27 @@ const Payments = () => {
 
   //-----------------------DATA-------------------------//
 
-  const { data, isSuccess: paymentsIsSuccess } = useGetStudentsPaymentsQuery();
-  const { data: recruiters, isSuccess: recruiterIsSuccess } =
-    useGetUsersQuery();
-  const { data: students, isSuccess: studentsIsSuccess } =
-    useGetStudentsQuery();
+  const {
+    data,
+    isSuccess: paymentsIsSuccess,
+    error: paymentsError,
+  } = useGetStudentsPaymentsQuery();
+  const {
+    data: recruiters,
+    isSuccess: recruiterIsSuccess,
+    error: recruitersError,
+  } = useGetUsersQuery();
+  const {
+    data: students,
+    isSuccess: studentsIsSuccess,
+    error: studentsError,
+  } = useGetStudentsQuery();
 
   useEffect(() => {
     paymentsIsSuccess && dispatch(setFetchData({ page: 'payments', data }));
   }, [paymentsIsSuccess]);
+
+  useErrorHandler([paymentsError, recruitersError, studentsError]);
 
   const payments = useSelector((store) => store.data.currentData);
 
@@ -205,7 +218,7 @@ const Payments = () => {
       {paymentsIsSuccess ? ( //TABLE
         <>
           <div className="table__actions-box">
-            <RowsSlicer />
+            {/* <RowsSlicer /> */}
             <Button text="+Добавить платеж" action={onClickClose} />
             <Search placeholder="Имя студента" searchData={students} />
           </div>
@@ -215,7 +228,7 @@ const Payments = () => {
               payments={payments}
               additionalData={{ students, recruiters }}
             />
-            <Pagination />
+            {/* <Pagination /> */}
           </div>
         </>
       ) : (

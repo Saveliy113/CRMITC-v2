@@ -24,15 +24,16 @@ const Pagination = () => {
   const urlPageIndex = Number(searchParams.get("page"));
 
   //CHANGE CURRENT PAGE IF PAGE IN URL WAS CHANGED
-  useEffect(() => {
-    if (urlPageIndex > 0) {
-      dispatch(changePage(urlPageIndex - 1));
-    } else dispatch(changePage(0));
-  }, [urlPageIndex]);
+  // useEffect(() => {
+  //   if (urlPageIndex > 0) {
+  //     dispatch(changePage(urlPageIndex - 1));
+  //   } else dispatch(changePage(0));
+  // }, [urlPageIndex]);
 
   const handlePageClick = (event) => {
-    searchParams.set("page", event.selected + 1);
-    setSearchParams(searchParams);
+    dispatch(changePage(event.selected))
+    // searchParams.set("page", event.selected + 1);
+    // setSearchParams(searchParams);
   };
 
   return (
@@ -42,7 +43,7 @@ const Pagination = () => {
       nextLabel={<RiArrowRightSLine />}
       onPageChange={handlePageClick}
       pageRangeDisplayed={3}
-      pageCount={pageCount}
+      pageCount={10}
       previousLabel={<RiArrowLeftSLine />}
       renderOnZeroPageCount={null}
     />

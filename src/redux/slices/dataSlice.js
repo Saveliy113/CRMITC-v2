@@ -1,19 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  page: "",
+  page: '',
   fetchData: [],
   currentData: [],
   pageCount: 0,
   currentPageIndex: 0,
-  itemsPerPage: 0,
+  itemsPerPage: 10,
   itemOffset: 0,
   endOffset: 0,
-  searchQuery: "",
+  searchQuery: '',
 };
 
 const dataSlice = createSlice({
-  name: "data",
+  name: 'data',
   initialState,
   reducers: {
     setFetchData(state, action) {
@@ -27,7 +27,7 @@ const dataSlice = createSlice({
       );
     },
     changePage(state, action) {
-      state.searchQuery = "";
+      state.searchQuery = '';
       state.currentPageIndex = action.payload;
       state.itemOffset = action.payload * state.itemsPerPage;
       state.endOffset = state.itemOffset + state.itemsPerPage;
@@ -37,9 +37,10 @@ const dataSlice = createSlice({
       );
     },
     changeItemsPerPage(state, action) {
-      state.searchQuery = "";
-      console.log(action.payload);
+      state.searchQuery = '';
+      // console.log('ACTION PAYLOAD', typeof action.payload);
       if (action.payload === Infinity) {
+        console.log('INFINITY TRUE');
         state.currentData = state.fetchData;
         state.pageCount = 0;
         state.itemOffset = 0;
@@ -59,9 +60,16 @@ const dataSlice = createSlice({
         );
       }
     },
+    clearItemsPerPage(state) {
+      state.itemsPerPage = 10;
+      state.itemOffset = 0;
+      state.endOffset = state.itemOffset + state.itemsPerPage;
+      state.pageCount = Math.ceil(state.fetchData.length / state.itemsPerPage);
+      state.currentPageIndex = 0;
+    },
     onSearch(state, action) {
       if (!action.payload.searchText) {
-        state.searchQuery = "";
+        state.searchQuery = '';
         state.pageCount = Math.ceil(
           state.fetchData.length / state.itemsPerPage
         );
@@ -76,23 +84,23 @@ const dataSlice = createSlice({
           // .slice(state.itemOffset, state.endOffset)
           .filter((data) => {
             switch (state.page) {
-              case "branches":
+              case 'branches':
                 return data.name
                   .toLowerCase()
                   .includes(action.payload.searchText.toLowerCase());
-              case "trail_lessons":
+              case 'trail_lessons':
                 return data.title
                   .toLowerCase()
                   .includes(action.payload.searchText.toLowerCase());
-              case "courses":
+              case 'courses':
                 return data.title
                   .toLowerCase()
                   .includes(action.payload.searchText.toLowerCase());
-              case "students":
+              case 'students':
                 return data.full_name
                   .toLowerCase()
                   .includes(action.payload.searchText.toLowerCase());
-              case "payments":
+              case 'payments':
                 if (action.payload.searchData) {
                   const searchText = action.payload.searchText;
                   const relevantStudents = action.payload.searchData.filter(
@@ -109,7 +117,7 @@ const dataSlice = createSlice({
       }
     },
     clearData(state) {
-      state.page = "";
+      state.page = '';
       state.fetchData = [];
       state.currentData = [];
       state.pageCount = 0;
@@ -125,6 +133,7 @@ export const {
   setCurrentItems,
   changePage,
   clearData,
+  clearItemsPerPage,
   changeItemsPerPage,
   onSearch,
 } = dataSlice.actions;

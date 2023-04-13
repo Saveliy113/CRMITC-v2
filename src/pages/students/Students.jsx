@@ -47,7 +47,6 @@ const Students = () => {
 
   const [filterByCourses, setFilterByCourses] = useState('');
   const [filterByRemainder, setFilterByRemainder] = useState(false);
-  console.log(filterByRemainder);
 
   useEffect(() => {
     if (filterByCourses) {
