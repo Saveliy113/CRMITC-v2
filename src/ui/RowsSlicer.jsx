@@ -23,12 +23,16 @@ const RowsSlicer = ({ initialState }) => {
   useEffect(() => {
     if (urlRowsNumber > 0) {
       dispatch(changeItemsPerPage(urlRowsNumber));
+      searchParams.delete('page');
     } else if (urlRowsNumber === 0) {
-      dispatch(clearItemsPerPage());
+      dispatch(changeItemsPerPage(rowsNumber));
+      searchParams.delete('page');
     }
   }, [urlRowsNumber]);
 
   const changeRowsNumber = (event) => {
+    searchParams.delete('page');
+
     dispatch(changeItemsPerPage(Number(event.target.value)));
     searchParams.set('rows', event.target.value);
     setSearchParams(searchParams);
