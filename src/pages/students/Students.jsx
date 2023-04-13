@@ -1,6 +1,6 @@
 //REACT
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import useNotify from '../../hooks/useNotify';
 
@@ -12,7 +12,10 @@ import {
   useGetStudentsQuery,
   useGetUsersQuery,
 } from '../../services/dataApi';
-import { setFetchData } from '../../redux/slices/dataSlice';
+import {
+  filterStudentsByRemainder,
+  setFetchData,
+} from '../../redux/slices/dataSlice';
 
 //COMPONENTS
 import { CSSTransition } from 'react-transition-group';
@@ -35,6 +38,7 @@ import '../../css/components/ModalWindow.css';
 import '../../ui/Select.css';
 import 'react-toastify/dist/ReactToastify.css';
 import useErrorHandler from '../../hooks/useErrorHandler';
+import FilterByRemainder from './FilterByRemainder';
 
 const Students = () => {
   const dispatch = useDispatch();
@@ -60,19 +64,6 @@ const Students = () => {
       );
     }
   }, [filterByCourses]);
-
-  useEffect(() => {
-    if (filterByRemainder) {
-      dispatch(
-        setFetchData({
-          page: 'students',
-          data: data.filter(
-            (student) => student.remainder_for_current_mount > 0
-          ),
-        })
-      );
-    }
-  }, [filterByRemainder]);
 
   //-----------------------DATA-------------------------//
 
@@ -101,9 +92,21 @@ const Students = () => {
     error: directionsError,
   } = useGetDirectionsQuery();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlRemainder = searchParams.get('remainder');
+
+  useEffect(() => {
+    if(!urlRemainder) {
+      setFilterByRemainder(false)
+    } else if (urlRemainder) {
+      setFilterByRemainder(true)
+    }
+  }, [urlRemainder])
+
   //SETTING DATA TO REEDUX
   useEffect(() => {
-    if (studentsIsSuccess && !filterByCourses && !filterByRemainder) {
+    if (studentsIsSuccess && !filterByCourses && !filterByRemainder ) {
+      setFilterByRemainder(false)
       dispatch(
         setFetchData({
           page: 'students',
@@ -480,16 +483,10 @@ const Students = () => {
               ></Button>
             </div>
 
-            <div id="filter__container">
-              <label htmlFor="remainder__check">Задолженность</label>
-              <input
-                type="checkbox"
-                name="remainder"
-                id="remainder__check"
-                onChange={() => setFilterByRemainder(!filterByRemainder)}
-                value={filterByRemainder}
-              />
-            </div>
+            <FilterByRemainder
+              filterByRemainder={filterByRemainder}
+              setFilterByRemainder={setFilterByRemainder}
+            />
 
             <Search placeholder="Имя студента" />
           </div>

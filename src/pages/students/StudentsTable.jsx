@@ -29,7 +29,7 @@ const StudentsTable = ({ currentPage, students, additionalData }) => {
           </td>
           <td data-label="Скидка">{student.full_discount}</td>
           <td data-label="Остаток за текущий месяц">
-            {student.remainder_for_current_mount.toLocaleString('ru')}
+            {`${student.remainder_for_current_mount.toLocaleString('ru')} ${student.currency}`}
           </td>
           <td data-label="Рекрутер">
             {recruiters?.map((recruiter) =>

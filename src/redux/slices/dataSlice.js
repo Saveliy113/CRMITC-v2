@@ -10,6 +10,7 @@ const initialState = {
   itemOffset: 0,
   endOffset: 0,
   searchQuery: '',
+  filterStudentsByRemainder: false
 };
 
 const dataSlice = createSlice({
@@ -17,16 +18,9 @@ const dataSlice = createSlice({
   initialState,
   reducers: {
     setFetchData(state, action) {
-      console.log(action.payload);
       state.page = action.payload.page;
       state.fetchData = action.payload.data;
-      // console.log(state.fetchData)
       state.pageCount = Math.ceil(state.fetchData.length / state.itemsPerPage);
-      console.log(state.itemsPerPage);
-      // state.itemsPerPage = 10
-      console.log(state.fetchData.length);
-      console.log(state.pageCount);
-      console.log(state.pageCount);
       state.endOffset = state.itemOffset + state.itemsPerPage;
       state.currentData = state.fetchData.slice(
         state.itemOffset,
@@ -78,6 +72,15 @@ const dataSlice = createSlice({
         state.endOffset
       );
     },
+    clearData(state) {
+      state.page = '';
+      state.fetchData = [];
+      state.currentData = [];
+      state.pageCount = 0;
+      state.itemsPerPage = 0;
+      state.itemOffset = 0;
+      state.endOffset = 0;
+    },
     onSearch(state, action) {
       if (!action.payload.searchText) {
         state.searchQuery = '';
@@ -127,26 +130,37 @@ const dataSlice = createSlice({
           });
       }
     },
-    clearData(state) {
-      state.page = '';
-      state.fetchData = [];
-      state.currentData = [];
-      state.pageCount = 0;
-      state.itemsPerPage = 0;
-      state.itemOffset = 0;
-      state.endOffset = 0;
+    filterStudentsByRemainder(state, action) {
+      console.log(action.payload);
+      if(action.payload) {
+        state.filterStudentsByRemainder = true
+        state.currentPageIndex = 0;
+        state.itemOffset = 0;
+        state.endOffset = Number(state.itemOffset + state.itemsPerPage);
+        state.fetchData = state.fetchData.filter(student => student.remainder_for_current_mount > 0);
+        console.log(state.fetchData);
+        state.currentData = state.fetchData.slice(
+          state.itemOffset,
+          state.endOffset
+        );
+        console.log(state.currentData)
+        state.pageCount = Math.ceil(
+          state.fetchData.length / state.itemsPerPage
+        );
+        state.endOffset = Number(state.itemOffset + state.itemsPerPage);
+      }
     },
   },
 });
 
 export const {
   setFetchData,
-  setCurrentItems,
   changePage,
-  clearData,
-  clearItemsPerPage,
   changeItemsPerPage,
+  clearItemsPerPage,
+  clearData,
   onSearch,
+  filterStudentsByRemainder,
 } = dataSlice.actions;
 
 export default dataSlice.reducer;
