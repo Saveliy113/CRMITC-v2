@@ -218,7 +218,7 @@ const Payments = () => {
       {paymentsIsSuccess ? ( //TABLE
         <>
           <div className="table__actions-box">
-            {/* <RowsSlicer /> */}
+            <RowsSlicer />
             <Button text="+Добавить платеж" action={onClickClose} />
             <Search placeholder="Имя студента" searchData={students} />
           </div>
@@ -228,7 +228,7 @@ const Payments = () => {
               payments={payments}
               additionalData={{ students, recruiters }}
             />
-            {/* <Pagination /> */}
+            <Pagination />
           </div>
         </>
       ) : (

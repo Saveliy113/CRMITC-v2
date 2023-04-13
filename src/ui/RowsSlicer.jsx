@@ -17,32 +17,23 @@ const RowsSlicer = ({ initialState }) => {
 
   const rowsNumber = useSelector((store) => store.data.itemsPerPage);
   const urlRowsNumber = Number(searchParams.get('rows'));
-  console.log('ROWSNUMBER', rowsNumber);
-  console.log('URLROWSNUMBER', urlRowsNumber);
+  // console.log('ROWSNUMBER', rowsNumber);
+  // console.log('URLROWSNUMBER', urlRowsNumber);
 
-  // useEffect(() => {
-  //   searchParams.set('rows', rowsNumber);
-  //   setSearchParams(searchParams);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (urlRowsNumber !== rowsNumber) {
-  //     if (urlRowsNumber === 0) {
-  //       console.log('URLROWSNUMBER === 0');
-  //       dispatch(clearItemsPerPage());
-  //       dispatch(changePage(0));
-  //     } else {
-  //       dispatch(changeItemsPerPage(urlRowsNumber));
-  //     }
-  //     console.log('111');
-  //   }
-  // }, [urlRowsNumber]);
+  useEffect(() => {
+    if (urlRowsNumber > 0) {
+      dispatch(changeItemsPerPage(urlRowsNumber));
+    } else if (urlRowsNumber === 0) {
+      dispatch(clearItemsPerPage());
+    }
+  }, [urlRowsNumber]);
 
   const changeRowsNumber = (event) => {
-    // searchParams.set('rows', event.target.value);
-    // setSearchParams(searchParams);
     dispatch(changeItemsPerPage(Number(event.target.value)));
+    searchParams.set('rows', event.target.value);
+    setSearchParams(searchParams);
   };
+
   return (
     <div className={styles.select__container}>
       <select

@@ -17,9 +17,16 @@ const dataSlice = createSlice({
   initialState,
   reducers: {
     setFetchData(state, action) {
+      console.log(action.payload);
       state.page = action.payload.page;
       state.fetchData = action.payload.data;
+      // console.log(state.fetchData)
       state.pageCount = Math.ceil(state.fetchData.length / state.itemsPerPage);
+      console.log(state.itemsPerPage);
+      // state.itemsPerPage = 10
+      console.log(state.fetchData.length);
+      console.log(state.pageCount);
+      console.log(state.pageCount);
       state.endOffset = state.itemOffset + state.itemsPerPage;
       state.currentData = state.fetchData.slice(
         state.itemOffset,
@@ -64,8 +71,12 @@ const dataSlice = createSlice({
       state.itemsPerPage = 10;
       state.itemOffset = 0;
       state.endOffset = state.itemOffset + state.itemsPerPage;
-      state.pageCount = Math.ceil(state.fetchData.length / state.itemsPerPage);
       state.currentPageIndex = 0;
+      state.pageCount = Math.ceil(state.fetchData.length / state.itemsPerPage);
+      state.currentData = state.fetchData.slice(
+        state.itemOffset,
+        state.endOffset
+      );
     },
     onSearch(state, action) {
       if (!action.payload.searchText) {
