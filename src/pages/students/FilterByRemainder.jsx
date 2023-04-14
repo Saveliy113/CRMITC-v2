@@ -1,27 +1,40 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { filterStudentsByRemainder } from '../../redux/slices/dataSlice';
 
-const FilterByRemainder = ({
-  filterByRemainder = false,
-  setFilterByRemainder,
-}) => {
+const FilterByRemainder = ({ setInitialData }) => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
+  const urlRemainder = searchParams.get('remainder');
+  const [filterByRemainder, setFilterByRemainder] = useState(false);
+  console.log('FILTERBYREMAINDER', filterByRemainder);
+  console.log('URLREMAINDER', urlRemainder);
 
   useEffect(() => {
-    if (filterByRemainder) {
-      searchParams.set('remainder', true);
+    if (filterByRemainder && !urlRemainder) {
       searchParams.delete('page');
+      searchParams.set('remainder', filterByRemainder);
       setSearchParams(searchParams);
-    } else {
+      dispatch(filterStudentsByRemainder(true));
+      console.log('111');
+    } else if (!filterByRemainder && urlRemainder) {
       searchParams.delete('remainder');
       setSearchParams(searchParams);
-      setFilterByRemainder(false);
+      setInitialData();
+      console.log('222');
     }
-    dispatch(filterStudentsByRemainder(filterByRemainder));
   }, [filterByRemainder]);
+
+  useEffect(() => {
+    if (urlRemainder) {
+      setFilterByRemainder(true);
+      // dispatch(filterStudentsByRemainder(true))
+    } else if (!urlRemainder) {
+      setFilterByRemainder(false);
+      // setInitialData()
+    }
+  }, [urlRemainder]);
 
   return (
     <div id="filter__container">

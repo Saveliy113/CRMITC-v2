@@ -50,7 +50,6 @@ const Students = () => {
   //-----------------------FILTERING-------------------------//
 
   const [filterByCourses, setFilterByCourses] = useState('');
-  const [filterByRemainder, setFilterByRemainder] = useState(false);
 
   useEffect(() => {
     if (filterByCourses) {
@@ -93,28 +92,22 @@ const Students = () => {
   } = useGetDirectionsQuery();
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const urlRemainder = searchParams.get('remainder');
-
-  useEffect(() => {
-    if(!urlRemainder) {
-      setFilterByRemainder(false)
-    } else if (urlRemainder) {
-      setFilterByRemainder(true)
-    }
-  }, [urlRemainder])
 
   //SETTING DATA TO REEDUX
+  const setStudentsData = () => {
+    dispatch(
+      setFetchData({
+        page: 'students',
+        data: data.filter((student) => student.studies),
+      })
+    );
+  };
+
   useEffect(() => {
-    if (studentsIsSuccess && !filterByCourses && !filterByRemainder ) {
-      setFilterByRemainder(false)
-      dispatch(
-        setFetchData({
-          page: 'students',
-          data: data.filter((student) => student.studies),
-        })
-      );
+    if (studentsIsSuccess && !filterByCourses) {
+      setStudentsData();
     }
-  }, [studentsIsSuccess, filterByCourses, filterByRemainder]);
+  }, [studentsIsSuccess, filterByCourses]);
 
   //QUERIES ERRORS HANDLING
   useErrorHandler([
@@ -126,7 +119,7 @@ const Students = () => {
 
   const students = useSelector((store) => store.data.currentData);
 
-  console.log(students);
+  // console.log(students);
 
   //----------------------------------------------------//
 
@@ -483,10 +476,7 @@ const Students = () => {
               ></Button>
             </div>
 
-            <FilterByRemainder
-              filterByRemainder={filterByRemainder}
-              setFilterByRemainder={setFilterByRemainder}
-            />
+            <FilterByRemainder setInitialData={setStudentsData} />
 
             <Search placeholder="Имя студента" />
           </div>
