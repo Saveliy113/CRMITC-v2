@@ -34,22 +34,22 @@ const Pagination = () => {
 
   const handlePageClick = (event) => {
     dispatch(changePage(event.selected));
-    searchParams.set('page', event.selected + 1);
-    setSearchParams(searchParams);
+    // searchParams.set('page', event.selected + 1);
+    // setSearchParams(searchParams);
   };
 
-  return (
-    <ReactPaginate
-      breakLabel="..."
-      forcePage={currentPageIndex}
-      nextLabel={<RiArrowRightSLine />}
-      onPageChange={handlePageClick}
-      pageRangeDisplayed={3}
-      pageCount={pageCount}
-      previousLabel={<RiArrowLeftSLine />}
-      renderOnZeroPageCount={null}
-    />
-  );
+  // return (
+  <ReactPaginate
+    breakLabel="..."
+    // forcePage={currentPageIndex}
+    nextLabel={<RiArrowRightSLine />}
+    onPageChange={handlePageClick}
+    pageRangeDisplayed={3}
+    pageCount={pageCount}
+    previousLabel={<RiArrowLeftSLine />}
+    renderOnZeroPageCount={null}
+  />;
+  // );
 };
 
 export default Pagination;

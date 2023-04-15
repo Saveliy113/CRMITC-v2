@@ -32,8 +32,10 @@ const Branches = () => {
   } = useGetCountriesQuery();
 
   useEffect(() => {
-    countriesIsSuccess &&
+    if (countriesIsSuccess) {
+      console.log('111');
       dispatch(setFetchData({ page: 'branches', data: countriesData }));
+    }
   }, [countriesIsSuccess]);
 
   useErrorHandler([error]); //QUERIES ERRORS HANDLING

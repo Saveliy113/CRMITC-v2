@@ -99,7 +99,7 @@ const TrailLessons = () => {
           data: trailLessonsData,
         })
       );
-  }, [trailLessonsIsSuccess, trailLessonsData]);
+  }, [trailLessonsData]);
 
   const trailLessons = useSelector((store) => store.data.currentData);
 

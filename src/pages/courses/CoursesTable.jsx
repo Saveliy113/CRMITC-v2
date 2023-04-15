@@ -44,7 +44,7 @@ const CoursesTable = ({ currentPage, courses, additionalData }) => {
       })
     ) : (
       <tr>
-        <td colSpan={4}>No available data</td>
+        <td colSpan={5}>No available data</td>
       </tr>
     );
   return (
