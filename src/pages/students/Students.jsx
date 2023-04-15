@@ -119,8 +119,6 @@ const Students = () => {
 
   const students = useSelector((store) => store.data.currentData);
 
-  // console.log(students);
-
   //----------------------------------------------------//
 
   //---------------- MODAL WINDOW ------------------//

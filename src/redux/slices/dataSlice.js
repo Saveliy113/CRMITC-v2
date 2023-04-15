@@ -10,7 +10,7 @@ const initialState = {
   itemOffset: 0,
   endOffset: 0,
   searchQuery: '',
-  filterStudentsByRemainder: false
+  filterStudentsByRemainder: false,
 };
 
 const dataSlice = createSlice({
@@ -132,12 +132,14 @@ const dataSlice = createSlice({
     },
     filterStudentsByRemainder(state, action) {
       // console.log('FILTERING STUDENTS BY REMAINDER: ',action.payload);
-      if(action.payload) {
-        state.filterStudentsByRemainder = true
+      if (action.payload === true) {
+        state.filterStudentsByRemainder = true;
         state.currentPageIndex = 0;
         state.itemOffset = 0;
         state.endOffset = Number(state.itemOffset + state.itemsPerPage);
-        state.fetchData = state.fetchData.filter(student => student.remainder_for_current_mount > 0);
+        state.fetchData = state.fetchData.filter(
+          (student) => student.remainder_for_current_mount > 0
+        );
         // console.log(state.fetchData);
         state.currentData = state.fetchData.slice(
           state.itemOffset,

@@ -763,7 +763,9 @@ const CourseInfo = () => {
                             '-'
                           )}
                         </p>
-                        <p>Цена: {Math.ceil(course.price)} KZT</p>
+                        <p>
+                          Цена: {Math.ceil(course.price)} {course.currency}
+                        </p>
                         {course.description ? (
                           <p>Описание: {course.description}</p>
                         ) : (

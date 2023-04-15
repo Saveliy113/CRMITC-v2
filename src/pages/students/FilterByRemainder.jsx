@@ -7,9 +7,15 @@ const FilterByRemainder = ({ setInitialData }) => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const urlRemainder = searchParams.get('remainder');
-  const [filterByRemainder, setFilterByRemainder] = useState(false);
-  console.log('FILTERBYREMAINDER', filterByRemainder);
-  console.log('URLREMAINDER', urlRemainder);
+  const [filterByRemainder, setFilterByRemainder] = useState(
+    urlRemainder || false
+  );
+
+  useEffect(() => {
+    if (urlRemainder) {
+      dispatch(filterStudentsByRemainder(true));
+    }
+  }, []);
 
   useEffect(() => {
     if (filterByRemainder && !urlRemainder) {
@@ -17,22 +23,20 @@ const FilterByRemainder = ({ setInitialData }) => {
       searchParams.set('remainder', filterByRemainder);
       setSearchParams(searchParams);
       dispatch(filterStudentsByRemainder(true));
-      console.log('111');
     } else if (!filterByRemainder && urlRemainder) {
       searchParams.delete('remainder');
       setSearchParams(searchParams);
       setInitialData();
-      console.log('222');
     }
   }, [filterByRemainder]);
 
   useEffect(() => {
     if (urlRemainder) {
       setFilterByRemainder(true);
-      // dispatch(filterStudentsByRemainder(true))
+      dispatch(filterStudentsByRemainder(true));
     } else if (!urlRemainder) {
       setFilterByRemainder(false);
-      // setInitialData()
+      setInitialData();
     }
   }, [urlRemainder]);
 
