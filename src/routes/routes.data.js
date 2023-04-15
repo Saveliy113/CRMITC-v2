@@ -6,7 +6,7 @@ import ClientDetails from '../pages/ClientDetails';
 import CourseInfo from '../pages/courses/courseDetails/CourseInfo';
 import Courses from '../pages/courses/Courses';
 import Direction from '../pages/direction/Direction';
-import Main from '../pages/Main';
+import Main from '../pages/main/Main';
 import MentorDetails from '../pages/MentorDetails';
 import NotFound from '../pages/NotFound';
 import PaymentDetails from '../pages/payments/paymentDetails/PaymentDetails';

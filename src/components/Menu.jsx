@@ -24,7 +24,7 @@ const Menu = () => {
   const isLoged = useSelector((store) => store.login.token);
   const blockedStyles = {
     pointerEvents: 'none',
-    color: 'rgba(114, 114, 114, 0.5)',
+    color: 'rgba(0, 0, 0, 0.4)',
   };
 
   return (

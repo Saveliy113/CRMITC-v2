@@ -26,4 +26,7 @@
 
 .btn:disabled {
   cursor: auto;
+  color: gray;
+  background-color: rgba(0, 0, 0, 0.622);
+  background-color: rgba(211, 211, 211, 0.725);
 }

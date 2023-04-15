@@ -70,16 +70,19 @@ const BrancheDetails = () => {
     error: clientsError,
   } = useGetClientsQuery();
 
-  const { data: mentors, isSuccess: mentorsIsSuccess, error: mentorsError } = useGetMentorsQuery()
+  const {
+    data: mentors,
+    isSuccess: mentorsIsSuccess,
+    error: mentorsError,
+  } = useGetMentorsQuery();
 
-  console.log(mentors)
   //QUERIES ERRORS HANDLING
   useErrorHandler([
     branchError,
     employeesError,
     trailLessonsError,
     clientsError,
-    mentorsError
+    mentorsError,
   ]);
 
   //SETTING DATA TO REDUX
@@ -165,7 +168,7 @@ const BrancheDetails = () => {
               onClick={() => changeData('mentors')}
             >
               <GiTeacher />
-              Сотрудники
+              Менторы
             </button>
           </div>
         </div>
@@ -199,10 +202,7 @@ const BrancheDetails = () => {
           )}
 
           {activeData === 'mentors' && (
-            <MentorsTable
-              currentPage={currentPage}
-              currentData={currentData}
-            />
+            <MentorsTable currentPage={currentPage} currentData={currentData} />
           )}
         </div>
         <Pagination />
