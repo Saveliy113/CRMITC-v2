@@ -69,6 +69,7 @@ export const dataApi = createApi({
         method: 'DELETE',
         url: `/v1/mainapp/course/${courseId}`,
       }),
+      invalidatesTags: ['Courses'],
     }),
 
     getMentors: build.query({

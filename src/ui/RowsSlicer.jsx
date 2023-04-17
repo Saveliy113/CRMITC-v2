@@ -17,8 +17,6 @@ const RowsSlicer = ({ initialState }) => {
 
   const rowsNumber = useSelector((store) => store.data.itemsPerPage);
   const urlRowsNumber = Number(searchParams.get('rows'));
-  // console.log('ROWSNUMBER', rowsNumber);
-  // console.log('URLROWSNUMBER', urlRowsNumber);
 
   useEffect(() => {
     if (urlRowsNumber > 0) {
@@ -32,7 +30,6 @@ const RowsSlicer = ({ initialState }) => {
 
   const changeRowsNumber = (event) => {
     searchParams.delete('page');
-
     dispatch(changeItemsPerPage(Number(event.target.value)));
     searchParams.set('rows', event.target.value);
     setSearchParams(searchParams);

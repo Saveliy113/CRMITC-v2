@@ -320,7 +320,7 @@ const Courses = () => {
                   onChange={(event) =>
                     setCourseReqBody({
                       ...courseReqBody,
-                      telegram_froup_link: event.target.value,
+                      telegram_group_link: event.target.value,
                     })
                   }
                   type="text"

@@ -20,6 +20,9 @@ const dataSlice = createSlice({
     setFetchData(state, action) {
       state.page = action.payload.page;
       state.fetchData = action.payload.data;
+      if (state.itemsPerPage === 0) {
+        state.itemsPerPage = 10;
+      }
       state.pageCount = Math.ceil(state.fetchData.length / state.itemsPerPage);
       state.endOffset = state.itemOffset + state.itemsPerPage;
       state.currentData = state.fetchData.slice(
@@ -41,7 +44,6 @@ const dataSlice = createSlice({
       state.searchQuery = '';
       // console.log('ACTION PAYLOAD', typeof action.payload);
       if (action.payload === Infinity) {
-        console.log('INFINITY TRUE');
         state.currentData = state.fetchData;
         state.pageCount = 0;
         state.itemOffset = 0;
