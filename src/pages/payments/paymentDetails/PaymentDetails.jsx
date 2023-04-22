@@ -1,5 +1,5 @@
 //REACT
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import useNotify from '../../../hooks/useNotify';
 import useErrorHandler from '../../../hooks/useErrorHandler';
@@ -106,9 +106,9 @@ const PaymentDetails = () => {
     },
   ] = useDeletePaymentMutation();
 
-  const editHandler = () => {
+  const editHandler = useCallback(() => {
     editPayment({ paymentId, paymentReqBody }).unwrap();
-  };
+  }, [paymentReqBody]);
 
   const deleteHandler = () => {
     deletePayment(paymentId);

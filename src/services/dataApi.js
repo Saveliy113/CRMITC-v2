@@ -153,7 +153,7 @@ export const dataApi = createApi({
       query: (body) => ({
         method: 'PATCH',
         url: `/v1/students/payment_students/${body.paymentId}/`,
-        body: body.reqBody,
+        body: body.paymentReqBody,
       }),
       invalidatesTags: ['StudentPayments'],
     }),

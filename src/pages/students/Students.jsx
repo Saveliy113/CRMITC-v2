@@ -91,8 +91,6 @@ const Students = () => {
     error: directionsError,
   } = useGetDirectionsQuery();
 
-  const [searchParams, setSearchParams] = useSearchParams();
-
   //SETTING DATA TO REEDUX
   const setStudentsData = () => {
     dispatch(
@@ -134,7 +132,6 @@ const Students = () => {
     discount_of_cash: 0,
     phone: '',
     course: 0,
-    studies: false,
     recruiter: 0,
     contract: false,
     comment: '',
@@ -176,7 +173,6 @@ const Students = () => {
         discount_of_cash: '',
         phone: '',
         course: 0,
-        studies: false,
         recruiter: 0,
         contract: false,
         comment: '',
@@ -358,18 +354,7 @@ const Students = () => {
                   </div>
                 </div>
               </div>
-              <div className="modal__input-container">
-                <label htmlFor="studies">Учится</label>
-                <input
-                  onChange={(event) =>
-                    setReqBody({ ...reqBody, studies: event.target.checked })
-                  }
-                  type="checkbox"
-                  id="studies"
-                  maxLength="15"
-                  checked={reqBody.studies}
-                />
-              </div>
+
               <div className="modal__input-container">
                 <label htmlFor="name">Рекрутер</label>
                 <div className="select__container">
