@@ -137,7 +137,6 @@ const CourseInfo = () => {
     whatsapp: '',
     telegram: '',
     course: courseId,
-    studies: false,
     recruiter: 0,
     contract: false,
     comment: '',
@@ -231,7 +230,6 @@ const CourseInfo = () => {
         whatsapp: '',
         telegram: '',
         course: courseId,
-        studies: false,
         recruiter: 0,
         contract: false,
         comment: '',
@@ -422,21 +420,6 @@ const CourseInfo = () => {
                   id="telegram"
                   maxLength="255"
                   value={studentReqBody.telegram}
-                />
-              </div>
-              <div className="modal__input-container">
-                <label htmlFor="studies">Учится</label>
-                <input
-                  onChange={(event) =>
-                    setStudentReqBody({
-                      ...studentReqBody,
-                      studies: event.target.checked,
-                    })
-                  }
-                  type="checkbox"
-                  id="studies"
-                  maxLength="15"
-                  checked={studentReqBody.studies}
                 />
               </div>
               <div className="modal__input-container">
