@@ -9,6 +9,12 @@
   border-radius: 20px;
 }
 
+.edit__container input,
+.edit__container textarea {
+  color: black;
+  max-width: 65%;
+}
+
 .paymentDetails__header {
   width: 100%;
   max-height: 140px;
@@ -75,6 +81,13 @@
   transform: scale(1.1);
 }
 
+.edit__container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 #edit__container-saveBtn {
   padding: 0;
   background: none;
@@ -84,4 +97,8 @@
 #edit__container-saveBtn:disabled svg {
   pointer-events: none;
   color: rgba(128, 128, 128, 0.575);
+}
+
+#name {
+  color: black;
 }

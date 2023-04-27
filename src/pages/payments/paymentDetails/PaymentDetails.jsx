@@ -31,7 +31,7 @@ import ModalLoader from '../../../ui/ModalLoader';
 import Loader from '../../../ui/Loader';
 
 //CSS
-import './PaymentDetails.css';
+import styles from './PaymentDetails.module.css';
 
 const PaymentDetails = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -146,13 +146,13 @@ const PaymentDetails = () => {
   /*----------------------------------------------------------*/
 
   return payment && recruiter && students ? (
-    <div className="paymentDetails__card">
-      <div className="paymentDetails__header">
+    <div className={styles.paymentDetails__card}>
+      <div className={styles.paymentDetails__header}>
         <img src={CreditCards} alt="" />
       </div>
-      <div className="paymentDetails__content">
+      <div className={styles.paymentDetails__content}>
         {isEditing ? (
-          <div className="card__edit-container">
+          <div className={styles.edit__container}>
             <RiArrowGoBackLine
               id="edit__container-back"
               onClick={() => setIsEditing(false)}
@@ -210,7 +210,7 @@ const PaymentDetails = () => {
                     comment: event.target.value,
                   })
                 }
-                id="name"
+                id={styles.name}
                 value={paymentReqBody.comment}
               />
             </div>
@@ -234,7 +234,7 @@ const PaymentDetails = () => {
           </>
         )}
       </div>
-      <div className="paymentDetails__footer">
+      <div className={styles.paymentDetails__footer}>
         {deleteLoading || editIsLoading ? (
           <ModalLoader />
         ) : isEditing ? (
