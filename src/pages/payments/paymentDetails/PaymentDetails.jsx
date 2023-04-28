@@ -1,6 +1,6 @@
 //REACT
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import useNotify from '../../../hooks/useNotify';
 import useErrorHandler from '../../../hooks/useErrorHandler';
 
@@ -36,6 +36,7 @@ import styles from './PaymentDetails.module.css';
 const PaymentDetails = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { notify } = useNotify();
+  const navigate = useNavigate(-1);
 
   const [isEditing, setIsEditing] = useState(false);
   const [recruiter, setRecruiter] = useState('');
@@ -121,7 +122,7 @@ const PaymentDetails = () => {
   useEffect(() => {
     if (deleteCompleted) {
       notify({ message: 'Изменения внесены успешно!', type: 'success' });
-      setTimeout(() => setIsEditing(false), 500);
+      navigate(-1);
     }
     if (deleteError) {
       notify({ message: deleteError, type: 'error' });

@@ -146,7 +146,7 @@ export const dataApi = createApi({
         url: '/v1/students/payment_students/',
         body: reqBody,
       }),
-      invalidatesTags: ['StudentPayments', 'Students'],
+      invalidatesTags: ['StudentPayments', 'Students', 'Payments'],
     }),
 
     editPayment: build.mutation({
@@ -163,7 +163,7 @@ export const dataApi = createApi({
         method: 'DELETE',
         url: `/v1/students/payment_students/${paymentId}/`,
       }),
-      invalidatesTags: ['StudentPayments'],
+      invalidatesTags: ['StudentPayments', 'Payments'],
     }),
 
     getTrailLessons: build.query({

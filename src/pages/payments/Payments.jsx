@@ -58,7 +58,7 @@ const Payments = () => {
 
   useEffect(() => {
     paymentsIsSuccess && dispatch(setFetchData({ page: 'payments', data }));
-  }, [paymentsIsSuccess]);
+  }, [paymentsIsSuccess, data]);
 
   useErrorHandler([paymentsError, recruitersError, studentsError]);
 
