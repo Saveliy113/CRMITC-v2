@@ -815,7 +815,7 @@ const CourseInfo = () => {
             </div>
           </InfoCard>
 
-          <div className="table__actions-box">
+          <div className={styles.table__actions}>
             <Button text="+Добавить студента" action={onClickClose} />
           </div>
           <div className="table__box">

@@ -43,7 +43,7 @@ import ModalLoader from '../../../ui/ModalLoader';
 import Button from '../../../ui/Button';
 
 //CSS
-import './StudentInfo.css';
+import styles from './StudentInfo.module.css';
 import 'react-toastify/dist/ReactToastify.css';
 import formatDate from '../../../utils/formatDate';
 import useErrorHandler from '../../../hooks/useErrorHandler';
@@ -582,7 +582,7 @@ const StudentInfo = () => {
                             comment: event.target.value,
                           })
                         }
-                        id="student__comment"
+                        id={styles.student__comment}
                         value={studentReqBody.comment}
                       />
                     </div>
@@ -750,7 +750,7 @@ const StudentInfo = () => {
             </div>
           </InfoCard>
 
-          <div className="table__actions-box">
+          <div className={styles.table__actions}>
             {/* <RowsSlicer /> */}
             <Button text="+Добавить платеж" action={onClickClose} />
             {/* <Search /> */}

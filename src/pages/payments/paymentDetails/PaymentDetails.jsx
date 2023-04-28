@@ -167,7 +167,7 @@ const PaymentDetails = () => {
                   })
                 }
                 type="number"
-                id="discount"
+                id={styles.discount}
                 maxLength="3"
                 min={0}
                 max={100}

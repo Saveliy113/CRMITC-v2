@@ -31,7 +31,6 @@ import {
   RiEdit2Line,
   RiSave3Fill,
   RiFileInfoLine,
-  RiPhoneFill,
 } from 'react-icons/ri';
 
 //COMPONENTS
@@ -45,7 +44,7 @@ import Loader from '../../../ui/Loader';
 import ModalLoader from '../../../ui/ModalLoader';
 
 //CSS
-import './TrailLesson.css';
+import styles from './TrailLesson.module.css';
 import TrailLessonTable from './TrailLessonTable';
 
 const TrailLesson = () => {
@@ -550,7 +549,7 @@ const TrailLesson = () => {
                           })
                         }
                         type="date"
-                        id="date"
+                        className={styles.date}
                         value={lessonReqBody.date}
                       />
                     </div>
@@ -644,6 +643,7 @@ const TrailLesson = () => {
                     <div className="modal__input-container">
                       <label htmlFor="description">Описание</label>
                       <textarea
+                        className="dark"
                         onChange={(event) =>
                           setLessonReqBody({
                             ...lessonReqBody,

@@ -119,6 +119,10 @@
   /* -webkit-appearance: none; */
 }
 
+.dark {
+  color: black !important;
+}
+
 /*----------------ADDITIONAL ELEMENTS--------------*/
 
 #modal__close {

@@ -46,3 +46,10 @@
 #course__comment {
   color: black;
 }
+
+.table__actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 30px;
+}

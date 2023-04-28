@@ -1,4 +1,4 @@
-.studentInfo {
+/* .studentInfo {
   width: 90%;
   margin: 0 auto;
 }
@@ -10,8 +10,14 @@
 .studentInfo__item p {
   margin-left: 20px;
   font-size: large;
-}
+} */
 
 #student__comment {
   color: black;
+}
+
+.table__actions {
+  width: 100%;
+  display: flex;
+  margin-top: 50px;
 }

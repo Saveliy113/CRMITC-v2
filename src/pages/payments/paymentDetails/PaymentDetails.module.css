@@ -9,10 +9,18 @@
   border-radius: 20px;
 }
 
-.edit__container input,
+.edit__container .modal__input-container input,
 .edit__container textarea {
-  color: black;
+  color: black !important;
   max-width: 65%;
+}
+
+.edit__container .modal__input-container input {
+  background-color: red;
+}
+
+#discount {
+  color: black;
 }
 
 .paymentDetails__header {
@@ -36,6 +44,7 @@
 .paymentDetails__content {
   width: 90%;
   margin: 0 auto;
+  margin-top: 10px;
   color: black;
 }
 
@@ -84,6 +93,7 @@
 .edit__container {
   position: relative;
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
   gap: 10px;
 }
@@ -101,4 +111,8 @@
 
 #name {
   color: black;
+}
+
+.edit__container select {
+  background-color: rgba(211, 211, 211, 0.705);
 }
